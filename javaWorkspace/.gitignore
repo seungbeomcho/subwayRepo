@@ -1,0 +1,8 @@
+javaWorkspace/.metadata/
+*.classpath
+*.project
+**/.settings/
+**/bin/
+setup/
+javaWorkspace/.gitignore
+javaWorkspace/miniProject/.gitignore
