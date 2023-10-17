@@ -1,4 +1,4 @@
-package main;
+package com.kh.subway.main;
 
 public class Main {
 
