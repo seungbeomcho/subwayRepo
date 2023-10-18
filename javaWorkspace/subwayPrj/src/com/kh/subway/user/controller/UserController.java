@@ -46,14 +46,11 @@ public class UserController {
 			// 데이터
 			System.out.print("아이디 : ");
 			String id = Main.SC.nextLine();
-			System.out.print("비밀번호 : ");
-			String pwd = Main.SC.nextLine();
 			System.out.print("닉네임 : ");
 			String nick = Main.SC.nextLine();
 			
 			UserVo vo = new UserVo();
 			vo.setId(id);
-			vo.setPwd(pwd);
 			vo.setNick(nick);
 			
 			int result = service.join(vo);
