@@ -14,7 +14,7 @@ public class AdminService {
 	public AdminService() {
 		dao = new AdminDao();
 	}
-
+	//관리자 로그인
 	public AdminVo login(AdminVo vo) throws Exception {
 		
 		Connection conn = JDBCTemplate.getConnection();
@@ -26,12 +26,12 @@ public class AdminService {
 		
 		return admin;
 	}
-
-	public int quit(String no) throws Exception {
+	//회원가입(관리자 로그인시 가능)
+	public int join(AdminVo vo) throws Exception {
 		
 		Connection conn = JDBCTemplate.getConnection();
 		
-		int result = dao.quit(conn , no);
+		int result =dao.join(conn , vo);
 		
 		if(result == 1) {
 			JDBCTemplate.commit(conn);
@@ -41,8 +41,107 @@ public class AdminService {
 		
 		JDBCTemplate.close(conn);
 		
+		return result;
+	}
+	//회원정보 수정 (아이디)
+	public int modifyId(AdminVo vo) throws Exception {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = dao.modifyId(conn , vo);
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
 		
 		return result;
-	
 	}
-}
+
+	
+	//회원정보 수정 (닉네임)
+		public int modifyNick(AdminVo vo) throws Exception {
+			
+			Connection conn = JDBCTemplate.getConnection();
+			
+			int result = dao.modifyId(conn , vo);
+			
+			if(result == 1) {
+				JDBCTemplate.commit(conn);
+			}else {
+				JDBCTemplate.rollback(conn);
+			}
+			
+			JDBCTemplate.close(conn);
+			
+			return result;
+		}
+	
+	
+		//회원정보 수정 (업무명)
+		public int modifyPartName(AdminVo vo) throws Exception {
+			
+			Connection conn = JDBCTemplate.getConnection();
+			
+			int result = dao.modifyId(conn , vo);
+			
+			if(result == 1) {
+				JDBCTemplate.commit(conn);
+			}else {
+				JDBCTemplate.rollback(conn);
+			}
+			
+			JDBCTemplate.close(conn);
+			
+			return result;
+		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}//class
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
