@@ -1,6 +1,7 @@
 package com.kh.subway.board.service;
 
 import java.sql.Connection;
+import java.util.List;
 
 import com.kh.subway.board.dao.BoardDao;
 import com.kh.subway.board.vo.BoardVo;
@@ -33,6 +34,20 @@ private final BoardDao dao;
 		
 		
 		return result;
+	}
+
+
+	//자유게시판 목록 조회(작성일자 최신순)
+	public List<BoardVo> boardList() {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		List<BoardVo> voList = dao.boardList(conn);
+		
+		JDBCTemplate.close(conn);
+		
+		return voList;
+		
 	}
 	
 	
