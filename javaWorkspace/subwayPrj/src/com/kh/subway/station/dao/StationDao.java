@@ -42,4 +42,45 @@ public class StationDao {
 		return voList;
 	}
 
+	// 역 추가
+	public int subwayStationAdd(Connection conn, StationVo vo) throws Exception {
+		
+		// sql
+		String sql = "INSERT INTO STATION (STATION_NO,STATION_NAME,LINE_NO,TRANSFER_YN,EXIT_COUNT,WEEK_START_TIME,WEEK_END_TIME,HOL_START_TIME,HOL_END_TIME,TOILET_IO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, vo.getStationNo());
+		pstmt.setString(2, vo.getStationName());
+		pstmt.setString(3, vo.getLineNo());
+		pstmt.setString(4, vo.getTransferYn());
+		pstmt.setString(5, vo.getExitCount());
+		pstmt.setString(6, vo.getWeekStartTime());
+		pstmt.setString(7, vo.getWeekEndTime());
+		pstmt.setString(8, vo.getHolStartTime());
+		pstmt.setString(9, vo.getHolEndTime());
+		pstmt.setString(10, vo.getToiletIo());
+		int result = pstmt.executeUpdate();
+		
+		// close
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+	}
+
+	// 역 삭제
+	public int subwayStationDelete(Connection conn, StationVo vo) throws Exception {
+
+		// sql
+		String sql = "DELETE FROM STATION WHERE STATION_NAME = ? AND LINE_NO = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, vo.getStationName());
+		pstmt.setString(2, vo.getLineNo());
+		int result = pstmt.executeUpdate();
+		
+		// close
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+
+	}
+
 }
