@@ -50,6 +50,7 @@ public class BoardController {
 					
 				}else if(Main.loginAdmin != null) {
 					
+					
 				}
 				
 				
@@ -59,25 +60,47 @@ public class BoardController {
 			
 			
 		}
-		// 자유게시판 목록 조회 (작성 시간 순)
+		// 자유게시판 목록 조회 (최신순)
 		public void boardList() {
 			try {
 				System.out.println("자유게시판 목록 조회");
 				
 				List<BoardVo> voList = service.boardList();
 				
+				
 				for(BoardVo vo : voList) {
-					System.out.println(vo);
+					
+					System.out.print(vo.getBoardNo());
+					System.out.print("/");
+					System.out.print(vo.getTitle());
+					System.out.print("/");
+					System.out.print(vo.getContent());
+					System.out.print("/");
+					System.out.print(vo.getStationName());
+					System.out.print("/");
+					System.out.print(vo.getEnrollDate());
+					System.out.print("/");
+					System.out.print(vo.getInquiry());
+					System.out.print("/");
+					System.out.print(vo.getWriterNick());
+					System.out.println();
 				}
 				
 				
 			}catch(Exception e) {
-				
+				System.out.println("목록 조회 실패");
+				e.printStackTrace();
 			}
 		}
 		
 		
-		
+		public void selectMenu() {
+			
+			Main.SC.nextLine();
+			boardList();
+			
+			
+		}
 		// 자유게시판 삭제 (로그인한 유저만,
 	
 	

@@ -37,8 +37,8 @@ private final BoardDao dao;
 	}
 
 
-	//자유게시판 목록 조회(작성일자 최신순)
-	public List<BoardVo> boardList() {
+	//자유게시판 목록 조회( 최신순)
+	public List<BoardVo> boardList() throws Exception {
 		
 		Connection conn = JDBCTemplate.getConnection();
 		
