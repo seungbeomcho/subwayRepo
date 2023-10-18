@@ -207,7 +207,11 @@ public class AdminController {
 		}
 	}
 	
-	
+	//로그아웃
+	public void adminLogout() {
+		Main.loginAdmin = null;
+		System.out.println("로그아웃");
+	}
 	
 	
 	
