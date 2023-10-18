@@ -1,6 +1,6 @@
 package com.kh.subway.faq.vo;
 
-class FaqVo {
+public class FaqVo {
 	
 	private String faqno;
 	private String stationno;
