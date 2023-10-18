@@ -2,6 +2,13 @@ package com.kh.subway.faq.controller;
 
 public class FaqController {
 	
+	//필드
+	private final FaqService service;
+	
+	public FaqController() {
+		service = new FaqService();
+	}
+	
 	//메뉴선택
 	public void selectMenu() {
 		System.out.println("====FAQ====");
@@ -16,19 +23,10 @@ public class FaqController {
 		default : System.out.println("잘못입력하셨습니다"); 
 		}
 				
-		//목록 조회 - 조회수 (번호, 제목, 작성자 닉네임, 조회수, 작성일시)
-		
-		//게시글 검색 - 제목
-		
-		//상세 조회 - 번호 (모든 칼럼)
-		/**
-		 * 상세 조회
-		 * 
-		 * SELECT *
-		 * FROM BOARD
-		 * WHERE NO = ?
-		 * AND DEL_YN = 'N'
-		 */
+		//faq 게시글 수정
+		public void exit() {
+			
+		}
 				
 				
 				

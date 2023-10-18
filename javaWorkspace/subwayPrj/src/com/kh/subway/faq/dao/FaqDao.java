@@ -1,22 +1,37 @@
 package com.kh.subway.faq.dao;
 
-class FaqDao {
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 
-	//작성하기
-	String sql = "~~";
-	PreparedStatement pstmt = conn.prepareStatement(sql);
-	pstmt.setString(1, vo.faqtitle());
-	pstmt.setString(2, vo.getContent());
-	pstmt.setString(3, Main.LoginMember.getNo());
-	int result = pstmt.executeUpdate();
+import com.kh.subway.faq.vo.FaqVo;
+
+public class FaqDao {
+
 	
+	//faq 목록 (최신순)
+	public List<FaqVo> faqList (Connection conn){
+		
 	
-	
-	
-	
-	
-	
-	
+		//SQL
+		String sql = "";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		//rs
+		List<FaqVo> voList = new ArrayList<FaqVo>();
+		while
+		
+		//close
+		
+		
+		
+		
+		
+		
+		
+	}
 	
 	
 	
