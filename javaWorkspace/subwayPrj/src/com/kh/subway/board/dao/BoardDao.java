@@ -12,12 +12,17 @@ import javaJDBCTEMPLATE.JDBCTemplate;
 
 public class BoardDao {
 	
+	//자유게시판 작성
 	public int write(Connection conn, BoardVo vo) throws Exception {
 		
-		String sql = "INSERT INTO BOARD(BOARD_NO, TITLE, CONTENT) VALUES (SEQ_BOARD_NO.NEXTVAL , ? , ?)";
+		String sql = "INSERT INTO BOARD(BOARD_NO , STATION_NO, USER_NO , TITLE, CONTENT) VALUES (SEQ_BOARD_NO.NEXTVAL , (SELECT STATION_NO FROM STATION WHERE STATION_NAME = ?) , ? , ? ,?)";
+
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, vo.getTitle());
-		pstmt.setString(2, vo.getContent());
+		
+		pstmt.setString(1, vo.getStationName());
+		pstmt.setString(2, vo.getUserNo());
+		pstmt.setString(3, vo.getTitle());
+		pstmt.setString(4, vo.getContent());
 		int result = pstmt.executeUpdate();
 		
 		return result;

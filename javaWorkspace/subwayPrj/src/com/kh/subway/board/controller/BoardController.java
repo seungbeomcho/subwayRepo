@@ -18,23 +18,36 @@ public class BoardController {
 		// 자유게시판 작성
 		public void write() {
 			try {
+				if(Main.loginUser == null && Main.loginAdmin == null) {
+					throw new Exception("로그인하셔야 가능합니다.");
+				}
+				
 				System.out.println("----- 자유게시판 작성 -----");
 				
+				System.out.println("예시) 강남구청역 X -> 강남구청");
+				System.out.print("역이름 : ");
+				String stationName = Main.SC.nextLine();
 				System.out.print("제목 : ");
 				String title = Main.SC.nextLine();
 				System.out.print("작성내용 : ");
 				String content = Main.SC.nextLine();
+				String uesrNo = Main.loginUser.getUserNo();
+				
 				
 				BoardVo vo = new BoardVo();
 				vo.setTitle(title);
 				vo.setContent(content);
+				vo.setStationName(stationName);
+				vo.setUserNo(uesrNo);
 				
 				int result = service.write(vo);
 				
 				if(result != 1) {
 					throw new Exception();
 				}
+				System.out.println("게시글 작성 완료");
 			}catch(Exception e) {
+				System.out.println("게시글 작성 실패");
 				e.printStackTrace();
 			}
 			
