@@ -20,12 +20,14 @@ public class AdminController {
 		System.out.println("1. 회원가입");
 		System.out.println("2. 로그인");
 		System.out.println("3. 회원정보수정");
+		System.out.println("9. 로그아웃");
 		
 		String num = Main.SC.nextLine();
 		switch(num) {
 		case "1" : join(); break;
 		case "2" : login(); break;
-		case "3" : modeifySelectMenu(); break;
+		case "3" : modifySelectMenu(); break;
+		case "9" : adminLogout(); break;
 		default : System.out.println("잘못 선택 하셨습니다.");
 		}
 		
@@ -104,7 +106,7 @@ public class AdminController {
 	}
 	
 	// 관리자 정보 수정 선택
-		public void modeifySelectMenu() {
+		public void modifySelectMenu() {
 			System.out.println("수정하실 사항을 선택해주세요");
 			System.out.println("1. 아이디");
 			System.out.println("2. 닉네임");

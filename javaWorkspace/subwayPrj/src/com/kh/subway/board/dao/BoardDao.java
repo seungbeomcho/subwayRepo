@@ -65,7 +65,60 @@ public class BoardDao {
 		
 		return voList;
 	}
+
+	//자유게시판 수정(일반회원 USER_NO 로 조회해서 UPDATE)
+//	public int editBoardUser(Connection conn, BoardVo vo) {
+//		
+//		String sql = "UPDATE BOARD SET ";
+//		
+//		return 0;
+//	}
+
+	//게시판 상세 조회(BOARD_NO)
+	public BoardVo boardDetailByNo(Connection conn, String no) throws Exception{
+		
+		String sql = "SELECT B.BOARD_NO ,S.STATION_NAME ,B.TITLE ,B.CONTENT ,TO_CHAR(B.ENROLL_DATE , 'YY/MM/DD') AS ENROLLDATE ,B.INQUIRY ,U.NICK AS WRITER_NICK FROM BOARD B JOIN SUBWAY_USER U ON B.USER_NO = U.USER_NO JOIN STATION S ON B.STATION_NO = S.STATION_NO WHERE DELETE_YN = 'N' AND B.BOARD_NO = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, no);
+		ResultSet rs = pstmt.executeQuery();
+		
+		BoardVo voList = null;
+		if(rs.next()) {
+			String doardNo = rs.getString("BOARD_NO");
+			String stationName = rs.getString("STATION_NAME");
+			String title = rs.getString("TITLE");
+			String content = rs.getString("CONTENT");
+			String enrollDate = rs.getString("ENROLLDATE");
+			String inquiry = rs.getString("INQUIRY");
+			String writerNick = rs.getString("WRITER_NICK");
+			
+			voList = new BoardVo();
+			voList.setBoardNo(doardNo);
+			voList.setStationName(stationName);
+			voList.setTitle(title);
+			voList.setContent(content);
+			voList.setEnrollDate(enrollDate);
+			voList.setInquiry(inquiry);
+			voList.setWriterNick(writerNick);
+		}
+		
+		
+		return voList;
+	}
 	
+		public int increaseInquiry(Connection conn, String num) throws Exception {
+		
+		//SQL
+		String sql = "UPDATE BOARD SET HIT = INQUIRY + 1 WHERE NO = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, num);
+		int result = pstmt.executeUpdate();
+		
+		
+		//close
+		JDBCTemplate.close(pstmt);
+		
+		return result;
 	
-	
+		}
 }
