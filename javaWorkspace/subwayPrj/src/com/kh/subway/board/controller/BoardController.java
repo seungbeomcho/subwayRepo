@@ -18,7 +18,8 @@ public class BoardController {
 			System.out.println("===== 자유게시판 =====");
 			System.out.println("1. 글작성");
 			System.out.println("2. 전체 목록 조회(최신순)");
-			System.out.println("3. 상세 목록 조회(게시판넘버)");
+			System.out.println("3. 상세 목록 조회 (게시판넘버)");
+			System.out.println("4. 본인 게시판 조회 및 수정 ");
 			
 			String num = Main.SC.nextLine();
 			switch(num) {
@@ -31,7 +32,8 @@ public class BoardController {
 		}
 		
 		public void adminMenu() {
-			System.out.println("");
+			System.out.println("===== 관리자 메뉴 =====");
+			
 		}
 		
 		// 자유게시판 작성
@@ -111,10 +113,9 @@ public class BoardController {
 					throw new Exception("로그인 해주세요.");
 				}
 				
-				String userNo = Main.loginUser.getUserNo();
 				
 				
-				List<BoardVo> voList = service.userBoardSelect(userNo);
+				List<BoardVo> voList = service.userBoardSelect(Main.loginUser.getUserNo());
 				
 				for(BoardVo vo : voList) {
 					System.out.print("NO :" + vo.getBoardNo() + " ");

@@ -17,7 +17,7 @@ private final BoardDao dao;
 	}
 	
 	
-	
+	//게시글 작성
 	public int write(BoardVo vo) throws Exception {
 		
 		Connection conn = JDBCTemplate.getConnection();
@@ -134,8 +134,8 @@ private final BoardDao dao;
 	}
 
 
-
-	public int delete(String no) {
+	//게시글 삭제
+	public int delete(String no) throws Exception {
 		
 		Connection conn = JDBCTemplate.getConnection();
 		
