@@ -51,26 +51,6 @@ private final BoardDao dao;
 	}
 
 
-//	//일반 유저 게시판 수정
-//	public int editBoardUser(BoardVo vo) throws Exception {
-//		
-//		Connection conn = JDBCTemplate.getConnection();
-//		
-//		int result = dao.editBoardUser(conn, vo);
-//		
-//		if(result == 1) {
-//			JDBCTemplate.commit(conn);
-//		}else {
-//			JDBCTemplate.rollback(conn);
-//		}
-//		
-//		JDBCTemplate.close(conn);
-//		
-//		return result;
-//		
-//	}
-
-
 	// 상세 조회 (Board_NO)
 	public BoardVo boardDetailByNo(String no) throws Exception {
 		
@@ -88,6 +68,88 @@ private final BoardDao dao;
 		JDBCTemplate.close(conn);
 		
 		return voList;
+	}
+
+
+	// 게시글 제목 수정
+	public int titleModify(BoardVo vo) throws Exception {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = dao.titleModify(conn , vo);
+		
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		
+		return result;
+	}
+
+
+	// 게시글 내용 수정
+	public int contentModify(BoardVo vo) throws Exception {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		
+		int result = dao.contentModify(conn , vo);
+		
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		
+		return result;
+	}
+
+
+	// 게시글 조회(USER_NO가 쓴글)
+	public List<BoardVo> userBoardSelect(String userNo) throws Exception{
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = dao.increaseInquiry(conn, userNo);
+		List<BoardVo> voList = dao.userBoardSelect(conn , userNo);
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		return voList;
+	}
+
+
+
+	public int delete(String no) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = dao.delete(conn , no);
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+			
+		return result;
 	}
 	
 	

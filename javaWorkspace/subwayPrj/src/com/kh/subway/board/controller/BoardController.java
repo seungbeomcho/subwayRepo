@@ -15,11 +15,23 @@ public class BoardController {
 		}
 		
 		public void selectMenu() {
+			System.out.println("===== 자유게시판 =====");
+			System.out.println("1. 글작성");
+			System.out.println("2. 전체 목록 조회(최신순)");
+			System.out.println("3. 상세 목록 조회(게시판넘버)");
 			
+			String num = Main.SC.nextLine();
+			switch(num) {
+			case "1" : write(); break; 
+			case "2" : boardList(); break; 
+			case "3" : boardDetailByNo(); break; 
+			case "4" : userBoardSelect(); break; 
+			default : System.out.println("잘못 입력하셨습니다.");
+			}
 		}
 		
 		public void adminMenu() {
-			
+			System.out.println("");
 		}
 		
 		// 자유게시판 작성
@@ -70,14 +82,19 @@ public class BoardController {
 				
 				for(BoardVo vo : voList) {
 					
-					System.out.printf(vo.getBoardNo());
-					System.out.printf("%50s" ,"제목 : " + vo.getTitle());
-					System.out.printf(vo.getContent());
-					System.out.printf(vo.getStationName());
-					System.out.printf(vo.getEnrollDate());
-					System.out.printf(vo.getInquiry());
-					System.out.printf(vo.getWriterNick());
+					System.out.print("NO :" + vo.getBoardNo() + " ");
+					System.out.print("제목 : " + vo.getTitle());
 					System.out.println();
+					System.out.print("내용 : " + vo.getContent());
+					System.out.println();
+					System.out.print("역이름 : " + vo.getStationName());
+					System.out.println();
+					System.out.print("작성일시 : " + vo.getEnrollDate());
+					System.out.println();
+					System.out.print("조회수 : " + vo.getInquiry());
+					System.out.println();
+					System.out.print("작성자 : " + vo.getWriterNick() + "\n");
+					System.out.println("===================================");
 				}
 				
 				
@@ -87,55 +104,71 @@ public class BoardController {
 			}
 		}
 		
-//		// 자유게시판 수정( no 로그인한 유저가 작성한 것에 해당하는것)
-//		public void editBoardUser() {
-//			try{
-//				if(Main.loginUser == null) {
-//					throw new Exception("로그인 해주세요.");
-//				}
-//				System.out.println("자유게시판 수정");
-//				String no = Main.loginUser.getUserNo();
-//				System.out.print("제목 : ");
-//				String title = Main.SC.nextLine();
-//				System.out.print("내용 : ");
-//				String content = Main.SC.nextLine();
-//				
-//				BoardVo vo = new BoardVo();
-//				vo.setUserNo(no);
-//				vo.setTitle(title);
-//				vo.setContent(content);
-//				
-//				int result = service.editBoardUser(vo);
-//				
-//				if(result != 1) {
-//					throw new Exception();
-//				}
-//				System.out.println("게시글이 수정 되었습니다.");
-//				System.out.print("제목 : " + vo.getTitle());
-//				System.out.print("내용 : " + vo.getContent());
-//				
-//			}catch(Exception e) {
-//				System.out.println("게시판 수정 실패");
-//				e.printStackTrace();
-//			}
+		// 자유게시판 조회 및 수정 (로그인 한 no로 조회 및 수정)
+		public void userBoardSelect() {
+			try{
+				if(Main.loginUser == null) {
+					throw new Exception("로그인 해주세요.");
+				}
+				
+				String userNo = Main.loginUser.getUserNo();
+				
+				
+				List<BoardVo> voList = service.userBoardSelect(userNo);
+				
+				for(BoardVo vo : voList) {
+					System.out.print("NO :" + vo.getBoardNo() + " ");
+					System.out.print("제목 : " + vo.getTitle());
+					System.out.println();
+					System.out.print("내용 : " + vo.getContent());
+					System.out.println();
+					System.out.print("역이름 : " + vo.getStationName());
+					System.out.println();
+					System.out.print("작성일시 : " + vo.getEnrollDate());
+					System.out.println();
+					System.out.print("조회수 : " + vo.getInquiry());
+					System.out.println();
+					System.out.print("작성자 : " + vo.getWriterNick() + "\n");
+					System.out.println("===================================");
+				}
+				
+				System.out.println("자유게시판 수정");
+				System.out.println("1. 제목 수정");
+				System.out.println("2. 내용 수정");
+				System.out.println("3. 게시글 삭제");
+				System.out.println("9. 이전으로 돌아가기");
+				String num = Main.SC.nextLine();
+				switch(num) {
+				case "1" : titleModify(); break;
+				case "2" : contentModify(); break;
+				case "3" : delete(); break;
+				case "9" : return;
+				default : System.out.println("잘못 입력하셨습니다.");
+				}
+				
+				
+			}catch(Exception e) {
+				System.out.println("게시판 수정 실패");
+				e.printStackTrace();
+			}
 			
 			
-//		}
+		}
 		
 		// 자유게시판 삭제 (로그인한 유저만, 게시판 번호)
 		public void delete() {
 			try {
-				if(Main.loginAdmin == null && Main.loginUser == null) {
-					throw new Exception("로그인해야 가능한 기능입니다.");
-				}
 				
 				System.out.print("게시판 번호 : ");
 				String no = Main.SC.nextLine();
 				
+				int result = service.delete(no);
 				
+				if(result != 1) {
+					throw new Exception();
+				}
 				
-				
-				
+				System.out.println("게시글 삭제 성공");
 				
 			}catch(Exception e) {
 				System.out.println("게시판 삭제 실패");
@@ -164,6 +197,7 @@ public class BoardController {
 				System.out.println("게시판 역이름 : " + voList.getStationName());
 				
 				
+				
 			}catch(Exception e) {
 				System.out.println("상세 조회 실패 ...");
 				e.printStackTrace();
@@ -173,37 +207,58 @@ public class BoardController {
 			
 		}
 		
+		// 게시글 제목 수정
+		public void titleModify() {
+			try {
+				
+				System.out.print("변경할 내용 : ");
+				String title = Main.SC.nextLine();
+				BoardVo vo = new BoardVo();
+				vo.setTitle(title);
+				vo.setBoardNo(Main.loginUser.getUserNo());
+				
+				int result = service.titleModify(vo);
+				
+				if(result != 1) {
+					throw new Exception();
+				}
+				System.out.println("제목 수정 성공 !");
+				
+				
+			}catch(Exception e){
+				System.out.println("제목 수정 실패 ...");
+				e.printStackTrace();
+			}
+			
+		}
 		
-		
+		// 게시글 내용 수정
+		public void contentModify() {
+			try {
+				
+				System.out.print("변경할 내용 : ");
+				String content = Main.SC.nextLine();
+				BoardVo vo = new BoardVo();
+				vo.setTitle(content);
+				vo.setBoardNo(Main.loginUser.getUserNo());
+				
+				int result = service.contentModify(vo);
+				
+				if(result != 1) {
+					throw new Exception();
+				}
+				System.out.println("내용 수정 성공 !");
+				
+				
+			}catch(Exception e){
+				System.out.println("내용 수정 실패 ...");
+				e.printStackTrace();
+			}
+		}
 		
 		
 		
 }//class
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
