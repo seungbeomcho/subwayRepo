@@ -13,7 +13,7 @@ public class QnaVo {
 	private String reContent;
 	private String inquiry;
 	private String deleteYn;
-	
+	private String writerNick;
 	public String getQnaNo() {
 		return qnaNo;
 	}
@@ -80,8 +80,16 @@ public class QnaVo {
 	public void setDeleteYn(String deleteYn) {
 		this.deleteYn = deleteYn;
 	}
+	public String getWriterNick() {
+		return writerNick;
+	}
+	public void setWriterNick(String writerNick) {
+		this.writerNick = writerNick;
+	}
+	public QnaVo() {
+	}
 	public QnaVo(String qnaNo, String stationNo, String adminNo, String userNo, String postTime, String title,
-			String content, String reTitle, String reContent, String inquiry, String deleteYn) {
+			String content, String reTitle, String reContent, String inquiry, String deleteYn, String writerNick) {
 		super();
 		this.qnaNo = qnaNo;
 		this.stationNo = stationNo;
@@ -94,15 +102,14 @@ public class QnaVo {
 		this.reContent = reContent;
 		this.inquiry = inquiry;
 		this.deleteYn = deleteYn;
+		this.writerNick = writerNick;
 	}
-	public QnaVo() {
-	}
-	
 	@Override
 	public String toString() {
 		return "QnaVo [qnaNo=" + qnaNo + ", stationNo=" + stationNo + ", adminNo=" + adminNo + ", userNo=" + userNo
 				+ ", postTime=" + postTime + ", title=" + title + ", content=" + content + ", reTitle=" + reTitle
-				+ ", reContent=" + reContent + ", inquiry=" + inquiry + ", deleteYn=" + deleteYn + "]";
+				+ ", reContent=" + reContent + ", inquiry=" + inquiry + ", deleteYn=" + deleteYn + ", writerNick="
+				+ writerNick + "]";
 	}
 	
 }

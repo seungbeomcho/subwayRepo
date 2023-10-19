@@ -38,6 +38,25 @@ public class QnaService {
 	
 	}
 	
+	//게시글 답변 관리자
+		public int reWrite(QnaVo vo) throws Exception {
+			
+			//conn
+			Connection conn = JDBCTemplate.getConnection();
+			//DAO
+			int result = dao.reWrite(conn, vo);
+			//tx(DML 실행시에만 필요)
+			if(result == 1) {
+				JDBCTemplate.commit(conn);
+			}else {
+				JDBCTemplate.rollback(conn);
+			}
+			//close
+			JDBCTemplate.close(conn);
+			
+			return result;
+		
+		}
 	//게시글 목록(최신순)
 	public List<QnaVo> qnaList() throws Exception {
 		
