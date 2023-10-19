@@ -14,12 +14,13 @@ public class FaqController {
 	public FaqController() {
 		service = new FaqService();
 	}
+	
 	//관리자 메뉴
 	public void adminMenu() {
 		
 	}
 	
-	//faq 메뉴선택
+	//FAQ 메뉴선택
 	public void selectMenu() {
 		System.out.println("----FAQ----");
 		
@@ -28,12 +29,14 @@ public class FaqController {
 		System.out.println("3. FAQ 상세조회");
 //		System.out.println("3. FAQ 수정");
 //		System.out.println("3. FAQ 삭제");
-//		수정, 공지사사항 
 		
 		String num = Main.SC.nextLine();
 		switch(num) {
 		case "1" : write(); break;
 		case "2" : faqList(); break;
+		case "3" : faqDetailByNo(); break;
+//		case "4" : faqModify(); break;
+//		case "5" : faqDelete(); break;
 		default : System.out.println("잘못입력하셨습니다"); 
 		}
 }
@@ -47,7 +50,7 @@ public class FaqController {
 				
 				//로그인 여부 체크
 				if(Main.loginAdmin == null) {
-					throw new Exception("관리자만 FAQ 작성이 가능합니다.");
+					throw new Exception("관리자 로그인이 필요합니다.");
 				}
 				
 				System.out.println("제목 : ");
@@ -78,29 +81,29 @@ public class FaqController {
 			try {
 				System.out.println("---- FAQ 목록 ----");
 				
-//				List<FaqVo> voList = service.faqList();
+				List<FaqVo> voList = service.faqList();
 				
-				System.out.print("번호");
-				System.out.print(" / ");
 				System.out.print("제목");
+				System.out.print(" / ");
+				System.out.print("번호");
 				System.out.print(" / ");
 				System.out.print("작성일자");
 				System.out.println();
 				
-//				for(FaqVo vo : voList) {
-//					System.out.print(vo.getFaqno());
-//					System.out.println("/");
-//					System.out.println(vo.getFaqtitle());
-//					System.out.println("/");
-//					System.out.println(vo.getPosttime());
-//					System.out.println();
-//				}
+				for(FaqVo vo : voList) {
+					System.out.print(vo.getFaqno());
+					System.out.println("/");
+					System.out.println(vo.getFaqtitle());
+					System.out.println("/");
+					System.out.println(vo.getPosttime());
+					
+					System.out.println();
+				}
 				
 			}catch (Exception e) {
 				System.out.println("FAQ 목록 조회 실패");
 				e.printStackTrace();
 			}
-			
 		} //faqList
 		
 		
@@ -108,32 +111,35 @@ public class FaqController {
 		public void faqDetailByNo() {
 			
 			try {
-				System.out.println("---FAQ 상세조회---");
+				System.out.println("----FAQ 상세조회----");
 				
 				//데이터
-				System.out.println("조회할 게시글 입력 : ");
+				System.out.println("조회할 FAQ 번호 : ");
 				String num = Main.SC.nextLine();
 				
 				//서비스
-//				List<BoardNo>
+				FaqVo vo = service.faqDetailByNo(num);
 				
 				//결과처리
+				if(vo == null) {
+					throw new Exception("FAQ 상세조회 실패");
+				}
+				System.out.println("FAQ 번호 : " + vo.getFaqno());
+				System.out.println("FAQ 제목 : " + vo.getFaqtitle());
+				System.out.println("FAQ 내용 : " + vo.getContent());
+				System.out.println("FAQ 작성일시 : " + vo.getPosttime());
+//				역이름, 조회수 추가
 				
 			}catch (Exception e) {
 				System.out.println("FAQ 상세조회가 불가합니다");
+				e.printStackTrace();
 			}
-			
-			
-			
-			
 		} //faqDetailByNo
+	
 		
+		//FAQ 수정
 		
-		
-		
-		
-		
-		//faq 게시글 수정
+		//FAQ 삭제
 			
 			
 
