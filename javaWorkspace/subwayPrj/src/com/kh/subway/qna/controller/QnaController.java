@@ -19,8 +19,8 @@ public class QnaController {
 	public void selectMenu() {
 		System.out.println("===== QNA =====");
 
-		System.out.println("1. 질의내용 작성");
-		System.out.println("2. 질의답변 작성");
+		System.out.println("1. 질의내용 작성"); 
+		System.out.println("2. 질의답변 작성"); 
 		System.out.println("3. 질의내용 목록 조회 <최신순>");
 		System.out.println("4. 질의내용 상세 조회 <번호>");
 		System.out.println("5. 질의답변 목록 조회 <최신순>");
@@ -29,7 +29,7 @@ public class QnaController {
 		String num = Main.SC.nextLine();
 		switch (num) {
 		case "1": write(); break;
-//		case "2": reWrite(); break;
+		case "2": reWrite(); break;
 		case "3": qnaList(); break;
 		case "4": qnaDetailByNo(); break;
 //		case "5": reQnaList(); break;
@@ -84,7 +84,44 @@ public class QnaController {
 			e.printStackTrace();
 		}
 	}
+	// 답변 (관리자 전용)
+	public void reWrite() {
 
+		try {
+			System.out.println("------질의답변 작성------");
+			
+			QnaVo vo = null;
+			// 로그인 여부 확인
+			if (Main.loginAdmin == null) {
+				throw new Exception("로그인 하고 오세요! 관리자만 가능합니다.");
+			}else {
+				String adminNo = Main.loginAdmin.getAdminNo();
+				// 데이터
+				System.out.println("답변제목 : ");
+				String reTitle = Main.SC.nextLine();
+				System.out.println("답변내용 : ");
+				String reContent = Main.SC.nextLine();
+
+				vo = new QnaVo();
+				
+				vo.setReTitle(reTitle);
+				vo.setReContent(reContent);
+			}
+			// 서비스
+			int result = service.reWrite(vo);
+
+			// 결과
+			if (result == 1) {
+				System.out.println("질의내용 작성 성공!");
+			} else {
+				throw new Exception();
+			}
+
+		} catch (Exception e) {
+			System.out.println("질의내용 작성 실패...");
+			e.printStackTrace();
+		}
+	}
 	// 삭제 (작성자 본인만)
 
 	// 수정하기 (제목, 내용)
@@ -165,9 +202,11 @@ public class QnaController {
 			System.out.println("------------------------------");
 			System.out.println("글번호 : " + vo.getQnaNo());
 			System.out.println("질의제목 : " + vo.getTitle());
-			System.out.println("질의자 : " + vo.getUserNo());
+			System.out.println("질의내용 : " + vo.getContent());
+			System.out.println("닉네임 : " + vo.getWriterNick());
 			System.out.println("조회수 : " + vo.getInquiry());
-			System.out.println("작성일자 : " + vo.getPostTime());
+			System.out.println("작성일시 : " + vo.getPostTime());
+			System.out.println("유저번호 : " + vo.getUserNo());
 			System.out.println("------------------------------");
 			
 		} catch (Exception e) {
