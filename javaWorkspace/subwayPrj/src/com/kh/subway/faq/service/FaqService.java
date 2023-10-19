@@ -18,41 +18,46 @@ public class FaqService {
 		dao = new FaqDao();
 	}
 
-	//faq 목록 (최신순)
-	public List<FaqVo> faqList(){
-		
-		//conn
-		Connection conn = JDBCTemplate.getConnection();
-		
-		//dao
-		List<FaqVo> voList = dao.faqList(conn);
-		
-		//tx
-		
-		//close
+	public int writer(FaqVo vo) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
+
+//	//faq 목록 (최신순)
+//	public List<FaqVo> faqList(){
+//		
+//		//conn
+//		Connection conn = JDBCTemplate.getConnection();
+//		
+//		//dao
+//		List<FaqVo> voList = dao.faqList(conn);
+//		
+//		//tx
+//		
+//		//close
+//	}
 	
 	
 	
 	
 	
 	//faq 상세 조회 (번호)
-	public FaqVo faqDetailByNo(String num) throws Exception {
-		
-		//conn
-		Connection conn = JDBCTemplate.getConnection();
-		
-		//dao
-		int result 
-		FaqVo vo = dao.faqDetailByNo(conn, num);
-		
-		//tx
-		if(result == 1) {
-			JDBCTemplate.commit(conn);
-		}else {
-			JDBCTemplate.rollback(conn);
-		}
+//	public FaqVo faqDetailByNo(String num) throws Exception {
+//		
+//		//conn
+//		Connection conn = JDBCTemplate.getConnection();
+//		
+//		//dao
+//		int result 
+//		FaqVo vo = dao.faqDetailByNo(conn, num);
+//		
+//		//tx
+//		if(result == 1) {
+//			JDBCTemplate.commit(conn);
+//		}else {
+//			JDBCTemplate.rollback(conn);
+//		}
 		
 		//rs
 	}
-}
+// }
