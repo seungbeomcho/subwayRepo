@@ -49,6 +49,46 @@ private final BoardDao dao;
 		return voList;
 		
 	}
+
+
+//	//일반 유저 게시판 수정
+//	public int editBoardUser(BoardVo vo) throws Exception {
+//		
+//		Connection conn = JDBCTemplate.getConnection();
+//		
+//		int result = dao.editBoardUser(conn, vo);
+//		
+//		if(result == 1) {
+//			JDBCTemplate.commit(conn);
+//		}else {
+//			JDBCTemplate.rollback(conn);
+//		}
+//		
+//		JDBCTemplate.close(conn);
+//		
+//		return result;
+//		
+//	}
+
+
+	// 상세 조회 (Board_NO)
+	public BoardVo boardDetailByNo(String no) throws Exception {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = dao.increaseInquiry(conn, no);
+		BoardVo voList = dao.boardDetailByNo(conn , no);
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		return voList;
+	}
 	
 	
 }
