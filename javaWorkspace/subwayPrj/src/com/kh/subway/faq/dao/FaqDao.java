@@ -2,16 +2,19 @@ package com.kh.subway.faq.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.kh.subway.faq.vo.FaqVo;
 
+import javaJDBCTEMPLATE.JDBCTemplate;
+
 public class FaqDao {
 
 	
 	//faq 목록 (최신순)
-	public List<FaqVo> faqList (Connection conn){
+	public List<FaqVo> faqList (Connection conn)throws Exception{
 		
 	
 		//SQL
@@ -21,19 +24,21 @@ public class FaqDao {
 		
 		//rs
 		List<FaqVo> voList = new ArrayList<FaqVo>();
-		while
 		
 		//close
+		JDBCTemplate.close(rs);
+		JDBCTemplate.close(pstmt);
 		
-		
+		return voList;   
 		
 		
 		
 		
 		
 	}
+	}
 	
 	
 	
 	
-}//class
+//}//class
