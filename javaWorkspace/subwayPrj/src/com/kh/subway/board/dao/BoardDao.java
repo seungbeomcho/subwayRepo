@@ -66,13 +66,7 @@ public class BoardDao {
 		return voList;
 	}
 
-	//자유게시판 수정(일반회원 USER_NO 로 조회해서 UPDATE)
-//	public int editBoardUser(Connection conn, BoardVo vo) {
-//		
-//		String sql = "UPDATE BOARD SET ";
-//		
-//		return 0;
-//	}
+
 
 	//게시판 상세 조회(BOARD_NO)
 	public BoardVo boardDetailByNo(Connection conn, String no) throws Exception{
@@ -120,5 +114,84 @@ public class BoardDao {
 		
 		return result;
 	
+		}
+
+		// 게시글 제목 수정
+		public int titleModify(Connection conn, BoardVo vo) throws Exception {
+			
+			String sql = "UPDATE BOARD SET TITLE = ? , MODIFY_DATE = SYSDATE WHERE USER_NO = ? AND DELETE_YN = 'N'";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setString(2, vo.getUserNo());
+			int result = pstmt.executeUpdate();
+			
+			JDBCTemplate.close(pstmt);
+			
+			return result;
+		}
+
+		// 게시글 내용 수정
+		public int contentModify(Connection conn, BoardVo vo) throws Exception {
+			
+			String sql = "UPDATE BOARD SET CONTENT = ? , MODIFY_DATE = SYSDATE WHERE USER_NO = ? AND DELETE_YN = 'N'";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, vo.getContent());
+			pstmt.setString(2, vo.getUserNo());
+			int result = pstmt.executeUpdate();
+			
+			JDBCTemplate.close(pstmt);
+			
+			return result;
+		}
+
+		// 게시글 조회(USER_NO가 쓴글)
+		public List<BoardVo> userBoardSelect(Connection conn, String userNo) throws Exception {
+			String sql = "SELECT B.BOARD_NO ,S.STATION_NAME ,B.TITLE ,B.CONTENT ,TO_CHAR(B.ENROLL_DATE , 'YY/MM/DD') AS ENROLLDATE ,B.INQUIRY ,U.NICK AS WRITER_NICK FROM BOARD B JOIN SUBWAY_USER U ON B.USER_NO = U.USER_NO JOIN STATION S ON B.STATION_NO = S.STATION_NO WHERE B.USER_NO = ? AND DELETE_YN = 'N' ORDER BY B.ENROLL_DATE DESC";
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			ResultSet rs = pstmt.executeQuery();
+			
+			List<BoardVo> voList = new ArrayList<BoardVo>();
+			while(rs.next()) {
+				String doardNo = rs.getString("BOARD_NO");
+				String stationName = rs.getString("STATION_NAME");
+				String title = rs.getString("TITLE");
+				String content = rs.getString("CONTENT");
+				String enrollDate = rs.getString("ENROLLDATE");
+				String inquiry = rs.getString("INQUIRY");
+				String writerNick = rs.getString("WRITER_NICK");
+				
+				BoardVo vo = new BoardVo();
+				vo.setBoardNo(doardNo);
+				vo.setStationName(stationName);
+				vo.setTitle(title);
+				vo.setContent(content);
+				vo.setEnrollDate(enrollDate);
+				vo.setInquiry(inquiry);
+				vo.setWriterNick(writerNick);
+				
+				voList.add(vo);
+				
+			}
+			
+			JDBCTemplate.close(rs);
+			JDBCTemplate.close(pstmt);
+			
+			return voList;
+			
+		}
+
+		// 게시글 삭제
+		public int delete(Connection conn, String no) throws Exception {
+			
+			String sql = "UPDATE BOARD SET DELETE_YN = 'Y' WHERE BOARD_NO = ? AND DELETE_YN = 'N'";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, no);
+			int result = pstmt.executeUpdate();
+			
+			JDBCTemplate.close(pstmt);
+			
+			return result;
+			
 		}
 }
