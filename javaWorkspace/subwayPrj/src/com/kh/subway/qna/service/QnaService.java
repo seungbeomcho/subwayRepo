@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.kh.subway.qna.dao.QnaDao;
 import com.kh.subway.qna.vo.QnaVo;
-import com.kh.subway.template.JDBCTemplate;
+
+import javaJDBCTEMPLATE.JDBCTemplate;
+
 
 public class QnaService {
 
