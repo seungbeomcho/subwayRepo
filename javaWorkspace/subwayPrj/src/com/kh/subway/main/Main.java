@@ -23,7 +23,6 @@ public class Main {
 		BoardController boardController = new BoardController();
 		QnaController qnaController = new QnaController();
 		FaqController faqController = new FaqController();
-
 		
 		System.out.println("==== Subway 프로젝트 ====");	
 		while(true) {
@@ -67,6 +66,8 @@ public class Main {
 //				case "3" : faqController.adminMenu(); break;
 //				case "4" : noticeController.adminMenu(); break;
 //				case "5" : qnaController.adminMenu(); break;
+//				case "6" : boardController.adminMenu(); break;
+				
 				}
 			}
 		}//while
