@@ -1,6 +1,7 @@
 package com.kh.subway.store.service;
 
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
 
 import com.kh.subway.store.dao.SubwayDao;
@@ -33,30 +34,30 @@ public class SubwayService {
 	}
 
 	//역 이름으로 근처 매장 조회
-	public SubwayVo subwayListByName(String name) throws Exception {
+	public List<SubwayVo> subwayListByName(String name) throws Exception {
 	
 		//conn
 		Connection conn = JDBCTemplate.getConnection();
 		
 		//dao
-		SubwayVo vo = dao.subwayListByName(conn, name);
+		List<SubwayVo> voList = dao.subwayListByName(conn, name);
 		
 		//tx
 		
 		//close
 		JDBCTemplate.close(conn);
 		
-		return vo;
+		return voList;
 	}
 
-	//관리자 계정으로 매장 정보 수정
-	public int editStore(SubwayVo vo) throws Exception {
+	//관리자 계정으로 매장 이름 수정
+	public int changeStoreName(SubwayVo vo) throws Exception {
 	
 		//conn
 		Connection conn = JDBCTemplate.getConnection();
 		
 		//dao
-		int result = dao.editStore(conn, vo);
+		int result = dao.changeStoreName(conn, vo);
 		
 		//tx
 		if(result == 1) {
@@ -70,7 +71,48 @@ public class SubwayService {
 		
 		return result;
 	}
+//폐업 매장 등록(삭제)
+	public int closeStore(HashMap<String, String> map) throws Exception {
 
+		//conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		//dao
+		int result = dao.closeStore(conn, map);
+		
+		//tx
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		//close
+		JDBCTemplate.close(conn);
+		return result;
+	}
+
+	//신규 매장 추가
+	public int newStore(SubwayVo vo) throws Exception {
+
+		//conn
+		Connection conn = JDBCTemplate.getConnection();
+	
+		//dao
+		int result = dao.newStore(conn, vo);
+		
+		//tx
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		//close
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
 	
 
 }
