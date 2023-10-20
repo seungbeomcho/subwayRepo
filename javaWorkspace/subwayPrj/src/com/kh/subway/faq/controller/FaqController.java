@@ -1,6 +1,5 @@
 package com.kh.subway.faq.controller;
 
-import java.util.HashMap;
 import java.util.List;
 
 import com.kh.subway.faq.service.FaqService;
@@ -18,26 +17,6 @@ public class FaqController {
 	
 	//관리자 메뉴
 	public void adminMenu() {
-		System.out.println("---FAQ 관리자 메뉴---");
-		
-		System.out.println("1. FAQ 작성");
-//		System.out.println("2. FAQ 수정");
-		System.out.println("3. FAQ 삭제");
-		System.out.println("4. 로그아웃");
-		System.out.println("9. 돌아가기");
-		
-		String num = Main.SC.nextLine();
-		switch(num) {
-		case "1" : write(); break;
-//		case "2" : faqModify(); break;
-		case "3" : delete(); break;
-//		case "4" : AdminController.adminlogout(); break;
-		case "9" : return;
-		
-		
-		default : System.out.println("잘못입력하셨습니다");
-		}
-		
 		
 	}
 	
@@ -45,14 +24,19 @@ public class FaqController {
 	public void selectMenu() {
 		System.out.println("----FAQ----");
 		
-		System.out.println("1. FAQ 목록조회");
-		System.out.println("2. FAQ 상세조회");
+		System.out.println("1. FAQ 작성");
+		System.out.println("2. FAQ 목록조회");
+		System.out.println("3. FAQ 상세조회");
+//		System.out.println("3. FAQ 수정");
+//		System.out.println("3. FAQ 삭제");
 		
 		String num = Main.SC.nextLine();
 		switch(num) {
-		case "1" : faqList(); break;
-		case "2" : faqDetailByNo(); break;
-
+		case "1" : write(); break;
+		case "2" : faqList(); break;
+		case "3" : faqDetailByNo(); break;
+//		case "4" : faqModify(); break;
+//		case "5" : faqDelete(); break;
 		default : System.out.println("잘못입력하셨습니다"); 
 		}
 }
@@ -91,10 +75,7 @@ public class FaqController {
 		}//write
 			
 		
-		/**
-		 * FAQ 목록조회 (최신순)
-		 * 번호, 제목, 조회수, 작성일자
-		 */
+		//FAQ 목록조회 (최신순)
 		public void faqList() {
 			
 			try {
@@ -102,23 +83,20 @@ public class FaqController {
 				
 				List<FaqVo> voList = service.faqList();
 				
-				System.out.print("번호");
-				System.out.print(" / ");
 				System.out.print("제목");
 				System.out.print(" / ");
-				System.out.print("조회수");
+				System.out.print("번호");
 				System.out.print(" / ");
 				System.out.print("작성일자");
 				System.out.println();
 				
 				for(FaqVo vo : voList) {
 					System.out.print(vo.getFaqno());
-					System.out.print("/");
-					System.out.print(vo.getFaqtitle());
-					System.out.print("/");
-					System.out.print(vo.getInquiry());
-					System.out.print("/");
-					System.out.print(vo.getPosttime());
+					System.out.println("/");
+					System.out.println(vo.getFaqtitle());
+					System.out.println("/");
+					System.out.println(vo.getPosttime());
+					
 					System.out.println();
 				}
 				
@@ -129,10 +107,7 @@ public class FaqController {
 		} //faqList
 		
 		
-		/**
-		 * FAQ 상세 조회 (번호)
-		 * 번호, 역번호,  제목, 조회수, 작성일자, 내용
-		 */
+		//FAQ 상세 조회
 		public void faqDetailByNo() {
 			
 			try {
@@ -140,21 +115,20 @@ public class FaqController {
 				
 				//데이터
 				System.out.println("조회할 FAQ 번호 : ");
-				String NUM = Main.SC.nextLine();
+				String num = Main.SC.nextLine();
 				
 				//서비스
-				FaqVo vo = service.faqDetailByNo(NUM);
+				FaqVo vo = service.faqDetailByNo(num);
 				
 				//결과처리
 				if(vo == null) {
 					throw new Exception("FAQ 상세조회 실패");
 				}
 				System.out.println("FAQ 번호 : " + vo.getFaqno());
-				System.out.println("FAQ 역 번호 : " + vo.getStationno());
 				System.out.println("FAQ 제목 : " + vo.getFaqtitle());
-				System.out.println("FAQ 조회수 : " + vo.getInquiry());
-				System.out.println("FAQ 작성일시 : " + vo.getPosttime());
 				System.out.println("FAQ 내용 : " + vo.getContent());
+				System.out.println("FAQ 작성일시 : " + vo.getPosttime());
+//				역이름, 조회수 추가
 				
 			}catch (Exception e) {
 				System.out.println("FAQ 상세조회가 불가합니다");
@@ -165,41 +139,8 @@ public class FaqController {
 		
 		//FAQ 수정
 		
-		
 		//FAQ 삭제
-		public void delete() {
-			try {
-				System.out.println("---FAQ 삭제---");
-				
-				if(Main.loginAdmin == null) {
-					throw new Exception("관리자 로그인이 필요합니다");
-				}
-				
-				//데이터
-				System.out.println("게시글 번호 : ");
-				String num = Main.SC.nextLine();
-				String memberNo = Main.loginAdmin.getAdminNo();
-				
-				//서비스
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("faqNum", num);
-				map.put("loginUserNo", memberNo);
-				int result = service.delete(map);
-				
-				//결과
-				if(result != 1) {
-					throw new Exception();
-				}
-				System.out.println("삭제완료");
-				
-			}catch(Exception e) {
-				System.out.println("삭제실패");
-				e.printStackTrace();
-				
-			}
-		}
 			
 			
 
 }//class
-
