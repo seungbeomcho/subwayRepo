@@ -16,6 +16,20 @@ import com.kh.subway.store.vo.SubwayVo;
 		service = new SubwayService();
 	}
 	
+	//관리자 메뉴
+	public void adminMenu() {
+		System.out.println("1. 매장 정보 수정 (관리자만");
+		System.out.println("2. 폐업 매장 삭제 (관리자만");
+		System.out.println("3. 신규 매장 추가 (관리자만");
+		
+		String num = Main.SC.nextLine();
+		switch(num) {
+		case "1" : break;
+		case "2" : break;
+		case "3" : break;
+	    default : System.out.println("잘못 입력하셨습니다.");
+		}
+	}
 	//메뉴선택
 	public void selectMenu() {
 		System.out.println("=====SUBWAY STORE=====");
