@@ -3,6 +3,7 @@ package com.kh.subway.station.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,34 @@ public class StationDao {
 		JDBCTemplate.close(pstmt);
 		
 		return voList;
+	}//searchStationInfo
+
+	//시간표 조회
+	public StationVo searchTimetable(Connection conn, StationVo timeVo) throws Exception {
+		
+		String sql = "SELECT WEEK_START_TIME ,WEEK_END_TIME ,HOL_START_TIME ,HOL_END_TIME FROM STATION WHERE STATION_NAME = ? AND LINE_NO = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, timeVo.getStationName());
+		pstmt.setString(2, timeVo.getLineNo());
+		ResultSet resultSet = pstmt.executeQuery();
+	    
+		StationVo rsVo = new StationVo();
+		if(!resultSet.next()) {
+			throw new Exception();
+		}
+		String weekStime = resultSet.getString("WEEK_START_TIME");
+		String weekEtime = resultSet.getString("WEEK_END_TIME");
+		String holStime = resultSet.getString("HOL_START_TIME");
+		String holEtime = resultSet.getString("HOL_END_TIME");
+		
+		rsVo.setWeekStartTime(weekStime);
+		rsVo.setWeekEndTime(weekEtime);
+		rsVo.setHolStartTime(holStime);
+		rsVo.setHolEndTime(holEtime);
+		
+		
+		
+		return rsVo;
 	}
 
 }
