@@ -26,7 +26,9 @@ public class StationService {
 		//DAO
 		List<StationVo> voList = stationDao.searchStationInfo(conn, station);
 		
+		//표시처리
 		StationVo stationInfo= voList.get(0);
+		
 		if(stationInfo.getTransferYn().equals("Y")) {
 			stationInfo.setTransferYn("환승가능");
 		}else {
@@ -38,5 +40,19 @@ public class StationService {
 		JDBCTemplate.close(conn);
 		return voList;
 	}
+
+	//시간표 조회
+	public StationVo searchTimetable(StationVo timeVo) throws Exception {
+		//conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		//DAO
+		StationVo rsVo = stationDao.searchTimetable(conn, timeVo);
+		
+		//close
+		JDBCTemplate.close(conn);
+		
+		return rsVo;
+	}//searchTimetable
 
 }
