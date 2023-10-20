@@ -59,16 +59,16 @@ public class StationController {
 			System.out.println();
 			System.out.println();	
 			System.out.println("┌──────────────────────────────────────────┐");
-			System.out.println(" 역명 :" + stationInfo.getStationName());
-			System.out.println(" 노선명 :" + stationInfo.getLineNo());
-			System.out.println(" 환승 여부 :" + stationInfo.getTransferYn());
+			System.out.println(" 역명 : " + stationInfo.getStationName());
+			System.out.println(" 노선명 : " + stationInfo.getLineNo());
+			System.out.println(" 환승 여부 : " + stationInfo.getTransferYn());
 			if(stationInfo.getTransferYn().equals("Y")) {
 			System.out.print(" 환승가능노선 : ");
 				for(StationVo vo : voList) {
-					System.out.print(vo.getLineNo() + "|");
+					System.out.print(vo.getLineNo() + "호선|");
 				}
 			}
-			System.out.println(" 출구 개수 :" + stationInfo.getExitCount());
+			System.out.println(" 출구 개수 : " + stationInfo.getExitCount());
 			System.out.print(" 화장실 개찰구 내/외 안내 : ");
 			switch (stationInfo.getToiletIo()) {
 			case "I": System.out.print("개찰구 내 위치합니다."); break;

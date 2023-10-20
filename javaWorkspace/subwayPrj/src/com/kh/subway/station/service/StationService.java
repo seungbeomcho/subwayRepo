@@ -25,6 +25,13 @@ public class StationService {
 		
 		//DAO
 		List<StationVo> voList = stationDao.searchStationInfo(conn, station);
+		
+		StationVo stationInfo= voList.get(0);
+		if(stationInfo.getTransferYn().equals("Y")) {
+			stationInfo.setTransferYn("환승가능");
+		}else {
+			stationInfo.setTransferYn("환승불가! 환승역 아님");
+		}
 		//tx
 		
 		//close

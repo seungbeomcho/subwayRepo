@@ -8,6 +8,7 @@ import com.kh.subway.board.controller.BoardController;
 import com.kh.subway.faq.controller.FaqController;
 import com.kh.subway.qna.controller.QnaController;
 import com.kh.subway.station.controller.StationController;
+import com.kh.subway.store.controller.SubwayController;
 import com.kh.subway.user.vo.UserVo;
 
 public class Main {
@@ -23,6 +24,7 @@ public class Main {
 		BoardController boardController = new BoardController();
 		QnaController qnaController = new QnaController();
 		FaqController faqController = new FaqController();
+		SubwayController subwayController = new SubwayController();
 		
 		System.out.println("==== Subway 프로젝트 ====");	
 		while(true) {
@@ -50,10 +52,10 @@ public class Main {
 			case "1" : stationController.selectMenu(); break;
 //			case "2" : stationController.stationInfoView(); break;
 //			case "3" : noticeController.selectMenu(); break;
-//			case "4" : faqController.selectMenu(); break;
+			case "4" : faqController.selectMenu(); break;
 //			case "5" : qnaController.selectMenu(); break;
-//			case "6" : boardController.selectMenu(); break;
-//			case "7" : subwayController.selectMenu(); break;
+			case "6" : boardController.selectMenu(); break;
+			case "7" : subwayController.selectMenu(); break;
 			case "9" : return;
 			}
 			
@@ -63,10 +65,10 @@ public class Main {
 				switch (loginAdmin.getAdminNo()) {
 				case "1" : stationController.adminMenu(); break;
 //				case "2" : subwayController.adminMenu(); break;
-//				case "3" : faqController.adminMenu(); break;
+				case "3" : faqController.adminMenu(); break;
 //				case "4" : noticeController.adminMenu(); break;
 //				case "5" : qnaController.adminMenu(); break;
-//				case "6" : boardController.adminMenu(); break;
+				case "6" : boardController.adminMenu(); break;
 				
 				}
 			}
