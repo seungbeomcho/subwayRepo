@@ -107,17 +107,27 @@ public class AdminController {
 	
 	// 관리자 정보 수정 선택
 		public void modifySelectMenu() {
-			System.out.println("수정하실 사항을 선택해주세요");
-			System.out.println("1. 아이디");
-			System.out.println("2. 닉네임");
-			System.out.println("3. 업무명");
-			String num = Main.SC.nextLine();
-			
-			switch(num) {
-			case "1" : modifyId(); break;
-			case "2" : modifyNick(); break;
-			case "3" : modifyPartName(); break;
-			default : System.out.println("잘못 선택하셨습니다.");
+			try {
+				if(Main.loginAdmin == null) {
+					throw new Exception("ADMIN 로그인시 가능합니다.");
+				}
+				System.out.println("수정하실 사항을 선택해주세요");
+				System.out.println("현재 아이디 : " + Main.loginAdmin.getId());
+				System.out.println("현재 닉네임 : " + Main.loginAdmin.getNick());
+				System.out.println("현재 업무명 : " + Main.loginAdmin.getPartName());
+				System.out.println("1. 아이디");
+				System.out.println("2. 닉네임");
+				System.out.println("3. 업무명");
+				String num = Main.SC.nextLine();
+				
+				switch(num) {
+				case "1" : modifyId(); break;
+				case "2" : modifyNick(); break;
+				case "3" : modifyPartName(); break;
+				default : System.out.println("잘못 선택하셨습니다.");
+				}
+			}catch(Exception e) {
+			System.out.println("관리자 정보 수정 실패");
 			}
 		}
 	

@@ -56,29 +56,23 @@ public class FaqService {
 		return voList;
 	}
 
-	public FaqVo faqDetailByNo(String num) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	
-	//faq 상세 조회 (번호)
-//	public FaqVo faqDetailByNo(String num) throws Exception {
-//		
-//		//conn
-//		Connection conn = JDBCTemplate.getConnection();
-//		
-//		//dao
-//		int result 
-//		FaqVo vo = dao.faqDetailByNo(conn, num);
-//		
-//		//tx
-//		if(result == 1) {
-//			JDBCTemplate.commit(conn);
-//		}else {
-//			JDBCTemplate.rollback(conn);
-//		}
-		
-		//rs
-	}
-// }
+	//FAQ 상세 조회 (번호)
+	   public FaqVo faqDetailByNo(String num) throws Exception {
+	      System.out.println("서비스 호출");
+	      //conn
+	      Connection conn = JDBCTemplate.getConnection();
+	      
+	      //dao
+	      FaqVo vo = dao.faqDetailByNo(conn, num);
+	      
+	      //tx
+	      
+	      //close
+	      JDBCTemplate.close(conn);
+	      
+	      return vo;
+
+	   } //faqDetailByNo
+}

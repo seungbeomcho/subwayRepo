@@ -107,40 +107,45 @@ public class FaqController {
 		} //faqList
 		
 		
-		//FAQ 상세 조회
-		public void faqDetailByNo() {
-			
-			try {
-				System.out.println("----FAQ 상세조회----");
-				
-				//데이터
-				System.out.println("조회할 FAQ 번호 : ");
-				String num = Main.SC.nextLine();
-				
-				//서비스
-				FaqVo vo = service.faqDetailByNo(num);
-				
-				//결과처리
-				if(vo == null) {
-					throw new Exception("FAQ 상세조회 실패");
-				}
-				System.out.println("FAQ 번호 : " + vo.getFaqno());
-				System.out.println("FAQ 제목 : " + vo.getFaqtitle());
-				System.out.println("FAQ 내용 : " + vo.getContent());
-				System.out.println("FAQ 작성일시 : " + vo.getPosttime());
-//				역이름, 조회수 추가
-				
-			}catch (Exception e) {
-				System.out.println("FAQ 상세조회가 불가합니다");
-				e.printStackTrace();
-			}
-		} //faqDetailByNo
+		/**
+	       * FAQ 상세 조회 (번호)
+	       * 번호, 역번호,  제목, 조회수, 작성일자, 내용
+	       */
+	      public void faqDetailByNo() {
+	         
+	         try {
+	            System.out.println("----FAQ 상세조회----");
+	            
+	            //데이터
+	            System.out.println("조회할 FAQ 번호 : ");
+	            String NUM = Main.SC.nextLine();
+	            
+	            //서비스
+	            FaqVo vo = service.faqDetailByNo(NUM);
+	            
+	            //결과처리
+	            if(vo != null) {
+	               throw new Exception("FAQ 상세조회 실패");
+	            }
+	            System.out.println("FAQ 번호 : " + vo.getFaqno());
+	            System.out.println("FAQ 역 번호 : " + vo.getStationno());
+	            System.out.println("FAQ 제목 : " + vo.getFaqtitle());
+	            System.out.println("FAQ 작성일시 : " + vo.getPosttime());
+	            System.out.println("FAQ 내용 : " + vo.getContent());
+	            
+	         }catch (Exception e) {
+	            System.out.println("FAQ 상세조회가 불가합니다");
+	            e.printStackTrace();
+	         }
+	      } //faqDetailByNo
 	
 		
 		//FAQ 수정
 		
 		//FAQ 삭제
-			
+		
+		//faq 목록 (최신순)
+		      
 			
 
 }//class
