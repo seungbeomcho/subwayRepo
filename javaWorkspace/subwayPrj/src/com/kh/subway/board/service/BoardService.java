@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.kh.subway.board.dao.BoardDao;
 import com.kh.subway.board.vo.BoardVo;
+import com.kh.subway.main.Main;
 
 import javaJDBCTEMPLATE.JDBCTemplate;
 
@@ -76,7 +77,12 @@ private final BoardDao dao;
 		
 		Connection conn = JDBCTemplate.getConnection();
 		
-		int result = dao.titleModify(conn , vo);
+		int result = 0;
+		if(Main.loginUser != null) {
+			result = dao.titleModify(conn , vo);
+		}else {
+			result = dao.titleAdminModify(conn , vo);
+		}
 		
 		
 		if(result == 1) {
@@ -97,8 +103,12 @@ private final BoardDao dao;
 		
 		Connection conn = JDBCTemplate.getConnection();
 		
-		
-		int result = dao.contentModify(conn , vo);
+		int result = 0;
+		if(Main.loginUser != null) {
+			result = dao.contentModify(conn , vo);
+		}else {
+			result = dao.contentAdminModify(conn , vo);
+		}
 		
 		
 		if(result == 1) {
@@ -112,7 +122,34 @@ private final BoardDao dao;
 		
 		return result;
 	}
-
+	
+	
+	
+	
+	// 게시판 수정(역이름)
+	public int stationNameModify(BoardVo vo) throws Exception {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = 0;
+		if(Main.loginUser != null) {
+			result = dao.stationNameModify(conn , vo);
+		}else {
+			result = dao.stationNameAdminModify(conn , vo);
+		}
+		
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		
+		return result;
+	}
 
 	// 게시글 조회(USER_NO가 쓴글)
 	public List<BoardVo> userBoardSelect(String userNo) throws Exception{
@@ -151,6 +188,45 @@ private final BoardDao dao;
 			
 		return result;
 	}
+
+	//게시판 검색(제목 + 내용)
+	public List<BoardVo> searchserchBoardByTitleContent(String searchValue) throws Exception {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		List<BoardVo> voList = dao.searchserchBoardByTitleContent(conn , searchValue);
+		
+		JDBCTemplate.close(conn);
+		
+		return voList;
+		
+	}
+
+	//게시판 검색(역이름)
+	public List<BoardVo> searchserchBoardByStationName(String searchValue)  throws Exception {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		List<BoardVo> voList = dao.searchserchBoardByStationName(conn , searchValue);
+		
+		JDBCTemplate.close(conn);
+		
+		return voList;
+	}
+
+	//게시판 검색(닉네임)
+	public List<BoardVo> searchserchBoardByNick(String searchValue)  throws Exception {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		List<BoardVo> voList = dao.searchserchBoardByNick(conn , searchValue);
+		
+		JDBCTemplate.close(conn);
+		
+		return voList;
+	}
+
+	
+
+
 	
 	
 }
