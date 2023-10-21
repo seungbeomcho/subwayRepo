@@ -1,6 +1,7 @@
 package com.kh.subway.faq.service;
 
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
 
 import com.kh.subway.faq.dao.FaqDao;
@@ -40,6 +41,7 @@ public class FaqService {
 
 	}
 
+	
 	//FAQ 목록조회 (최신순)
 	public List<FaqVo> faqList() throws Exception {
 
@@ -50,35 +52,96 @@ public class FaqService {
 		List<FaqVo> voList = dao.faqList(conn);
 		
 		
-		//CLSOE
+		//close
 		JDBCTemplate.close(conn);
 		
 		return voList;
 	}
 
-	public FaqVo faqDetailByNo(String num) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	//FAQ 상세 조회 (번호)
+	public FaqVo faqDetailByNo(String num) throws Exception {
+
+		//conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		//dao
+		int result = dao.inquiry(conn, num);
+		FaqVo vo = dao.faqDetailByNo(conn, num);
+		
+		//tx
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		//close
+		JDBCTemplate.close(conn);
+		
+		return vo;
+
+	} //faqDetailByNo
+	
+	
+	//FAQ 검색 (제목)
+		public List<FaqVo> searchFaqByTitle(String searchValue) throws Exception {
+			
+			//conn
+			Connection conn = JDBCTemplate.getConnection();
+			
+			//dao
+			List<FaqVo> voList = dao.searchFaqByTitle(conn, searchValue);
+			
+			//close
+			JDBCTemplate.close(conn);
+			
+			return voList;
+		} //searchFaqByTitle
+		
+	
+	//FAQ 수정
+		public int Modify (FaqVo vo) throws Exception {
+			
+			// conn
+			Connection conn = JDBCTemplate.getConnection();
+			
+			// DAO
+			int result = dao.Modify(conn , vo);
+			
+			// close
+			JDBCTemplate.close(conn);
+			
+			return result;
+			
+		} //Modify
+		
+		
+
+	//FAQ 삭제
+	public int delete(HashMap<String, String> map) throws Exception {
+
+		//CONN
+		Connection conn = JDBCTemplate.getConnection();
+		
+		//DAO
+		int result = dao.delete(conn, map);
+		
+		//TX
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		//CLOSE
+		JDBCTemplate.close(conn);
+		return result;
+		
+	} //delete
 
 	
-	//faq 상세 조회 (번호)
-//	public FaqVo faqDetailByNo(String num) throws Exception {
-//		
-//		//conn
-//		Connection conn = JDBCTemplate.getConnection();
-//		
-//		//dao
-//		int result 
-//		FaqVo vo = dao.faqDetailByNo(conn, num);
-//		
-//		//tx
-//		if(result == 1) {
-//			JDBCTemplate.commit(conn);
-//		}else {
-//			JDBCTemplate.rollback(conn);
-//		}
-		
-		//rs
-	}
-// }
+	
+
+	
+ } //class
