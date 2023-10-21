@@ -58,28 +58,6 @@ public class FaqService {
 		return voList;
 	}
 
-<<<<<<< HEAD
-
-	
-	//FAQ 상세 조회 (번호)
-	   public FaqVo faqDetailByNo(String num) throws Exception {
-	      System.out.println("서비스 호출");
-	      //conn
-	      Connection conn = JDBCTemplate.getConnection();
-	      
-	      //dao
-	      FaqVo vo = dao.faqDetailByNo(conn, num);
-	      
-	      //tx
-	      
-	      //close
-	      JDBCTemplate.close(conn);
-	      
-	      return vo;
-
-	   } //faqDetailByNo
-}
-=======
 	
 	//FAQ 상세 조회 (번호)
 	public FaqVo faqDetailByNo(String num) throws Exception {
@@ -167,4 +145,3 @@ public class FaqService {
 
 	
  } //class
->>>>>>> origin/euijeong_1021_02
