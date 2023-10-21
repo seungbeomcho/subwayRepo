@@ -257,7 +257,7 @@ public class BoardDao {
 
 		//게시판 검색(제목+내용)
 		public List<BoardVo> searchserchBoardByTitleContent(Connection conn, String searchValue) throws Exception {
-			String sql = "SELECT B.BOARD_NO ,S.STATION_NAME ,B.TITLE ,B.CONTENT ,TO_CHAR(B.ENROLL_DATE , 'YY/MM/DD') AS ENROLLDATE ,B.INQUIRY ,U.NICK AS WRITER_NICK FROM BOARD B JOIN SUBWAY_USER U ON B.USER_NO = U.USER_NO JOIN STATION S ON B.STATION_NO = S.STATION_NO WHERE B.TITLE LIKE '%' || ? || '%' OR B.CONTENT LIKE '%' || ? || '%' AND B.DELETE_YN = 'N' ORDER BY B.ENROLL_DATE DESC";
+			String sql = "SELECT B.BOARD_NO ,S.STATION_NAME ,B.TITLE ,B.CONTENT ,TO_CHAR(B.ENROLL_DATE , 'YY/MM/DD') AS ENROLLDATE ,B.INQUIRY ,U.NICK AS WRITER_NICK FROM BOARD B JOIN SUBWAY_USER U ON B.USER_NO = U.USER_NO JOIN STATION S ON B.STATION_NO = S.STATION_NO WHERE B.DELETE_YN = 'N' AND B.TITLE LIKE '%' || ? || '%' OR B.CONTENT LIKE '%' || ? || '%' ORDER BY B.ENROLL_DATE DESC";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, searchValue);
@@ -332,7 +332,7 @@ public class BoardDao {
 
 		//게시판 검색(닉네임)
 		public List<BoardVo> searchserchBoardByNick(Connection conn, String searchValue) throws Exception {
-			String sql = "SELECT B.BOARD_NO ,S.STATION_NAME ,B.TITLE ,B.CONTENT ,TO_CHAR(B.ENROLL_DATE , 'YY/MM/DD') AS ENROLLDATE ,B.INQUIRY ,U.NICK AS WRITER_NICK FROM BOARD B JOIN SUBWAY_USER U ON B.USER_NO = U.USER_NO JOIN STATION S ON B.STATION_NO = S.STATION_NO WHERE U.NICK AS WRITER_NICK LIKE '%' || ? || '%' AND B.DELETE_YN = 'N' ORDER BY B.ENROLL_DATE DESC";
+			String sql = "SELECT B.BOARD_NO ,S.STATION_NAME ,B.TITLE ,B.CONTENT ,TO_CHAR(B.ENROLL_DATE , 'YY/MM/DD') AS ENROLLDATE ,B.INQUIRY ,U.NICK AS WRITER_NICK FROM BOARD B JOIN SUBWAY_USER U ON B.USER_NO = U.USER_NO JOIN STATION S ON B.STATION_NO = S.STATION_NO WHERE U.NICK LIKE '%' || ? || '%' AND B.DELETE_YN = 'N' ORDER BY B.ENROLL_DATE DESC";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, searchValue);

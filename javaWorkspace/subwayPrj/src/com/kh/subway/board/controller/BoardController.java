@@ -165,8 +165,8 @@ public class BoardController {
 				switch(num) {
 				case "1" : titleModify(); break;
 				case "2" : contentModify(); break;
-				case "3" : delete(); break;
-				case "4" : stationNameModify(); break;
+				case "3" : stationNameModify(); break;
+				case "4" : delete(); break;
 				case "9" : return;
 				default : System.out.println("잘못 입력하셨습니다.");
 				}
@@ -365,6 +365,11 @@ public class BoardController {
 				
 				List<BoardVo> voList = service.searchserchBoardByTitleContent(searchValue);
 				
+				if(voList.size() == 0) {
+					throw new Exception("검색하신 내용과 일치하는 게시글이 없습니다.");
+				}
+				
+				
 				for(BoardVo vo : voList) {
 					System.out.print("NO :" + vo.getBoardNo() + " ");
 					System.out.print("제목 : " + vo.getTitle());
@@ -397,6 +402,12 @@ public class BoardController {
 				
 				List<BoardVo> voList = service.searchserchBoardByStationName(searchValue);
 				
+				
+				if(voList.size() == 0) {
+					throw new Exception("검색하신 내용과 일치하는 게시글이 없습니다.");
+				}
+				
+				
 				for(BoardVo vo : voList) {
 					System.out.print("NO :" + vo.getBoardNo() + " ");
 					System.out.print("제목 : " + vo.getTitle());
@@ -428,6 +439,12 @@ public class BoardController {
 				String searchValue = Main.SC.nextLine();
 				
 				List<BoardVo> voList = service.searchserchBoardByNick(searchValue);
+				
+				if(voList.size() == 0) {
+					throw new Exception("검색하신 닉네임으로 작성한 게시글이 없습니다.");
+				}
+				
+				
 				
 				for(BoardVo vo : voList) {
 					System.out.print("NO :" + vo.getBoardNo() + " ");
