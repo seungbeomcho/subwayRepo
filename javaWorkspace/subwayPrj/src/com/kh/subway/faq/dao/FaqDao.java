@@ -66,43 +66,7 @@ public class FaqDao {
 		JDBCTemplate.close(pstmt);
 		
 		return voList;   
-	}
 		
-<<<<<<< HEAD
-		//FAQ 상세 조회 (번호)
-		   public FaqVo faqDetailByNo(Connection conn, String num) throws Exception {
-		      System.out.println("메인DAO호출");
-
-		      //sql
-		      String sql = "SELECT F.FAQ_NO, F.STATION_NO, F.FAQ_TITLE, TO_CHAR(F.POST_TIME, 'YYYY/MM/DD') AS POST_TIME, F.CONTENT FROM FAQ F JOIN STATION S ON F.STATION_NO = S.STATION_NO WHERE F.FAQ_NO = ? AND F.DELETE_YN = 'N'";
-		      PreparedStatement pstmt = conn.prepareStatement(sql);
-		      pstmt.setString(1, num);
-		      ResultSet rs = pstmt.executeQuery();
-		      
-		      //rs
-		      FaqVo vo = null;
-		      if(rs.next()) {
-		         String faqno = rs.getString("FAQ_NO");
-		         String stationno = rs.getString("STATION_NO");
-		         String faqtitle = rs.getString("FAQ_TITLE");
-		         String posttime = rs.getString("POST_TIME");
-		         String content = rs.getString("CONTENT");
-		         
-		         vo = new FaqVo();
-		         vo.setFaqno(faqno);
-		         vo.setStationno(stationno);
-		         vo.setFaqtitle(faqtitle);
-		         vo.setPosttime(posttime);
-		         vo.setContent(content);
-		      }
-		      
-		      //close
-		      JDBCTemplate.close(rs);
-		      JDBCTemplate.close(pstmt);
-		      
-		      return vo;
-		      
-=======
 	}
 
 	//FAQ 상세 조회
@@ -132,7 +96,6 @@ public class FaqDao {
 			vo.setPosttime(posttime);
 			vo.setContent(content);
 		}
->>>>>>> origin/euijeong_1021_02
 		
 		//close
 		JDBCTemplate.close(rs);
@@ -193,8 +156,6 @@ public class FaqDao {
 	
 	}
 	
-
-	
 	
 	//FAQ 수정 
 	public int Modify(Connection conn, FaqVo vo) throws Exception {
@@ -215,7 +176,7 @@ public class FaqDao {
 	}
 	
 	
-	//FAQ 삭제 **SQL 수정
+	//FAQ 삭제
 	public int delete(Connection conn, HashMap<String, String> map)throws Exception {
 
 		//sql
@@ -233,6 +194,5 @@ public class FaqDao {
 	
 	}
 
-	
 	
 }//class
