@@ -58,6 +58,8 @@ public class Main {
 			case "5" : qnaController.selectMenu(); break;
 			case "6" : boardController.selectMenu(); break;
 			case "7" : subwayController.selectMenu(); break;
+			case "8" : stationController.minTransferSearch(); break;
+			
 			case "9" : return;
 			}
 			

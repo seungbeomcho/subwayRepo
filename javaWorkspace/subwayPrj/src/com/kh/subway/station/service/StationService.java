@@ -27,7 +27,7 @@ public class StationService {
 		List<StationVo> voList = stationDao.searchStationInfo(conn, station);
 		
 		//표시처리
-		StationVo stationInfo= voList.get(0);
+		StationVo stationInfo = voList.get(0);
 		
 		if(stationInfo.getTransferYn().equals("Y")) {
 			stationInfo.setTransferYn("환승가능");
@@ -55,8 +55,112 @@ public class StationService {
 		return rsVo;
 	}//searchTimetable
 	
+	//같은호선인지 체크
+	public String checkSameLine(String startStation, String endStation) throws Exception {
+		//conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		//DAO
+		//출발역 호선
+		List<StationVo> startVoList = stationDao.searchNoInfo(conn,startStation);
+		//도착역 호선
+		List<StationVo> endVoList = stationDao.searchNoInfo(conn,endStation);
+		
+		String lineNo = null;
+		for(StationVo sVo : startVoList) {
+			for(StationVo eVo : endVoList) {
+				if(sVo.getLineNo().equals(eVo.getLineNo())) {
+					lineNo = sVo.getLineNo();
+				}
+			}
+		}
+		
+		//close
+		JDBCTemplate.close(conn);
+		return lineNo;
+	}
 	
-//	==========================================================================
+	
+	//경유역찾기
+	public List<String> searchTransferStation(String startStation, String endStation) throws Exception {
+		//conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		//DAO
+		List<String> transferStationList = stationDao.searchTransferStation(conn,startStation,endStation);
+		
+		//1번환승
+		if(transferStationList.size() == 1) {			
+			System.out.println(transferStationList);
+			return transferStationList;
+		} else if(transferStationList.size() > 1) {
+			return transferStationList;
+		}
+		
+		//close
+		JDBCTemplate.close(conn);
+		return transferStationList;
+	}
+	
+	
+	//경유역 리스트
+	public List<String> transitStationList(String lineNo, String startStation, String endStation) throws Exception {
+		//conn
+		Connection conn = JDBCTemplate.getConnection();		
+		
+		//DAO		
+		List<StationVo> startVoList = stationDao.searchNoInfo(conn,startStation);
+		//도착역 호선
+		List<StationVo> endVoList = stationDao.searchNoInfo(conn,endStation);
+		
+		String startStationNo = null;
+		String endStationNo = null;
+		for(StationVo sVo : startVoList) {
+			if(sVo.getLineNo().equals(lineNo)) {
+				startStationNo = sVo.getStationNo();
+			}
+		}
+		for(StationVo eVo : endVoList) {
+			if(eVo.getLineNo().equals(lineNo)) {
+				endStationNo = eVo.getStationNo();
+			}
+		}
+		//상행 하행 구분
+		if(Integer.parseInt(startStationNo) < Integer.parseInt(endStationNo)) {
+			System.out.println("하행");
+			List<String> transitList = stationDao.transitStationListDown(conn,startStationNo,endStationNo);
+			
+			JDBCTemplate.close(conn);
+			return transitList;
+
+		} else if(Integer.parseInt(startStationNo) > Integer.parseInt(endStationNo)) {
+			System.out.println("상행");
+			List<String> transitList = stationDao.transitStationListUp(conn,endStationNo,startStationNo);
+			
+			JDBCTemplate.close(conn);
+			return transitList;
+		} else {
+			JDBCTemplate.close(conn);
+			return null;
+		}
+	}//transitStationList
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	병합지점=================================================================================
 
 	// 역/노선 전체 조회 ( 역 개수 / 모든역 print)
 	public List<StationVo> stationInfoView() throws Exception {
@@ -306,4 +410,5 @@ public class StationService {
 		
 		return result;
 	}
+
 }

@@ -70,11 +70,132 @@ public class StationDao {
 		rsVo.setHolStartTime(holStime);
 		rsVo.setHolEndTime(holEtime);
 		
-		
+		//close
+		JDBCTemplate.close(resultSet);
+		JDBCTemplate.close(pstmt);
 		
 		return rsVo;
 	}
-//==============================================================================================
+	
+	//호선번호와 역번호 찾기
+	public List<StationVo> searchNoInfo(Connection conn, String station) throws Exception {
+		//sql
+		String sql = "SELECT STATION_NO, LINE_NO FROM STATION WHERE STATION_NAME = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, station);
+		ResultSet resultSet = pstmt.executeQuery();
+		
+		List<StationVo> voList = new ArrayList<StationVo>();
+		
+		//rs
+		while(resultSet.next()) {
+			String stationNo = resultSet.getString("STATION_NO");
+			String lineNo = resultSet.getString("LINE_NO");
+			
+			StationVo vo = new StationVo();
+			vo.setStationNo(stationNo);
+			vo.setLineNo(lineNo);
+			
+			voList.add(vo);
+		}
+		
+		//close
+		JDBCTemplate.close(resultSet);
+		JDBCTemplate.close(pstmt);
+		
+		return voList;
+	}
+	
+	//하행 경유역 리스트
+	public List<String> transitStationListDown(Connection conn, String startStationNo, String endStationNo) throws Exception {
+		//sql
+		String sql = "SELECT STATION_NAME FROM STATION WHERE STATION_NO BETWEEN ? AND ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, startStationNo);
+		pstmt.setString(2, endStationNo);
+		ResultSet resultSet = pstmt.executeQuery();
+		
+		List<String> transitList = new ArrayList<String>();
+		
+		while(resultSet.next()) {
+			String transitStationName = resultSet.getString("STATION_NAME");
+			
+			transitList.add(transitStationName);
+		}
+		
+		//close
+		JDBCTemplate.close(resultSet);
+		JDBCTemplate.close(pstmt);
+		
+		return transitList;
+	}//transitStationListDown
+	
+	//상행 경유역 리스트
+	public List<String> transitStationListUp(Connection conn, String startStationNo, String endStationNo) throws Exception {
+		//sql
+		String sql = "SELECT STATION_NAME ,STATION_NO FROM STATION WHERE STATION_NO BETWEEN ? AND ? ORDER BY STATION_NO DESC";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, startStationNo);
+		pstmt.setString(2, endStationNo);
+		ResultSet resultSet = pstmt.executeQuery();
+		
+		List<String> transitList = new ArrayList<String>();
+		
+		while(resultSet.next()) {
+			String transitStationName = resultSet.getString("STATION_NAME");
+			
+			transitList.add(transitStationName);
+		}
+		
+		//close
+		JDBCTemplate.close(resultSet);
+		JDBCTemplate.close(pstmt);
+		
+		return transitList;
+	}//transitStationListUp
+	
+	//경유역조회 
+	public List<String> searchTransferStation(Connection conn, String startStation, String endStation) throws SQLException {
+		//sql
+		String sql = "SELECT DISTINCT STATION_NAME FROM STATION WHERE STATION_NAME "
+				+ "IN ( SELECT STATION_NAME FROM STATION WHERE LINE_NO IN (SELECT LINE_NO FROM STATION WHERE STATION_NAME = ?) ) "
+				+ "AND STATION_NAME IN ( SELECT STATION_NAME FROM STATION WHERE LINE_NO IN (SELECT LINE_NO FROM STATION WHERE STATION_NAME = ?) )";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, startStation);
+		pstmt.setString(2, endStation);
+		ResultSet resultSet = pstmt.executeQuery();
+		
+		List<String> transList = new ArrayList<String>();
+
+		//rs
+		while(resultSet.next()) {
+			String transferStation = resultSet.getString("STATION_NAME");
+			
+			transList.add(transferStation);
+		}
+		//close
+		JDBCTemplate.close(resultSet);
+		JDBCTemplate.close(pstmt);
+		
+		return transList;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+// 병합지점==============================================================================================
+	
+	
 	// 역/노선 전체 조회 ( 역 개수 / 모든역 print)
 	public List<StationVo> stationInfoView(Connection conn) throws Exception {
 		

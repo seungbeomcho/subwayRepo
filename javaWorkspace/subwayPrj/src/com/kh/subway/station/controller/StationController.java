@@ -163,26 +163,78 @@ public class StationController {
 		
 	}//searchTimetable
 	
-//	public void minTransferSearch() {
-//		try {
-//			System.out.println("==== 최소환승 경로 안내 ====");
-//			//데이터
-//			System.out.print("출발지를 입력하세요 : ");
-//			String startStation = Main.SC.nextLine();
-//			System.out.print("목적지를 입력하세요 : ");
-//			String endStation = Main.SC.nextLine();
-//			
-//			
-//			//서비스호출
-//			
-//			//결과처리
-//			
-//		} catch (Exception e) {
-//			System.out.println("경로 탐색에 실패했습니다.");
-//			e.printStackTrace();
-//		}
-//	}
-//	========================================================================================
+	public void minTransferSearch() {
+		try {
+			System.out.println("==== 최소환승 경로 안내 ====");
+			//데이터
+			System.out.print("출발지를 입력하세요 : ");
+			String startStation = Main.SC.nextLine();
+			System.out.print("목적지를 입력하세요 : ");
+			String endStation = Main.SC.nextLine();
+			
+			
+			//서비스호출
+			//동일호선 체크
+			String lineNo = stationService.checkSameLine(startStation, endStation);
+			if(lineNo != null) {
+				System.out.println("동일 호선 "+ lineNo +"호선 입니다. 환승하지 않습니다.");
+				List<String> transitList= stationService.transitStationList(lineNo, startStation, endStation);
+				
+				for(String stationName : transitList) {
+					System.out.print("[" + stationName + "]");
+					System.out.print(" -> ");
+				}
+				
+			} else if(lineNo == null){
+				String transferStation = null;
+				
+				List<String> transferStationList = stationService.searchTransferStation(startStation,endStation);
+				
+				//환승 가능역 개수에 따라 분류
+				if(transferStationList.size() == 1) {			
+					transferStation = transferStationList.get(0);
+				} else if(transferStationList.size() > 1) {
+					System.out.println("환승역 리스트 입니다.");
+					int listNum = 1;
+					for(String name : transferStationList) {
+						System.out.println(listNum + "번 : " + name);
+						listNum++;
+					}
+					System.out.println("원하시는 환승역 번호를 입력해주세요 : ");
+					int userNum = Main.SC.nextInt();
+					
+					transferStation = transferStationList.get(userNum-1);
+				}
+				
+				
+				
+				//출발지부터 - 경유역까지
+				String startToTranslineNo = stationService.checkSameLine(startStation, transferStation);
+				List<String> startToTransList= stationService.transitStationList(startToTranslineNo, startStation, transferStation);
+				
+				//결과처리
+				for(String stationName : startToTransList) {
+					System.out.print("[" + stationName + "]");
+					System.out.print(" -> ");
+				}
+				System.out.println("환승");
+				
+				//경유역부터 도착지까지
+				String transToEndlineNo = stationService.checkSameLine(transferStation, endStation);
+				List<String> transToEndList= stationService.transitStationList(transToEndlineNo, transferStation, endStation);
+				
+				for(String stationName : transToEndList) {
+					System.out.print("[" + stationName + "]");
+					System.out.print(" -> ");
+				}
+			}
+			
+		} catch (Exception e) {
+			System.out.println("경로 탐색에 실패했습니다.");
+			e.printStackTrace();
+		}
+	}
+//	병합 지점========================================================================================
 	
 	// 역/노선 전체 조회 ( 역 개수 / 모든역 print)
 	public void stationInfoView() {
