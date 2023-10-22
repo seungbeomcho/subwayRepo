@@ -22,6 +22,7 @@ public class BoardController {
 		//메뉴 선택
 		public void selectMenu() {
 			System.out.println("===== 자유게시판 =====");
+			System.out.println("0. 로그아웃");
 			System.out.println("1. 로그인");
 			System.out.println("2. 글작성");
 			System.out.println("3. 전체 목록 조회(최신순)");
@@ -30,18 +31,21 @@ public class BoardController {
 			System.out.println("6. 게시글 검색(제목+내용)");
 			System.out.println("7. 게시글 검색(역이름)");
 			System.out.println("8. 게시글 검색(닉네임)");
+			System.out.println("9. 돌아가기");
 			
 			
 			String num = Main.SC.nextLine();
 			switch(num) {
-			case "1" : uc.login();; break; 
+			case "0" : uc.logout(); break; 
+			case "1" : uc.login(); break; 
 			case "2" : write(); break; 
 			case "3" : boardList(); break; 
 			case "4" : boardDetailByNo(); break; 
 			case "5" : userBoardSelect(); break; 
-			case "6" : searchserchBoardByTitleContent(); break; 
-			case "7" : searchserchBoardByStationName(); break; 
-			case "8" : searchserchBoardByNick(); break; 
+			case "6" : searchBoardByTitleContent(); break; 
+			case "7" : searchBoardByStationName(); break; 
+			case "8" : searchBoardByNick(); break; 
+			case "9" : return; 
 			default : System.out.println("잘못 입력하셨습니다.");
 			}
 		}
@@ -358,12 +362,12 @@ public class BoardController {
 		}
 		
 		//게시판 검색(제목+내용)
-		public void searchserchBoardByTitleContent() {
+		public void searchBoardByTitleContent() {
 			try {
 				System.out.println("검색하실 내용 : ");
 				String searchValue = Main.SC.nextLine();
 				
-				List<BoardVo> voList = service.searchserchBoardByTitleContent(searchValue);
+				List<BoardVo> voList = service.searchBoardByTitleContent(searchValue);
 				
 				if(voList.size() == 0) {
 					throw new Exception("검색하신 내용과 일치하는 게시글이 없습니다.");
@@ -394,13 +398,13 @@ public class BoardController {
 		
 		
 		//게시판 검색(역이름)
-		public void searchserchBoardByStationName() {
+		public void searchBoardByStationName() {
 			try {
 				
 				System.out.println("검색하실 내용 : ");
 				String searchValue = Main.SC.nextLine();
 				
-				List<BoardVo> voList = service.searchserchBoardByStationName(searchValue);
+				List<BoardVo> voList = service.searchBoardByStationName(searchValue);
 				
 				
 				if(voList.size() == 0) {
@@ -432,13 +436,13 @@ public class BoardController {
 		
 		
 		//게시판 검색(닉네임)
-		public void searchserchBoardByNick() {
+		public void searchBoardByNick() {
 			try {
 				
 				System.out.println("검색하실 내용 : ");
 				String searchValue = Main.SC.nextLine();
 				
-				List<BoardVo> voList = service.searchserchBoardByNick(searchValue);
+				List<BoardVo> voList = service.searchBoardByNick(searchValue);
 				
 				if(voList.size() == 0) {
 					throw new Exception("검색하신 닉네임으로 작성한 게시글이 없습니다.");
