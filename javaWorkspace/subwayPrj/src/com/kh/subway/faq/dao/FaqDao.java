@@ -154,7 +154,45 @@ public class FaqDao {
 		
 		return voList;
 	
-	}
+	} 
+	
+	
+	//FAQ 검색 (내용) **SQL 확인
+	public List<FaqVo> searchFaqByContent(Connection conn, String searchValue) throws Exception {
+		
+		//sql
+		String sql = "SELECT FAQ_NO , FAQ_TITLE , INQUIRY , TO_CHAR(POST_TIME , 'YYYY-MM-DD') AS POST_TIME , FAQ_CONTENT FROM FAQ WHERE CONTENT LIKE '%' || ? || '%' ORDER BY FAQ_NO DESC";
+		PreparedStatement pstmt =  conn.prepareStatement(sql);
+		pstmt.setString(1, searchValue);
+		ResultSet rs = pstmt.executeQuery();
+		
+		//rs
+		List<FaqVo> voList = new ArrayList<FaqVo>();
+		while(rs.next()) {
+			String no = rs.getString("FAQ_NO");
+			String title = rs.getString("FAQ_TITLE");
+			String inquiry = rs.getString("INQUIRY");
+			String posttime = rs.getString("POST_TIME");
+			String content = rs.getString("CONTENT");
+			
+			FaqVo vo = new FaqVo();
+			vo.setFaqno(no);
+			vo.setFaqtitle(title);
+			vo.setInquiry(inquiry);
+			vo.setPosttime(posttime);
+			vo.setContent(content);
+			
+			voList.add(vo);
+			
+		}
+		
+		//close
+		JDBCTemplate.close(rs);
+		JDBCTemplate.close(pstmt);
+		
+		return voList;
+	
+	} 
 	
 	
 	//FAQ 수정 
@@ -194,5 +232,6 @@ public class FaqDao {
 	
 	}
 
+	
 	
 }//class

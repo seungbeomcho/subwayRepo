@@ -85,19 +85,38 @@ public class FaqService {
 	
 	
 	//FAQ 검색 (제목)
-		public List<FaqVo> searchFaqByTitle(String searchValue) throws Exception {
+	public List<FaqVo> searchFaqByTitle(String searchValue) throws Exception {
+		
+		//conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		//dao
+		List<FaqVo> voList = dao.searchFaqByTitle(conn, searchValue);
+		
+		//close
+		JDBCTemplate.close(conn);
+		
+		return voList;
+		
+	} //searchFaqByTitle
+		
+		
+		//FAQ 검색 (내용)
+		public List<FaqVo> searchFaqByContent(String searchValue) throws Exception {
 			
 			//conn
 			Connection conn = JDBCTemplate.getConnection();
 			
 			//dao
-			List<FaqVo> voList = dao.searchFaqByTitle(conn, searchValue);
+			List<FaqVo> voList = dao.searchFaqByContent(conn, searchValue);
 			
 			//close
 			JDBCTemplate.close(conn);
 			
 			return voList;
-		} //searchFaqByTitle
+			
+		} //searchFaqByContent
+
 		
 	
 	//FAQ 수정
@@ -141,7 +160,5 @@ public class FaqService {
 	} //delete
 
 	
-	
-
 	
  } //class

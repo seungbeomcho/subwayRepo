@@ -147,8 +147,6 @@ public class NoticeDao {
 		pstmt.setString(1,num);
 		int result = pstmt.executeUpdate();
 		
-		
-		
 		//close
 		JDBCTemplate.close(pstmt);
 		
@@ -168,8 +166,8 @@ public class NoticeDao {
 		//rs
 		List<NoticeVo> voList = new ArrayList<NoticeVo>();
 		while(rs.next()) {
-			String no = rs.getString("FAQ_NO");
-			String title = rs.getString("FAQ_TITLE");
+			String no = rs.getString("NOTICE_NO");
+			String title = rs.getString("TITLE");
 			String inquiry = rs.getString("INQUIRY");
 			String posttime = rs.getString("POST_TIME");
 			
@@ -191,10 +189,45 @@ public class NoticeDao {
 	
 	}
 
+
+	//공지사항 검색 (내용)
+	public List<NoticeVo> searchNoticeByContent(Connection conn, String searchValue) throws Exception {
+		
+		//sql
+		String sql = "SELECT NOTICE_NO , TITLE , INQUIRY , TO_CHAR(POST_TIME , 'YYYY-MM-DD') AS POST_TIME , CONTENT FROM NOTICE WHERE TITLE LIKE '%' || ? || '%' ORDER BY NOTICE_NO DESC";
+		PreparedStatement pstmt =  conn.prepareStatement(sql);
+		pstmt.setString(1, searchValue);
+		ResultSet rs = pstmt.executeQuery();
+		
+		//rs
+		List<NoticeVo> voList = new ArrayList<NoticeVo>();
+		while(rs.next()) {
+			String no = rs.getString("NOTICE_NO");
+			String title = rs.getString("TITLE");
+			String inquiry = rs.getString("INQUIRY");
+			String posttime = rs.getString("POST_TIME");
+			String content = rs.getString("CONTENT");
+			
+			NoticeVo vo = new NoticeVo();
+			vo.setNoticeno(no);
+			vo.setTitle(title);
+			vo.setInqiry(inquiry);
+			vo.setPosttime(posttime);
+			vo.setContent(content);
+			
+			voList.add(vo);
+			
+		}
+		
+		//close
+		JDBCTemplate.close(rs);
+		JDBCTemplate.close(pstmt);
+		
+		return voList;
 	
-	
-	
-	
-	
+	}
+		
+
+
 
 }//CLASS

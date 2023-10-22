@@ -55,7 +55,7 @@ public class FaqController {
 		System.out.println("1. FAQ 목록조회");
 		System.out.println("2. FAQ 상세조회 (번호)");
 		System.out.println("3. FAQ 검색 (제목)");
-//		System.out.println("4. FAQ 검색 (내용)");
+		System.out.println("4. FAQ 검색 (내용)");
 		System.out.println("9. 돌아가기");
 		
 		String num = Main.SC.nextLine();
@@ -63,7 +63,7 @@ public class FaqController {
 		case "1" : faqList(); break;
 		case "2" : faqDetailByNo(); break;
 		case "3" : searchFaqByTitle(); break;
-//		case "4" : searchFaqByContent(); break;
+		case "4" : searchFaqByContent(); break;
 		case "9" : return;
 
 		default : System.out.println("잘못입력하셨습니다"); 
@@ -188,7 +188,39 @@ public class FaqController {
 				
 				// 결과
 				if(voList.size() == 0) {
-					System.out.println("검색결과가 없습니다.");
+//					System.out.println("검색결과가 없습니다.");
+					throw new Exception("검색 결과가 없습니다");
+				}
+				
+				for(FaqVo vo : voList) {
+					System.out.println(vo);
+				}
+				
+			}catch(Exception e) {
+				System.out.println("검색 실패");
+				e.printStackTrace();
+			}
+		}
+		
+		
+		//FAQ 검색 (내용)
+		public void searchFaqByContent() {
+			
+			try {
+				System.out.println("----FAQ 내용 검색----");
+				
+				// 데이터
+				System.out.print("검색할 내용을 입력하세요 : ");
+				String searchValue = Main.SC.nextLine();
+				
+				// 서비스
+				List<FaqVo> voList = service.searchFaqByContent(searchValue);
+				
+				
+				// 결과
+				if(voList.size() == 0) {
+//					System.out.println("검색결과가 없습니다.");
+					throw new Exception("검색 결과가 없습니다");
 				}
 				
 				for(FaqVo vo : voList) {
@@ -266,7 +298,7 @@ public class FaqController {
 				int result = service.delete(map);
 				
 				//결과
-				if(result == 1) {
+				if(result != 1) {
 					throw new Exception();
 				}
 				System.out.println("삭제완료");
