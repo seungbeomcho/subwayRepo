@@ -76,13 +76,13 @@ public class NoticeService {
 		
 	}
 
-	
+
 	//공지사항 삭제
-	public int delete(HashMap<String, String> map) throws Exception {
+	public int delete(String no) throws Exception {
 		
 		Connection conn = JDBCTemplate.getConnection();
-				
-		int result = dao.delete(conn , map);
+		
+		int result = dao.delete(conn , no);
 		
 		if(result == 1) {
 			JDBCTemplate.commit(conn);
@@ -94,6 +94,30 @@ public class NoticeService {
 			
 		return result;
 	}
+	
+	
+//	//공지사항 삭제 2
+//	public int delete(HashMap<String, String> map) throws Exception {
+//		
+//		//conn
+//		Connection conn = JDBCTemplate.getConnection();
+//		
+//		//dao
+//		int result = dao.delete(conn, map);
+//		
+//		//tx
+//		if(result == 1) {
+//			JDBCTemplate.commit(conn);
+//		}else {
+//			JDBCTemplate.rollback(conn);
+//		}
+//		
+//		//close
+//		JDBCTemplate.close(conn);
+//		
+//		return result;
+//		
+//	}
 
 	
 	//공지사항 목록조회 (최신순)
