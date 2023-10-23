@@ -59,13 +59,13 @@ public class UserService {
 	}
 
 	// 회원탈퇴
-	public int quit(String no) throws Exception {
+	public int quit(UserVo vo) throws Exception {
 		
 		// conn
 		Connection conn = JDBCTemplate.getConnection();
 		
 		// dao
-		int result = dao.quit(conn, no);
+		int result = dao.quit(conn, vo);
 		
 		// tx
 		if(result == 1) {
@@ -81,6 +81,7 @@ public class UserService {
 		
 	}
 
+	// 비밀번호 변경
 	public int editPwd(UserVo vo, String newPwd) throws Exception {
 		
 		// conn
@@ -101,6 +102,42 @@ public class UserService {
 		
 		return result;
 		
+	}
+
+	public int editNick(UserVo vo) throws Exception {
+		
+		// conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		// dao
+		int result = dao.editNick(conn, vo);
+		
+		// tx
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		} else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		// close
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+	//  회원정보 조회
+	public UserVo getUserInfo(String id) throws Exception {
+		
+		// conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		// dao
+		UserVo vo = dao.getUserInfo(conn, id);
+		
+		// close
+		JDBCTemplate.close(conn);
+		
+		return vo;
 	}
 	
 	

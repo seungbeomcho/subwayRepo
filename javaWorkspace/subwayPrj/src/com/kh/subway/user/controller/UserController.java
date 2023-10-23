@@ -21,38 +21,120 @@ public class UserController {
 		System.out.println("1. 회원가입");
 		if(Main.loginUser == null) {
 			System.out.println("2. 로그인");
-			System.out.println("3. 비밀번호 변경");
 		} else {
-			System.out.println("4. 회원탈퇴");
-			System.out.println("5. 로그아웃");
+			System.out.println("3. 마이페이지");
+			System.out.println("4. 로그아웃");
 		}
 		
 		String num = Main.SC.nextLine();
 		switch(num) {
 		case "1" : join(); break;
 		case "2" : if(Main.loginUser == null) {login();} break;
-		case "3" : if(Main.loginUser == null) {editPwd();} break;
-		case "4" : if(Main.loginUser != null) {quit();} break;
-		case "5" : if(Main.loginUser != null) {logout();} break;
+		case "3" : if(Main.loginUser != null) {mypage();} break;
+		case "4" : if(Main.loginUser != null) {logout();} break;
 		default : System.out.println("잘못 입력하셨습니다.");
 		}
 	}
 	
-	// 회원가입
-	public void join() {
+	// 마이페이지
+	private void mypage() {
 		
-		// 서비스
+		// 
+		System.out.println("== 마이페이지 ==");
+		
+		// 유저정보 출력
+		getUserInfo();
+		
+		System.out.println("=============");
+		System.out.println("1. 비밀번호 변경");
+		System.out.println("2. 닉네임 변경");
+		System.out.println("3. 회원탈퇴");
+		
+		System.out.print("메뉴번호 : ");
+		String num = Main.SC.nextLine();
+		
+		switch(num) {
+		case "1" : editPwd(); break;
+		case "2" : editNick(); break;
+		case "3" : quit(); break;
+		}
+		
+	}
+
+	// 유저 정보 출력
+	private void getUserInfo() {
+		
+		try {
+			
+			String id = Main.loginUser.getId();
+			
+			// 서비스
+			UserVo vo = service.getUserInfo(id);
+			
+			// 결과
+			System.out.println("아이디 : " + vo.getId());
+			System.out.println("닉네임 : " + vo.getNick());
+			System.out.println("가입일시 : " + vo.getEnrollDate());
+			System.out.println("수정일시 : " + vo.getPwdeditDate());
+			
+		} catch(Exception e) {
+			System.err.println("회원정보를 불러오는데 실패했습니다.");
+			e.printStackTrace();
+		}
+		
+	}
+
+	// 닉네임 변경
+	private void editNick() {
+		
+		try {
+			
+			// 데이터
+			System.out.print("비밀번호 확인 : ");
+			String pwd = Main.SC.nextLine();
+			System.out.print("새 닉네임 : ");
+			String newNick = Main.SC.nextLine();
+			
+			UserVo vo = new UserVo();
+			vo.setId(Main.loginUser.getId());
+			vo.setPwd(pwd);
+			vo.setNick(newNick);
+			
+			// 서비스
+			int result = service.editNick(vo);
+			
+			// 결과
+			if(result == 1) {
+				System.out.println("닉네임이 변경되었습니다.");
+			} else {
+				throw new Exception();
+			}
+			
+		} catch(Exception e) {
+			System.err.println("닉네임 변경이 실패하였습니다.");
+			e.printStackTrace();
+		}
+		
+	}
+
+	// 회원가입
+	private void join() {
+		
 		try {	
 			// 데이터
 			System.out.print("아이디 : ");
 			String id = Main.SC.nextLine();
+			System.out.print("비밀번호 : ");
+			String pwd = Main.SC.nextLine();
 			System.out.print("닉네임 : ");
 			String nick = Main.SC.nextLine();
 			
 			UserVo vo = new UserVo();
 			vo.setId(id);
+			vo.setPwd(pwd);
 			vo.setNick(nick);
-			
+
+			// 서비스
 			int result = service.join(vo);
 			
 			// 결과
@@ -70,7 +152,7 @@ public class UserController {
 	}
 	
 	// 로그인
-	public void login() {
+	private void login() {
 		
 		try {
 
@@ -104,7 +186,7 @@ public class UserController {
 	}
 	
 	// 로그아웃
-	public void logout() {
+	private void logout() {
 		if(Main.loginUser == null) {
 			System.err.println("로그인 하고 진행해주세요.");
 			return;
@@ -116,7 +198,7 @@ public class UserController {
 	}
 	
 	// 회원탈퇴
-	public void quit() {
+	private void quit() {
 		
 		try {
 			System.out.println("----- 회원탈퇴 ------");
@@ -128,26 +210,33 @@ public class UserController {
 			
 			// 데이터
 			String no = Main.loginUser.getUserNo();
+			System.out.print("비밀번호 확인 : ");
+			String pwd = Main.SC.nextLine();
+			
+			UserVo vo = new UserVo();
+			vo.setUserNo(no);
+			vo.setId(Main.loginUser.getId());
+			vo.setPwd(pwd);
 			
 			// 서비스
-			int result = service.quit(no);
+			int result = service.quit(vo);
 			
 			// 결과
 			if(result != 1) {
 				throw new Exception();
 			}
-			System.out.println("탈퇴되었습니다.");
+			System.out.println("정상적으로 탈퇴되었습니다.");
 			logout();
 			
 		} catch(Exception e) {
-			System.err.println("회원탈퇴 실패");
+			System.err.println("탈퇴를 실패하였습니다.");
 			e.printStackTrace();
 		}
 		
 	}
 	
-	// 비밀번호 찾기
-	public void editPwd() {
+	// 비밀번호 변경
+	private void editPwd() {
 		
 		try {		
 			// 데이터
@@ -168,7 +257,7 @@ public class UserController {
 			
 			// 결과
 			if(result == 1) {
-				System.out.println("변경되었습니다.");
+				System.out.println("닉네임이 변경되었습니다.");
 			} else {
 				throw new Exception();
 			}
