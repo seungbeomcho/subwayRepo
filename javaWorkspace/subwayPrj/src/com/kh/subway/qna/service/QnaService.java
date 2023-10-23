@@ -1,6 +1,7 @@
 package com.kh.subway.qna.service;
 
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
 
 import com.kh.subway.qna.dao.QnaDao;
@@ -148,6 +149,44 @@ public class QnaService {
 		
 		JDBCTemplate.close(conn);
 		return voList;
+	}
+
+
+
+	public int writeDelete(HashMap<String, String> map) throws Exception {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		//dao
+		int result = dao.writeDelete(conn, map);
+		//tx
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		//close
+		JDBCTemplate.close(conn);
+		return result;
+		
+	}
+
+
+
+	public int reWriteDelete(HashMap<String, String> map) throws Exception {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		//dao
+		int result = dao.reWriteDelete(conn, map);
+		//tx
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		//close
+		JDBCTemplate.close(conn);
+		return result;
+		
 	}
 
 }

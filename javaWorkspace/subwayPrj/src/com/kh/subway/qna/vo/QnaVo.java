@@ -14,6 +14,7 @@ public class QnaVo {
 	private String inquiry; 
 	private String deleteYn;
 	private String writerNick;
+	
 	public String getQnaNo() {
 		return qnaNo;
 	}

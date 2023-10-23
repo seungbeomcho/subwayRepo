@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.kh.subway.main.Main;
@@ -36,7 +37,7 @@ public class QnaDao {
 	public List<QnaVo> writeList(Connection conn) throws Exception {
 		
 		//sql
-		String sql = "SELECT Q.QNA_NO , Q.TITLE , U.NICK AS WRITER_NICK , Q.INQUIRY , TO_CHAR(Q.POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS POST_TIME, Q.USER_NO FROM QNA Q JOIN SUBWAY_USER U ON Q.USER_NO = U.USER_NO WHERE Q.DELETE_YN = 'N' ORDER BY Q.QNA_NO DESC";
+		String sql = "SELECT Q.QNA_NO , Q.TITLE , Q.CONTENT, U.NICK AS WRITER_NICK , Q.INQUIRY , TO_CHAR(Q.POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS POST_TIME, Q.USER_NO FROM QNA Q JOIN SUBWAY_USER U ON Q.USER_NO = U.USER_NO WHERE Q.DELETE_YN = 'N' ORDER BY Q.QNA_NO DESC";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 		
@@ -44,19 +45,21 @@ public class QnaDao {
 		List<QnaVo> voList = new ArrayList<QnaVo>();
 		while(rs.next()) {
 			String qnaNo = rs.getString("QNA_NO");
+			String userNo = rs.getString("USER_NO");
 			String title = rs.getString("TITLE");
+			String content = rs.getString("CONTENT");
 			String writerNick = rs.getString("WRITER_NICK");
 			String inquiry = rs.getString("INQUIRY");
 			String postTime = rs.getString("POST_TIME");
-			String userNo = rs.getString("USER_NO");
 			
 			QnaVo vo = new QnaVo();
 			vo.setQnaNo(qnaNo);
+			vo.setUserNo(userNo);
 			vo.setTitle(title);
+			vo.setContent(content);
 			vo.setWriterNick(writerNick);
 			vo.setInquiry(inquiry);
 			vo.setPostTime(postTime);
-			vo.setUserNo(userNo);
 			
 			voList.add(vo);
 		}
@@ -262,6 +265,41 @@ public class QnaDao {
 		JDBCTemplate.close(pstmt);
 		
 		return voList;
+		
+	}
+
+
+	public int writeDelete(Connection conn, HashMap<String, String> map) throws Exception {
+
+		//sql 
+				String sql = "UPDATE QNA SET DELETE_YN = 'Y' , POST_TIME = SYSDATE WHERE QNA_NO = ? AND USER_NO = ?";
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, map.get("qnaNum"));
+				pstmt.setString(2, map.get("loginUser"));
+				int result = pstmt.executeUpdate();
+				//rs
+				
+				//close
+				JDBCTemplate.close(pstmt);
+				
+				return result;
+	}
+
+
+	public int reWriteDelete(Connection conn, HashMap<String, String> map) throws Exception {
+
+		//sql 
+		String sql = "UPDATE QNA SET DELETE_YN = 'Y' , POST_TIME = SYSDATE WHERE QNA_NO = ? AND ADMIN_NO = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, map.get("qnaNum"));
+		pstmt.setString(2, map.get("loginAdmin"));
+		int result = pstmt.executeUpdate();
+		//rs
+		
+		//close
+		JDBCTemplate.close(pstmt);
+		
+		return result;
 		
 	}
 	
