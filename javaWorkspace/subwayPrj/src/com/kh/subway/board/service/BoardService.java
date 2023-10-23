@@ -190,11 +190,11 @@ private final BoardDao dao;
 	}
 
 	//게시판 검색(제목 + 내용)
-	public List<BoardVo> searchserchBoardByTitleContent(String searchValue) throws Exception {
+	public List<BoardVo> searchBoardByTitleContent(String searchValue) throws Exception {
 		
 		Connection conn = JDBCTemplate.getConnection();
 		
-		List<BoardVo> voList = dao.searchserchBoardByTitleContent(conn , searchValue);
+		List<BoardVo> voList = dao.searchBoardByTitleContent(conn , searchValue);
 		
 		JDBCTemplate.close(conn);
 		
@@ -203,10 +203,10 @@ private final BoardDao dao;
 	}
 
 	//게시판 검색(역이름)
-	public List<BoardVo> searchserchBoardByStationName(String searchValue)  throws Exception {
+	public List<BoardVo> searchBoardByStationName(String searchValue)  throws Exception {
 		Connection conn = JDBCTemplate.getConnection();
 		
-		List<BoardVo> voList = dao.searchserchBoardByStationName(conn , searchValue);
+		List<BoardVo> voList = dao.searchBoardByStationName(conn , searchValue);
 		
 		JDBCTemplate.close(conn);
 		
@@ -214,10 +214,10 @@ private final BoardDao dao;
 	}
 
 	//게시판 검색(닉네임)
-	public List<BoardVo> searchserchBoardByNick(String searchValue)  throws Exception {
+	public List<BoardVo> searchBoardByNick(String searchValue)  throws Exception {
 		Connection conn = JDBCTemplate.getConnection();
 		
-		List<BoardVo> voList = dao.searchserchBoardByNick(conn , searchValue);
+		List<BoardVo> voList = dao.searchBoardByNick(conn , searchValue);
 		
 		JDBCTemplate.close(conn);
 		
