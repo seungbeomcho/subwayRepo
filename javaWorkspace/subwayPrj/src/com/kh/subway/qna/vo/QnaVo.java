@@ -11,9 +11,10 @@ public class QnaVo {
 	private String content;
 	private String reTitle;
 	private String reContent;
-	private String inquiry;
+	private String inquiry; 
 	private String deleteYn;
 	private String writerNick;
+	
 	public String getQnaNo() {
 		return qnaNo;
 	}
