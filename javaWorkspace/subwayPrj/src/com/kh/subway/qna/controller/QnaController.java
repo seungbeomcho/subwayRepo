@@ -6,6 +6,8 @@ import java.util.List;
 import com.kh.subway.main.Main;
 import com.kh.subway.qna.service.QnaService;
 import com.kh.subway.qna.vo.QnaVo;
+import com.kh.subway.user.controller.UserController;
+import com.kh.subway.user.vo.UserVo;
 
 public class QnaController {
 
@@ -20,13 +22,17 @@ public class QnaController {
 	public void selectMenu() {
 		
 		
-		System.out.println("1. 유저 전용 게시판");
-		System.out.println("2. 관리자 전용 게시판");
+		System.out.println("1. 유저 회원가입 및 로그인");
+		System.out.println("2. 유저 전용 게시판");
+		System.out.println("3. 관리자 전용 게시판");
+		
+		UserController user = new UserController();
 		
 		String num1 = Main.SC.nextLine();
 		switch (num1) {
-		case "1": UserQna(); break;
-		case "2": AdminQna(); break;
+		case "1": user.selectMenu(); break;
+		case "2": UserQna(); break;
+		case "3": AdminQna(); break;
 		default: System.out.println("잘못 입력하셨습니다.");
 		}
 		}
@@ -379,16 +385,14 @@ public class QnaController {
 				throw new Exception("유저 로그인 안해서 에러 발생");
 			}
 			//데이터
+			System.out.println("------유저 게시글 삭제-------");
+			
 			System.out.println("유저 게시글 번호 : ");
 			String num = Main.SC.nextLine();
-			String userNo = Main.loginUser.getUserNo();
-			
 			//서비스
 			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("qnaNum", num);
-			map.put("loginUser", userNo);
+			map.put("userNo", num);
 			int result = service.writeDelete(map);
-			
 			//결과
 			if(result != 1) {
 				throw new Exception();

@@ -272,10 +272,9 @@ public class QnaDao {
 	public int writeDelete(Connection conn, HashMap<String, String> map) throws Exception {
 
 		//sql 
-				String sql = "UPDATE QNA SET DELETE_YN = 'Y' , POST_TIME = SYSDATE WHERE QNA_NO = ? AND USER_NO = ?";
+				String sql = "UPDATE QNA SET DELETE_YN = 'Y' , POST_TIME = SYSDATE WHERE USER_NO = ?";
 				PreparedStatement pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, map.get("qnaNum"));
-				pstmt.setString(2, map.get("loginUser"));
+				pstmt.setString(1, map.get("userNo"));
 				int result = pstmt.executeUpdate();
 				//rs
 				
