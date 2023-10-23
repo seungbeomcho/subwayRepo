@@ -3,7 +3,6 @@ package com.kh.subway.store.service;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
-
 import com.kh.subway.store.dao.SubwayDao;
 import com.kh.subway.store.vo.SubwayVo;
 import javaJDBCTEMPLATE.JDBCTemplate;
@@ -93,7 +92,7 @@ public class SubwayService {
 		
 		return result;
 	}
-//폐업 매장 등록(삭제)
+	//폐업 매장 등록(삭제)
 	public int closeStore(HashMap<String, String> map) throws Exception {
 
 		//conn

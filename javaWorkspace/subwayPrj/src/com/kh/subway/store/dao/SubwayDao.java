@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import com.kh.subway.store.vo.SubwayVo;
-
 import javaJDBCTEMPLATE.JDBCTemplate;
 
 public class SubwayDao {
@@ -17,7 +16,7 @@ public class SubwayDao {
 		
 		
 		//sql
-		String sql = "SELECT STORE_NO, TEL, STORE_NAME, ADDRESS FROM SUBWAY";
+		String sql = "SELECT STORE_NO, TEL, STORE_NAME, ADDRESS FROM SUBWAY ORDER BY STORE_NO ASC";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 		
@@ -111,6 +110,7 @@ public class SubwayDao {
 		
 		return result;
 	}
+	
 	//폐업 매장 등록(삭제)
 	public int closeStore(Connection conn, HashMap<String, String> map) throws Exception {
 

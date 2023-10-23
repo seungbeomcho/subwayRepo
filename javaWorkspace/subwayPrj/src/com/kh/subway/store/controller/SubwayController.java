@@ -2,7 +2,6 @@ package com.kh.subway.store.controller;
 
 import java.util.HashMap;
 import java.util.List;
-
 import com.kh.subway.main.Main;
 import com.kh.subway.store.service.SubwayService;
 import com.kh.subway.store.vo.SubwayVo;
@@ -69,6 +68,7 @@ import com.kh.subway.store.vo.SubwayVo;
 			System.out.print(" | ");
 			System.out.print("매장주소");
 			for(SubwayVo vo : voList) {
+				System.out.println();
 				System.out.print(vo.getStoreNo());
 				System.out.print(" | " );
 				System.out.print(vo.getTel());
@@ -84,7 +84,7 @@ import com.kh.subway.store.vo.SubwayVo;
 			System.out.println("서브웨이 매장 전체 조회 실패 ...");
 			e.printStackTrace();
 		}
-	}
+	}	
 	
 	//서브웨이 매장 상세 조회 (역 이름)
 	public void subwayListByName() {
