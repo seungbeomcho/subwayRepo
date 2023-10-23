@@ -20,14 +20,16 @@ import com.kh.subway.store.vo.SubwayVo;
 	//관리자 메뉴
 	public void adminMenu() {
 		System.out.println("1. 매장 이름 수정 (관리자만)");
-		System.out.println("2. 폐업 매장 삭제 (관리자만)");
-		System.out.println("3. 신규 매장 추가 (관리자만)");
+		System.out.println("2. 매장 주소 수정 (관리자만)");
+		System.out.println("3. 폐업 매장 삭제 (관리자만)");
+		System.out.println("4. 신규 매장 추가 (관리자만)");
 		
 		String num = Main.SC.nextLine();
 		switch(num) {
 		case "1" : changeStoreName(); break;
-		case "2" : closeStore(); break;
-		case "3" : newStore(); break;
+		case "2" : changeStoreAddress(); break;
+		case "3" : closeStore(); break;
+		case "4" : newStore(); break;
 	    default : System.out.println("잘못 입력하셨습니다.");
 		}
 	}
@@ -41,7 +43,7 @@ import com.kh.subway.store.vo.SubwayVo;
 		String num = Main.SC.nextLine();
 		switch(num) {
 		case "1" : subwayList(); break;
-		case "2" : subwayListByName(); break;
+		case "2" : subwayListByName(); break; 
 		case "9" : return;
 		default : System.out.println("잘못 입력하셨습니다."); 
 		
@@ -118,7 +120,9 @@ import com.kh.subway.store.vo.SubwayVo;
 	//관리자 계정으로 매장 이름 수정
 	public void changeStoreName() {
 		
-		try {			
+		try {		
+			System.out.println("----- 매장 이름 수정 -----");
+			
 			//데이터
 			System.out.println("정보 변동사항이 있는 매장 일련번호를 입력하세요 : ");
 			String storeNo = Main.SC.nextLine();
@@ -134,6 +138,37 @@ import com.kh.subway.store.vo.SubwayVo;
 			
 			//결과처리
 			if(result == 1) {
+				System.out.println("매장 이름 변경 성공");
+			}else {
+				throw new Exception();
+			}
+		}catch(Exception e) {
+			System.out.println("매장 이름 변경 실패");
+			e.printStackTrace();
+		}		
+	}
+	
+	//관리자 계정으로 매장 주소 수정
+	public void changeStoreAddress() {
+		
+		try {
+			System.out.println("----- 매장 주소 수정 -----");
+			
+			//데이터
+			System.out.println("주소를 변경할 매장 일련번호를 입력하세요 : ");
+			String storeNo = Main.SC.nextLine();
+			System.out.println("변경할 주소지를 입력하세요 : ");
+			String address = Main.SC.nextLine();
+			
+			SubwayVo vo = new SubwayVo();
+			vo.setStoreNo(storeNo);
+			vo.setAddress(address);
+			
+			//서비스 호출
+			int result = service.changeStoreAddress(vo);
+			
+			//결과처리
+			if(result == 1) {
 				System.out.println("매장 주소지 변경 성공");
 			}else {
 				throw new Exception();
@@ -141,7 +176,8 @@ import com.kh.subway.store.vo.SubwayVo;
 		}catch(Exception e) {
 			System.out.println("매장 주소지 변경 실패");
 			e.printStackTrace();
-		}		
+		}
+	
 	}
 	/**
 	 * 폐업 매장 삭제(관리자만)
