@@ -22,17 +22,19 @@ public class FaqController {
 		System.out.println("---FAQ 관리자 메뉴---");
 		
 		System.out.println("1. FAQ 작성");
-		System.out.println("2. FAQ 수정");
-		System.out.println("3. FAQ 삭제");
-		System.out.println("4. 로그아웃");
+		System.out.println("2. FAQ 제목 수정");
+		System.out.println("3. FAQ 내용 수정");
+		System.out.println("4. FAQ 삭제");
+		System.out.println("5. 로그아웃");
 		System.out.println("9. 돌아가기");
 		
 		String num = Main.SC.nextLine();
 		switch(num) {
 		case "1" : write(); break;
-		case "2" : Modify(); break;
-		case "3" : delete(); break;
-		case "4" : Logout(); break;
+		case "2" : titleModify(); break;
+		case "3" : contentModify(); break;
+		case "4" : delete(); break;
+		case "5" : Logout(); break;
 		case "9" : return;
 		
 		default : System.out.println("잘못입력하셨습니다");
@@ -54,8 +56,8 @@ public class FaqController {
 		
 		System.out.println("1. FAQ 목록조회");
 		System.out.println("2. FAQ 상세조회 (번호)");
-		System.out.println("3. FAQ 검색 (제목)");
-		System.out.println("4. FAQ 검색 (내용)");
+		System.out.println("3. FAQ 제목 검색");
+		System.out.println("4. FAQ 내용 검색");
 		System.out.println("9. 돌아가기");
 		
 		String num = Main.SC.nextLine();
@@ -235,11 +237,11 @@ public class FaqController {
 
 		
 		
-		//FAQ 수정
-		public void Modify() {
+		//FAQ 제목 수정
+		public void titleModify() {
 			
 			try {
-				System.out.println("----FAQ 수정----");
+				System.out.println("----FAQ 제목 수정----");
 				
 				// 로그인 체크
 				if(Main.loginAdmin == null) {
@@ -251,17 +253,56 @@ public class FaqController {
 				String no = Main.SC.nextLine();
 				System.out.print("수정할 FAQ 제목 : ");
 				String title = Main.SC.nextLine();
+//				System.out.print("수정할 FAQ 내용 : ");
+//				String content = Main.SC.nextLine();
+				
+				FaqVo vo = new FaqVo();
+				vo.setFaqno(no);
+				vo.setFaqtitle(title);
+//				vo.setContent(content);
+//				vo.setAdminno(Main.loginAdmin.getAdminNo());
+				
+				// 서비스
+				int result = service.titleModify(vo);
+				
+				// 결과
+				if(result != 1) {
+					throw new Exception();
+				}
+				System.out.println("FAQ 수정 성공");
+				
+			}catch(Exception e) {
+				System.out.println("FAQ 수정 실패");
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+		//FAQ 제목 수정
+		public void contentModify() {
+			
+			try {
+				System.out.println("----FAQ 내용 수정----");
+				
+				// 로그인 체크
+				if(Main.loginAdmin == null) {
+					throw new Exception("관리자 로그인이 필요합니다.");
+				}
+				
+				// 데이터
+				System.out.print("수정할 FAQ 번호 : ");
+				String no = Main.SC.nextLine();
 				System.out.print("수정할 FAQ 내용 : ");
 				String content = Main.SC.nextLine();
 				
 				FaqVo vo = new FaqVo();
 				vo.setFaqno(no);
-				vo.setFaqtitle(title);
 				vo.setContent(content);
-				vo.setAdminno(Main.loginAdmin.getAdminNo());
+//				vo.setAdminno(Main.loginAdmin.getAdminNo());
 				
 				// 서비스
-				int result = service.Modify(vo);
+				int result = service.contentModify(vo);
 				
 				// 결과
 				if(result != 1) {
