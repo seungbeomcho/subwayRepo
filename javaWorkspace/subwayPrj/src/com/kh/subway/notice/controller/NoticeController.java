@@ -22,17 +22,19 @@ public class NoticeController {
 		System.out.println("---공지사항 관리자 메뉴---");
 		
 		System.out.println("1. 공지사항 작성");
-		System.out.println("2. 공지사항 수정");
-		System.out.println("3. 공지사항 삭제");
-		System.out.println("4. 로그아웃");
+		System.out.println("2. 공지사항 제목 수정");
+		System.out.println("3. 공지사항 내용 수정");
+		System.out.println("4. 공지사항 삭제");
+		System.out.println("5. 로그아웃");
 		System.out.println("9. 돌아가기");
 		
 		String num = Main.SC.nextLine();
 		switch(num) {
 		case "1" : write(); break;
-		case "2" : Modify(); break;
-		case "3" : delete(); break;
-		case "4" : Logout(); break;
+		case "2" : titleModify(); break;
+		case "3" : contentModify(); break;
+		case "4" : delete(); break;
+		case "5" : Logout(); break;
 		case "9" : return;
 		
 		default : System.out.println("잘못입력하셨습니다");
@@ -106,11 +108,11 @@ public class NoticeController {
 	}//write
 	
 	
-	//공지사항 수정
-	public void Modify() {
+	//공지사항 제목 수정
+	public void titleModify() {
 		
 		try {
-			System.out.println("----공지사항 수정----");
+			System.out.println("----공지사항 내용 수정----");
 			
 			// 로그인 체크
 			if(Main.loginAdmin == null) {
@@ -128,11 +130,53 @@ public class NoticeController {
 			NoticeVo vo = new NoticeVo();
 			vo.setNoticeno(no);
 			vo.setTitle(title);
-			vo.setContent(content);
-			vo.setAdminno(Main.loginAdmin.getAdminNo());
+//			vo.setContent(content);
+//			vo.setAdminno(Main.loginAdmin.getAdminNo());
 			
 			// 서비스
-			int result = service.Modify(vo);
+			int result = service.titleModify(vo);
+			
+			// 결과
+			if(result != 1) {
+				throw new Exception();
+			}
+			System.out.println("공지사항 수정 성공");
+			
+		}catch(Exception e) {
+			System.out.println("공지사항 수정 실패");
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	//공지사항 내용 수정
+	public void contentModify() {
+		
+		try {
+			System.out.println("----공지사항 제목 수정----");
+			
+			// 로그인 체크
+			if(Main.loginAdmin == null) {
+				throw new Exception("관리자 로그인이 필요합니다.");
+			}
+			
+			// 데이터
+			System.out.print("수정할 공지사항 번호 : ");
+			String no = Main.SC.nextLine();
+//			System.out.print("수정할 공지사항 제목 : ");
+//			String title = Main.SC.nextLine();
+			System.out.print("수정할 공지사항 내용 : ");
+			String content = Main.SC.nextLine();
+			
+			NoticeVo vo = new NoticeVo();
+			vo.setNoticeno(no);
+//			vo.setTitle(title);
+			vo.setContent(content);
+//			vo.setAdminno(Main.loginAdmin.getAdminNo());
+			
+			// 서비스
+			int result = service.contentModify(vo);
 			
 			// 결과
 			if(result != 1) {

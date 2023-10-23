@@ -44,14 +44,30 @@ public class NoticeService {
 	}
 
 	
-	//공지사항 수정
-	public int Modify(NoticeVo vo) throws Exception {
+	//공지사항 제목 수정
+	public int titleModify(NoticeVo vo) throws Exception {
 		
 		// conn
 		Connection conn = JDBCTemplate.getConnection();
 		
 		// DAO
-		int result = dao.Modify(conn , vo);
+		int result = dao.titleModify(conn , vo);
+		
+		// close
+		JDBCTemplate.close(conn);
+		
+		return result;
+		
+	}
+	
+	//공지사항 내용 수정
+	public int contentModify(NoticeVo vo) throws Exception {
+		
+		// conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		// DAO
+		int result = dao.contentModify(conn , vo);
 		
 		// close
 		JDBCTemplate.close(conn);

@@ -36,16 +36,35 @@ public class NoticeDao {
 	}
 
 	
-	//공지사항 수정
-	public int Modify(Connection conn, NoticeVo vo) throws Exception {
+	//공지사항 제목 수정
+	public int titleModify(Connection conn, NoticeVo vo) throws Exception {
 		
 		// SQL
-		String sql = "UPDATE NOTICE SET TITLE = ? , CONTENT = ? , MODIFY_DATE = SYSDATE WHERE NOTICE_NO = ? AND ADMIN_NO = ? AND DELETE_YN = 'N'";
+		String sql = "UPDATE NOTICE SET TITLE = ? , MODIFY_DATE = SYSDATE WHERE NOTICE_NO = ? AND DELETE_YN = 'N'";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, vo.getTitle());
+//		pstmt.setString(2, vo.getContent());
+		pstmt.setString(3, vo.getNoticeno());
+//		pstmt.setString(4, vo.getAdminno());
+		int result = pstmt.executeUpdate();
+		
+		// close
+			JDBCTemplate.close(pstmt);
+			
+			return result;
+		}
+	
+	
+	//공지사항 내용 수정
+	public int contentModify(Connection conn, NoticeVo vo) throws Exception {
+		
+		// SQL
+		String sql = "UPDATE NOTICE SET CONTENT = ? , MODIFY_DATE = SYSDATE WHERE NOTICE_NO = ? AND DELETE_YN = 'N'";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+//		pstmt.setString(1, vo.getTitle());
 		pstmt.setString(2, vo.getContent());
 		pstmt.setString(3, vo.getNoticeno());
-		pstmt.setString(4, vo.getAdminno());
+//		pstmt.setString(4, vo.getAdminno());
 		int result = pstmt.executeUpdate();
 		
 		// close

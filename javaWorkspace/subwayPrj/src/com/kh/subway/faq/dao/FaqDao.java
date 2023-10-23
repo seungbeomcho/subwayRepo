@@ -161,7 +161,7 @@ public class FaqDao {
 	public List<FaqVo> searchFaqByContent(Connection conn, String searchValue) throws Exception {
 		
 		//sql
-		String sql = "SELECT FAQ_NO , FAQ_TITLE , INQUIRY , TO_CHAR(POST_TIME , 'YYYY-MM-DD') AS POST_TIME , FAQ_CONTENT FROM FAQ WHERE CONTENT LIKE '%' || ? || '%' ORDER BY FAQ_NO DESC";
+		String sql = "SELECT FAQ_NO , FAQ_TITLE , INQUIRY , TO_CHAR(POST_TIME , 'YYYY-MM-DD') AS POST_TIME , CONTENT FROM FAQ WHERE CONTENT LIKE '%' || ? || '%' ORDER BY FAQ_NO DESC";
 		PreparedStatement pstmt =  conn.prepareStatement(sql);
 		pstmt.setString(1, searchValue);
 		ResultSet rs = pstmt.executeQuery();
@@ -195,16 +195,16 @@ public class FaqDao {
 	} 
 	
 	
-	//FAQ 수정 
-	public int Modify(Connection conn, FaqVo vo) throws Exception {
+	//FAQ 제목 수정 
+	public int titleModify(Connection conn, FaqVo vo) throws Exception {
 		
 		// SQL
-		String sql = "UPDATE FAQ SET FAQ_TITLE = ? , CONTENT = ? , MODIFY_DATE = SYSDATE WHERE FAQ_NO = ? AND ADMIN_NO = ? AND DELETE_YN = 'N'";
+		String sql = "UPDATE FAQ SET FAQ_TITLE = ? , MODIFY_DATE = SYSDATE WHERE FAQ_NO = ? AND DELETE_YN = 'N'";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, vo.getFaqtitle());
-		pstmt.setString(2, vo.getContent());
+//		pstmt.setString(2, vo.getContent());
 		pstmt.setString(3, vo.getFaqno());
-		pstmt.setString(4, vo.getAdminno());
+//		pstmt.setString(4, vo.getAdminno());
 		int result = pstmt.executeUpdate();
 		
 		// close
@@ -213,6 +213,21 @@ public class FaqDao {
 		return result;
 	}
 	
+	
+	//FAQ 내용 수정
+	public int contentModify(Connection conn, FaqVo vo) throws Exception {
+		// SQL
+		String sql = "UPDATE FAQ SET CONTENT = ? , MODIFY_DATE = SYSDATE WHERE FAQ_NO = ? AND DELETE_YN = 'N'";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(2, vo.getContent());
+		pstmt.setString(3, vo.getFaqno());
+		int result = pstmt.executeUpdate();
+		
+		// close
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+	}
 	
 	//FAQ 삭제
 	public int delete(Connection conn, HashMap<String, String> map)throws Exception {
@@ -231,6 +246,7 @@ public class FaqDao {
 		
 	
 	}
+
 
 	
 	
