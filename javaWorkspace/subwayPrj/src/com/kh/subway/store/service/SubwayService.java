@@ -71,6 +71,28 @@ public class SubwayService {
 		
 		return result;
 	}
+	
+	//관리자 계정으로 매장 주소 수정
+	public int changeStoreAddress(SubwayVo vo) throws Exception {
+		
+		//conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		//dao
+		int result = dao.changeStoreAddress(conn, vo);
+		
+		//tx
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		//close
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
 //폐업 매장 등록(삭제)
 	public int closeStore(HashMap<String, String> map) throws Exception {
 
@@ -113,6 +135,6 @@ public class SubwayService {
 		
 		return result;
 	}
-	
+
 
 }

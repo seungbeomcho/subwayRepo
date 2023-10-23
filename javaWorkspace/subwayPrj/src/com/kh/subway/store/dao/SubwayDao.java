@@ -94,6 +94,23 @@ public class SubwayDao {
 		return result;
 	}
 	
+	//관리자 게정으로 매장 주소 수정
+	public int changeStoreAddress(Connection conn, SubwayVo vo) throws Exception {
+		
+		//sql
+		String sql = "UPDATE SUBWAY SET ADDRESS = ? WHERE STORE_NO = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, vo.getAddress());
+		pstmt.setString(2, vo.getStoreNo());
+		int result = pstmt.executeUpdate();
+		
+		//rs
+		
+		//close
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+	}
 	//폐업 매장 등록(삭제)
 	public int closeStore(Connection conn, HashMap<String, String> map) throws Exception {
 
