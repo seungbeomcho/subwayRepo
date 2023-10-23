@@ -20,6 +20,7 @@ public class NoticeService {
 		dao = new NoticeDao();
 	}
 
+	
 	//공지사항 작성
 	public int writer(NoticeVo vo) throws Exception {
 		
@@ -42,6 +43,7 @@ public class NoticeService {
 		return result;
 	}
 
+	
 	//공지사항 수정
 	public int Modify(NoticeVo vo) throws Exception {
 		
@@ -56,7 +58,7 @@ public class NoticeService {
 		
 		return result;
 		
-	} //Modify
+	}
 
 	
 	//공지사항 삭제
@@ -97,6 +99,7 @@ public class NoticeService {
 	
 	//공지사항 상세 조회 (번호)
 	public NoticeVo noticeDetailByNo(String num) throws Exception {
+		
 		// conn
 		Connection conn =  JDBCTemplate.getConnection();
 		
@@ -118,6 +121,7 @@ public class NoticeService {
 		
 	}
 
+	
 	//공지사항 검색 (제목)
 	public List<NoticeVo> searchNoticeByTitle(String searchValue) throws Exception {
 		
@@ -132,6 +136,23 @@ public class NoticeService {
 		
 		return voList;
 	}
+
+	
+	//공지사항 검색 (내용)
+	public List<NoticeVo> searchNoticeByContent(String searchValue) throws Exception {
+			
+			//conn
+			Connection conn = JDBCTemplate.getConnection();
+			
+			//dao
+			List<NoticeVo> voList = dao.searchNoticeByContent(conn, searchValue);
+			
+			//close
+			JDBCTemplate.close(conn);
+			
+			return voList;
+		}
+
 
 
 }//class

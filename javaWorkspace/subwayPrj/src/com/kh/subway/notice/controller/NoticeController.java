@@ -54,7 +54,7 @@ public class NoticeController {
 		System.out.println("1. 공지사항 목록조회");
 		System.out.println("2. 공지사항 상세조회 (번호)");
 		System.out.println("3. 공지사항 검색 (제목)");
-//		System.out.println("4. 공지사항 검색 (내용)");
+		System.out.println("4. 공지사항 검색 (내용)");
 		System.out.println("9. 돌아가기");
 		
 		String num = Main.SC.nextLine();
@@ -62,14 +62,14 @@ public class NoticeController {
 		case "1" : noticeList(); break;
 		case "2" : noticeDetailByNo(); break;
 		case "3" : searchNoticeByTitle(); break;
-//		case "4" : searchNoticeByContent(); break;
+		case "4" : searchNoticeByContent(); break;
 		case "9" : return;
 		
 		default : System.out.println("잘못입력하셨습니다");
 		}
 	}
 
-	
+
 	//공지사항 작성 (관)
 	public void write() {
 		
@@ -169,7 +169,7 @@ public class NoticeController {
 			int result = service.delete(map);
 			
 			//결과
-			if(result == 1) {
+			if(result != 1) {
 				throw new Exception();
 			}
 			System.out.println("공지사항 삭제 완료");
@@ -268,7 +268,8 @@ public class NoticeController {
 				
 				// 결과
 				if(voList.size() == 0) {
-					System.out.println("검색결과가 없습니다.");
+//					System.out.println("검색결과가 없습니다.");
+					throw new Exception("검색 결과가 없습니다");
 				}
 				
 				for(NoticeVo vo : voList) {
@@ -281,5 +282,35 @@ public class NoticeController {
 			}
 		}
 	
+		
+		//공지사항 검색 (내용)
+		private void searchNoticeByContent() {
+			
+			try {
+				System.out.println("----공지사항 내용 검색----");
+				
+				// 데이터
+				System.out.print("검색할 내용을 입력하세요 : ");
+				String searchValue = Main.SC.nextLine();
+				
+				// 서비스
+				List<NoticeVo> voList = service.searchNoticeByContent(searchValue);
+				
+				
+				// 결과
+				if(voList.size() == 0) {
+//					System.out.println("검색결과가 없습니다.");
+					throw new Exception("검색결과가 없습니다");
+				}
+				
+				for(NoticeVo vo : voList) {
+					System.out.println(vo);
+				}
+				
+			}catch(Exception e) {
+				System.out.println("검색 실패");
+				e.printStackTrace();
+			}
+		}
 	
 }//CLASS
