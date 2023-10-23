@@ -71,7 +71,8 @@ public class BoardController {
 		public void write() {
 			try {
 				if(Main.loginUser == null && Main.loginAdmin == null) {
-					throw new Exception("로그인하셔야 가능합니다.");
+					System.out.println("로그인 하셔야 가능한 기능입니다.");
+					uc.login();
 				}
 				
 				System.out.println("----- 자유게시판 작성 -----");
@@ -112,6 +113,10 @@ public class BoardController {
 				
 				List<BoardVo> voList = service.boardList();
 				
+				if(voList.size() == 0 ) {
+					throw new Exception();
+				}
+				
 				
 				for(BoardVo vo : voList) {
 					
@@ -142,6 +147,10 @@ public class BoardController {
 			try{
 				
 				List<BoardVo> voList = service.userBoardSelect(Main.loginUser.getUserNo());
+				
+				if(voList.size() == 0) {
+					throw new Exception();
+				}
 				
 				for(BoardVo vo : voList) {
 					System.out.println("NO :" + vo.getBoardNo() + " ");
@@ -513,6 +522,10 @@ public class BoardController {
 				e.printStackTrace();
 			}
 		}
+		
+		
+
+		
 		
 }//class
 
