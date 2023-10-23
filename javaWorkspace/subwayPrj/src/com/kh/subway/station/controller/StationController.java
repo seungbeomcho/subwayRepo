@@ -25,7 +25,7 @@ public class StationController {
 			//메뉴판
 			System.out.println("원하시는 메뉴를 입력해주세요.");
 			System.out.println("┌─────────────────────────────────────────────────────────┐");
-			System.out.println("| ※ 1 ~ 8 호선에 존재하는 역만 조회가 가능합니다 ※");
+			System.out.println("| ※ 1 ~ 9 호선에 존재하는 역만 조회가 가능합니다 ※");
 			System.out.println("| 1. 역 정보 검색");
 			System.out.println("|  - 노선명, 환승 여부, 환승 가능 노선, 출구 개수, 화장실 개찰구 내외 안내");
 			System.out.println("| 2. 시간표 조회");
@@ -180,12 +180,26 @@ public class StationController {
 				System.out.println("동일 호선 "+ lineNo +"호선 입니다. 환승하지 않습니다.");
 				List<String> transitList= stationService.transitStationList(lineNo, startStation, endStation);
 				
+				
 				for(String stationName : transitList) {
 					System.out.print("[" + stationName + "]");
 					System.out.print(" -> ");
 				}
+//				
+//				for(int i = 0; i<transitList.size();i++) {
+//					if(i != 0 && i % 5 == 0) {
+//						System.out.println("\t");
+//					}
+//					System.out.print("[" + transitList.get(i) + "]");
+//					if( i != transitList.size()-1) {						
+//						System.out.print(" -> ");
+//					}
+//				}
+				System.out.println();
+				System.out.print("========= [도착] =========");
 				
 			} else if(lineNo == null){
+				//==============================환승====================================
 				String transferStation = null;
 				
 				List<String> transferStationList = stationService.searchTransferStation(startStation,endStation);
@@ -207,26 +221,41 @@ public class StationController {
 				}
 				
 				
-				
 				//출발지부터 - 경유역까지
 				String startToTranslineNo = stationService.checkSameLine(startStation, transferStation);
 				List<String> startToTransList= stationService.transitStationList(startToTranslineNo, startStation, transferStation);
 				
 				//결과처리
-				for(String stationName : startToTransList) {
-					System.out.print("[" + stationName + "]");
-					System.out.print(" -> ");
+				//출발역부터 환승역까지
+				for(int i = 0; i<startToTransList.size();i++) {
+					if(i != 0 && i % 5 == 0) {
+						System.out.println("\t");
+					}
+					System.out.print("[" + startToTransList.get(i) + "] -> ");
 				}
-				System.out.println("환승");
+				
+				//환승
+				System.out.println("\n");
+				System.out.print("========= [환승] =========");
+				System.out.println("\n");
+				
 				
 				//경유역부터 도착지까지
 				String transToEndlineNo = stationService.checkSameLine(transferStation, endStation);
 				List<String> transToEndList= stationService.transitStationList(transToEndlineNo, transferStation, endStation);
 				
-				for(String stationName : transToEndList) {
-					System.out.print("[" + stationName + "]");
-					System.out.print(" -> ");
+				for(int i = 0; i<transToEndList.size();i++) {
+					if(i != 0 && i % 5 == 0) {
+						System.out.println("\t");
+					}
+					System.out.print("[" + transToEndList.get(i) + "]");
+					if( i != transToEndList.size()-1) {						
+						System.out.print(" -> ");
+					}
 				}
+				System.out.println();
+				System.out.print("========= [도착] =========");
+				
 			}
 			
 		} catch (Exception e) {

@@ -1,6 +1,7 @@
 package com.kh.subway.station.service;
 
 import java.sql.Connection;
+import java.util.Collections;
 import java.util.List;
 
 import com.kh.subway.station.dao.StationDao;
@@ -89,6 +90,10 @@ public class StationService {
 		//DAO
 		List<String> transferStationList = stationDao.searchTransferStation(conn,startStation,endStation);
 		
+//		if(transferStationList.size() == 0) {
+//			//한번환승으로 안댐
+//		}
+		
 		//1번환승
 		if(transferStationList.size() == 1) {			
 			System.out.println(transferStationList);
@@ -102,6 +107,38 @@ public class StationService {
 		return transferStationList;
 	}
 	
+	//2번 경유
+	public void noneOnetransfer(String startStation, String endStation) throws Exception {
+//		//conn
+//		Connection conn = JDBCTemplate.getConnection();
+//		
+//		//출발역 호선
+//		List<StationVo> startVoList = stationDao.searchNoInfo(conn,startStation);
+//		//도착역 호선
+//		List<StationVo> endVoList = stationDao.searchNoInfo(conn,endStation);
+//		
+//		String station = null;
+//		//8호선
+//		for(StationVo sVo : startVoList) {
+//			for(StationVo eVo : endVoList) {
+//				if((sVo.getLineNo().equals("8") && eVo.getLineNo().equals("1") ||
+//					    sVo.getLineNo().equals("8") && eVo.getLineNo().equals("4") ||
+//					    sVo.getLineNo().equals("8") && eVo.getLineNo().equals("6") ||
+//					    sVo.getLineNo().equals("8") && eVo.getLineNo().equals("7") ) ||
+//				   (eVo.getLineNo().equals("8") && sVo.getLineNo().equals("1") ||
+//						   eVo.getLineNo().equals("8") && sVo.getLineNo().equals("4") ||
+//						   eVo.getLineNo().equals("8") && sVo.getLineNo().equals("6") ||
+//						   eVo.getLineNo().equals("8") && sVo.getLineNo().equals("7") )	) 
+//				{
+//					station = "잠실";
+//					return 
+//				}
+//				
+//			}
+//			
+//		}
+//		
+	}
 	
 	//경유역 리스트
 	public List<String> transitStationList(String lineNo, String startStation, String endStation) throws Exception {
@@ -109,6 +146,7 @@ public class StationService {
 		Connection conn = JDBCTemplate.getConnection();		
 		
 		//DAO		
+		//출발역 호선
 		List<StationVo> startVoList = stationDao.searchNoInfo(conn,startStation);
 		//도착역 호선
 		List<StationVo> endVoList = stationDao.searchNoInfo(conn,endStation);
@@ -125,16 +163,15 @@ public class StationService {
 				endStationNo = eVo.getStationNo();
 			}
 		}
+		
 		//상행 하행 구분
 		if(Integer.parseInt(startStationNo) < Integer.parseInt(endStationNo)) {
-			System.out.println("하행");
 			List<String> transitList = stationDao.transitStationListDown(conn,startStationNo,endStationNo);
 			
 			JDBCTemplate.close(conn);
 			return transitList;
 
 		} else if(Integer.parseInt(startStationNo) > Integer.parseInt(endStationNo)) {
-			System.out.println("상행");
 			List<String> transitList = stationDao.transitStationListUp(conn,endStationNo,startStationNo);
 			
 			JDBCTemplate.close(conn);
