@@ -32,7 +32,7 @@ public class BoardDao {
 	//자유게시판 목록 조회( 최신순)
 	public List<BoardVo> boardList(Connection conn) throws Exception {
 		
-		String sql = "SELECT B.BOARD_NO ,S.STATION_NAME ,B.TITLE ,B.CONTENT ,TO_CHAR(B.ENROLL_DATE , 'YY/MM/DD') AS ENROLLDATE ,B.INQUIRY ,U.NICK AS WRITER_NICK FROM BOARD B JOIN SUBWAY_USER U ON B.USER_NO = U.USER_NO JOIN STATION S ON B.STATION_NO = S.STATION_NO WHERE DELETE_YN = 'N' ORDER BY B.ENROLL_DATE DESC";
+		String sql = "SELECT B.BOARD_NO ,S.STATION_NAME ,B.TITLE ,B.CONTENT ,TO_CHAR(B.ENROLL_DATE , 'YY/MM/DD') AS ENROLL_DATE ,B.INQUIRY ,U.NICK AS WRITER_NICK ,(SELECT COUNT(BOARD_NO) FROM BOARD_COMMENT WHERE DELETE_YN = 'N' GROUP BY BOARD_NO) AS COMMENT_COUNT FROM BOARD B JOIN SUBWAY_USER U ON B.USER_NO = U.USER_NO JOIN STATION S ON B.STATION_NO = S.STATION_NO JOIN BOARD_COMMENT C ON B.BOARD_NO = C.BOARD_NO WHERE B.DELETE_YN = 'N' AND C.DELETE_YN = 'N' ORDER BY B.ENROLL_DATE DESC";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
@@ -43,9 +43,10 @@ public class BoardDao {
 			String stationName = rs.getString("STATION_NAME");
 			String title = rs.getString("TITLE");
 			String content = rs.getString("CONTENT");
-			String enrollDate = rs.getString("ENROLLDATE");
+			String enrollDate = rs.getString("ENROLL_DATE");
 			String inquiry = rs.getString("INQUIRY");
 			String writerNick = rs.getString("WRITER_NICK");
+			String commentCount = rs.getString("COMMENT_COUNT");
 			
 			BoardVo vo = new BoardVo();
 			vo.setBoardNo(doardNo);
@@ -55,6 +56,7 @@ public class BoardDao {
 			vo.setEnrollDate(enrollDate);
 			vo.setInquiry(inquiry);
 			vo.setWriterNick(writerNick);
+			vo.setCommentCount(commentCount);
 			
 			voList.add(vo);
 			

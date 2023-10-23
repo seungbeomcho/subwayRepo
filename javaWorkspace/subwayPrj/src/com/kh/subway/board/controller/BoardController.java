@@ -5,6 +5,7 @@ import java.util.List;
 import com.kh.subway.admin.controller.AdminController;
 import com.kh.subway.board.service.BoardService;
 import com.kh.subway.board.vo.BoardVo;
+import com.kh.subway.comment.controller.CommentController;
 import com.kh.subway.main.Main;
 import com.kh.subway.user.controller.UserController;
 
@@ -13,14 +14,17 @@ public class BoardController {
 		private final BoardService service;
 		private final UserController uc;
 		private final AdminController ac;
+		private final CommentController cc;
 		
 		public BoardController() {
 			service = new BoardService();
 			ac = new AdminController();
 			uc = new UserController();
+			cc = new CommentController();
 		}
 		//메뉴 선택
 		public void selectMenu() {
+		while(true) {
 			System.out.println("===== 자유게시판 =====");
 			System.out.println("0. 로그아웃");
 			System.out.println("1. 로그인");
@@ -36,7 +40,7 @@ public class BoardController {
 			
 			String num = Main.SC.nextLine();
 			switch(num) {
-			case "0" : uc.logout(); break; 
+//			case "0" : uc.logout(); break; 
 			case "1" : uc.login(); break; 
 			case "2" : write(); break; 
 			case "3" : boardList(); break; 
@@ -49,18 +53,22 @@ public class BoardController {
 			default : System.out.println("잘못 입력하셨습니다.");
 			}
 		}
+			
+		}
 		
 		//관리자 메뉴
 		public void adminMenu() {
 			System.out.println("===== 자유게시판 관리자 메뉴 =====");
-			System.out.println("1. 게시판 수정");
-			System.out.println("2. 게시판 삭제");
+			System.out.println("1. 게시판 전체조회(최신순)");
+			System.out.println("2. 게시판 수정");
+			System.out.println("3. 게시판 삭제");
 			System.out.println("9. 로그아웃");
 			
 			String num = Main.SC.nextLine();
 			switch(num) {
-			case "1" : adminBoardDetailByNo(); break;
-			case "2" : delete(); break;
+			case "1" : boardList(); break;
+			case "2" : adminBoardDetailByNo(); break;
+			case "3" : delete(); break;
 			case "9" : ac.adminLogout(); break;
 			default : System.out.println("잘못 입력했습니다.");
 			}
@@ -73,6 +81,7 @@ public class BoardController {
 				if(Main.loginUser == null && Main.loginAdmin == null) {
 					System.out.println("로그인 하셔야 가능한 기능입니다.");
 					uc.login();
+					return;
 				}
 				
 				System.out.println("----- 자유게시판 작성 -----");
@@ -131,7 +140,9 @@ public class BoardController {
 					System.out.println();
 					System.out.print("조회수 : " + vo.getInquiry());
 					System.out.println();
-					System.out.print("작성자 : " + vo.getWriterNick() + "\n");
+					System.out.print("작성자 : " + vo.getWriterNick());
+					System.out.println();
+					System.out.print("댓글수 : " + vo.getCommentCount()+ "\n");
 					System.out.println("===================================");
 				}
 				
@@ -147,6 +158,7 @@ public class BoardController {
 			try{
 				
 				List<BoardVo> voList = service.userBoardSelect(Main.loginUser.getUserNo());
+				
 				
 				if(voList.size() == 0) {
 					throw new Exception();
@@ -167,23 +179,23 @@ public class BoardController {
 					System.out.print("작성자 : " + vo.getWriterNick() + "\n");
 					System.out.println("===================================");
 				}
-				
-				System.out.println("자유게시판 수정");
-				System.out.println("1. 제목 수정");
-				System.out.println("2. 내용 수정");
-				System.out.println("3. 역이름 수정");
-				System.out.println("4. 게시글 삭제");
-				System.out.println("9. 이전으로 돌아가기");
-				String num = Main.SC.nextLine();
-				switch(num) {
-				case "1" : titleModify(); break;
-				case "2" : contentModify(); break;
-				case "3" : stationNameModify(); break;
-				case "4" : delete(); break;
-				case "9" : return;
-				default : System.out.println("잘못 입력하셨습니다.");
-				}
-				
+					System.out.println("자유게시판 수정");
+					System.out.println("1. 제목 수정");
+					System.out.println("2. 내용 수정");
+					System.out.println("3. 역이름 수정");
+					System.out.println("4. 게시글 삭제");
+					System.out.println("9. 이전으로 돌아가기");
+					String num = Main.SC.nextLine();
+					switch(num) {
+					case "1" : titleModify(); break;
+					case "2" : contentModify(); break;
+					case "3" : stationNameModify(); break;
+					case "4" : delete(); break;
+					case "9" : return;
+					default : System.out.println("잘못 입력하셨습니다.");
+					}
+					
+
 				
 			}catch(Exception e) {
 				System.out.println("게시판 조회 및 수정 실패");
@@ -214,6 +226,16 @@ public class BoardController {
 				System.out.println("게시판 작성일시 : " + voList.getEnrollDate());
 				System.out.println("게시판 작성자 닉네임 : " + voList.getWriterNick());
 				System.out.println("게시판 역이름 : " + voList.getStationName());
+				
+				System.out.println("댓글을 작성 하시겠습니까?(Y/N)");
+				String yn = Main.SC.nextLine();
+				yn.toUpperCase();
+				switch(yn) {
+				case "Y" : cc.leaveComment(voList.getBoardNo()); break;
+				case "N" : return;
+				default : System.out.println("잘못 입력하셨습니다.");
+				}
+				
 				
 				
 			}catch(Exception e) {
