@@ -1,5 +1,6 @@
 package com.kh.subway.qna.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.kh.subway.main.Main;
@@ -25,29 +26,26 @@ public class QnaController {
 		System.out.println("4. 질의내용 상세 조회 <번호>");
 		System.out.println("5. 질의답변 목록 조회 <최신순>");
 		System.out.println("6. 질의답변 상세 조회 <번호>");
+		System.out.println("7. 질의내용 검색<제목>");
+		System.out.println("8. 질의답변 검색<제목>");
+		System.out.println("9. 질의내용 삭제<번호조회>");
+		System.out.println("10. 질의답변 삭제<번호조회>");
 
 		String num = Main.SC.nextLine();
 		switch (num) {
 		case "1": write(); break;
 		case "2": reWrite(); break;
-		case "3": qnaList(); break;
-		case "4": qnaDetailByNo(); break;
-//		case "5": reQnaList(); break;
-//		case "6": reQnaDetailByNo(); break;
+		case "3": writeList(); break;
+		case "4": writeDetailByNo(); break;
+		case "5": reWriteList(); break;
+		case "6": reWriteDetailByNo(); break;
+		case "7": searchWriteByTitle(); break;
+		case "8": searchReWriteByTitle(); break;
+		case "9": writeDelete(); break;
+//		case "10": reWriterDelete(); break;
 		default: System.out.println("잘못 입력하셨습니다.");
 		}
 	}
-
-	/**
-	 * 
-	 * 작성(회원전용)
-	 * 
-	 * 제목, 내용, 입력받아서 BOARD 테이블에 INSERT
-	 * 
-	 * INSERT INTO BOARD(NO, TITLE, CONTENT, WRITER_NO) VALUES(시퀸스, 제목, 내용, 현재 로그인
-	 * 유저 정보)
-	 * 
-	 */
 
 	// 작성 (회원 전용)
 	public void write() {
@@ -122,16 +120,9 @@ public class QnaController {
 			e.printStackTrace();
 		}
 	}
-	// 삭제 (작성자 본인만)
-
-	// 수정하기 (제목, 내용)
-	/**
-	 * 목록 조회 - 등록일(번호, 제목, 작성자닉네임, 조회수, 작성일시)
-	 * 
-	 * SELECT * FROM BOARD WHERE DEL_YN = 'N' ORDER BY NO DESC;
-	 */
-
-	public void qnaList() {
+	
+	//목록조회<질의>
+	public void writeList() {
 
 		try {
 			System.out.println("------------질의내용 목록(최신순)------------");
@@ -139,7 +130,7 @@ public class QnaController {
 			// 데이터 - 입력받을 것이 없기 때문에 생략
 
 			// 서비스 호출
-			List<QnaVo> voList = service.qnaList();
+			List<QnaVo> voList = service.writeList();
 			// 결과
 			System.out.print("번호");
 			System.out.print("/");
@@ -172,28 +163,18 @@ public class QnaController {
 		}
 
 	}
-	// 목록 조회 - 조회수(번호, 제목, 작성자닉네임, 조회수, 작성일시)
-
-	// 제목으로 검색 - 제목
-	// 제목으로 검색 - 작성자 닉네임
-	// 제목으로 검색 - 내용
-
-	/**
-	 * 상세 조회 - 번호를 이용해서 모든 칼럼 조회
-	 * 
-	 * SELECT * FROM BOARD WHERE NO = ? AND DEL_YN = 'N'
-	 * 
-	 */
-	public void qnaDetailByNo() {
+	
+	 // 상세 조회 - 번호를 이용해서 모든 칼럼 조회
+	public void writeDetailByNo() {
 
 		try {
 			System.out.println("----------질의내용 상세 조회(번호)------------");
 
 			// 데이터
-			System.out.print("조회할 질의 번호 : ");
+			System.out.print("조회할 QNA 번호 : ");
 			String num = Main.SC.nextLine();
 			// 서비스
-			QnaVo vo = service.qnaDetailByNo(num);
+			QnaVo vo = service.writeDetailByNo(num);
 			// 결과
 			if (vo == null) {
 				throw new Exception();
@@ -213,5 +194,158 @@ public class QnaController {
 			System.out.println("질의내용 상세 조회 실패...");
 			e.printStackTrace();
 		}
+	}
+	public void reWriteList() {
+		try {
+			System.out.println("------------질의답변 목록(최신순)------------");
+			
+				// 로그인 여부 확인
+				if (Main.loginAdmin == null) {
+					throw new Exception("로그인 하고 오세요! 관리자만 가능합니다.");
+				}
+
+			// 서비스 호출
+			List<QnaVo> voList = service.reWriteList();
+			// 결과
+			System.out.print("질의답변 번호");
+			System.out.print("/");
+			System.out.print("답변제목");
+			System.out.print("/");
+			System.out.print("답변내용");
+			System.out.print("/");
+			System.out.print("조회수");
+			System.out.print("/");
+			System.out.print("작성일자");
+			System.out.println();
+
+			for (QnaVo vo : voList) {
+				System.out.print(vo.getAdminNo());
+				System.out.print("/");
+				System.out.print(vo.getReTitle());
+				System.out.print("/");
+				System.out.print(vo.getReContent());
+				System.out.print("/");
+				System.out.print(vo.getInquiry());
+				System.out.print("/");
+				System.out.print(vo.getPostTime());
+
+				System.out.println();
+			}
+
+		} catch (Exception e) {
+			System.out.println("질의내용 목록 조회 실패...");
+			e.printStackTrace();
+		}
+	}
+	
+
+	public void searchWriteByTitle() {
+		try {
+			System.out.println("--------------회원게시글_검색--------------");
+			
+			//데이터
+			System.out.println("검색할 유저번호(USER_NO) : ");
+			String searchValue = Main.SC.nextLine();
+			//사비스 호출
+			List<QnaVo>voList = service.searchWriteByTitle(searchValue);
+			//결과 처리
+			if(voList.size() == 0) {
+				System.out.println("검색 결과가 없습니다.");
+			}
+			for(QnaVo vo : voList) {
+				System.out.println(vo);
+			}
+			}catch(Exception e) {
+				System.out.println("게시글 검색 실패..");
+				e.printStackTrace();
+	}
+}
+	
+	public void reWriteDetailByNo() {
+
+		try {
+			System.out.println("----------질의답변 상세 조회(QNA번호)------------");
+
+			// 로그인 여부 확인
+			if (Main.loginAdmin == null) {
+				throw new Exception("로그인 하고 오세요! 관리자만 가능합니다.");
+			}
+			
+			// 데이터
+			System.out.print("조회할 QNA 번호 : ");
+			String num = Main.SC.nextLine();
+			// 서비스
+			QnaVo vo = service.reWriteDetailByNo(num);
+			// 결과
+			if (vo == null) {
+				throw new Exception();
+			}
+			
+			System.out.println("------------------------------");
+			System.out.println("QNA번호 : " + vo.getQnaNo());
+			System.out.println("답변제목 : " + vo.getReTitle());
+			System.out.println("답변내용 : " + vo.getReContent());
+			System.out.println("조회수 : " + vo.getInquiry());
+			System.out.println("작성일시 : " + vo.getPostTime());
+			System.out.println("------------------------------");
+			
+		} catch (Exception e) {
+			System.out.println("답변내용 상세 조회 실패...");
+			e.printStackTrace();
+		}
+}	
+	
+	public void searchReWriteByTitle() {
+		try {
+			System.out.println("---------------관리자 게시글_검색---------------");
+			
+			// 로그인 여부 확인
+			if (Main.loginAdmin == null) {
+				throw new Exception("로그인 하고 오세요! 관리자만 가능합니다.");
+			}
+			//데이터
+			System.out.println("검색할 관리자번호(ADMIN_NO) : ");
+			String searchValue = Main.SC.nextLine();
+			//사비스 호출
+			List<QnaVo>voList = service.searchReWriteByTitle(searchValue);
+			//결과 처리
+			if(voList.size() == 0) {
+				System.out.println("검색 결과가 없습니다.");
+			}
+			for(QnaVo vo : voList) {
+				System.out.println(vo);
+			}
+			}catch(Exception e) {
+				System.out.println("관리자 게시글 검색 실패..");
+				e.printStackTrace();
+	}
+	}
+	
+	public void writeDelete() {
+		try {
+			if(Main.loginUser == null) {
+				throw new Exception("유저 로그인 안해서 에러 발생");
+			}
+			//데이터
+			System.out.println("유저 게시글 번호 : ");
+			String num = Main.SC.nextLine();
+			String qnaNo = Main.loginUser.getUserNo();
+			
+			//서비스
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("boardNum", num);
+			map.put("loginUser", qnaNo);
+//			int result = service.writeDelete(map);
+			
+			//결과
+//			if(result != 1) {
+				throw new Exception();
+			}
+			System.out.println("게시글 삭제 완료..!!!");
+		}catch(Exception e) {
+			System.out.println("게시글 삭제 실패...");
+			e.printStackTrace();
+		}
+	}
 	}
 }
