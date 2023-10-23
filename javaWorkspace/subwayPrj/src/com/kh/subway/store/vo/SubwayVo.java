@@ -127,8 +127,4 @@ public class SubwayVo {
 				+ ", storeName=" + storeName + ", address=" + address + ", delYn=" + delYn + ", closeDate=" + closeDate
 				+ ", openDate=" + openDate + ", modifydate=" + modifydate + ", newYn=" + newYn + "]";
 	}
-	
-    
-    
-    
 }
