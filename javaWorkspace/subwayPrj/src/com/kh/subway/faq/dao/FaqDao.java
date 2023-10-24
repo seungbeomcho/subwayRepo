@@ -40,7 +40,7 @@ public class FaqDao {
 	public List<FaqVo> faqList (Connection conn)throws Exception{
 		
 		//SQL
-		String sql = "SELECT F.FAQ_NO AS NO, F.FAQ_TITLE AS TITLE, F.INQUIRY,  TO_CHAR(F.POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS POST_TIME FROM FAQ F ORDER BY FAQ_NO DESC";
+		String sql = "SELECT F.FAQ_NO AS NO, F.FAQ_TITLE AS TITLE, F.INQUIRY,  TO_CHAR(F.POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS POST_TIME FROM FAQ F WHERE DELETE_YN = 'N' ORDER BY FAQ_NO DESC";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 		

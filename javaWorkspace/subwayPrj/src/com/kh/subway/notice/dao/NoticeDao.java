@@ -106,7 +106,7 @@ public class NoticeDao {
 	public List<NoticeVo> noticeList(Connection conn) throws Exception {
 		
 		//SQL
-		String sql = "SELECT NOTICE_NO AS NO , TITLE , INQUIRY ,  TO_CHAR(POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS POST_TIME FROM NOTICE ORDER BY NOTICE_NO DESC";
+		String sql = "SELECT NOTICE_NO AS NO , TITLE , INQUIRY ,  TO_CHAR(POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS POST_TIME FROM NOTICE WHERE DELETE_YN = 'N' ORDER BY NOTICE_NO DESC";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 		
