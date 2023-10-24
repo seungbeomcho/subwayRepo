@@ -179,19 +179,7 @@ public class StationDao {
 		
 		return transList;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 // 병합지점==============================================================================================
 	
@@ -200,7 +188,7 @@ public class StationDao {
 	public List<StationVo> stationInfoView(Connection conn) throws Exception {
 		
 		// sql
-		String sql = "SELECT STATION_NAME , LINE_NO, DEL_YN FROM STATION WHERE DEL_YN = 'N' ORDER BY LINE_NO";
+		String sql = "SELECT STATION_NAME , LINE_NO, DEL_YN FROM STATION WHERE DEL_YN = 'N' ORDER BY LINE_NO ASC, STATION_NO ASC";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 		

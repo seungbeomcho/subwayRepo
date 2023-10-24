@@ -179,22 +179,16 @@ public class StationController {
 			if(lineNo != null) {
 				System.out.println("동일 호선 "+ lineNo +"호선 입니다. 환승하지 않습니다.");
 				List<String> transitList= stationService.transitStationList(lineNo, startStation, endStation);
-				
-				
-				for(String stationName : transitList) {
-					System.out.print("[" + stationName + "]");
-					System.out.print(" -> ");
+								
+				for(int i = 0; i<transitList.size();i++) {
+					if(i != 0 && i % 5 == 0) {
+						System.out.println("\t");
+					}
+					System.out.print("[" + transitList.get(i) + "]");
+					if( i != transitList.size()-1) {						
+						System.out.print(" -> ");
+					}
 				}
-//				
-//				for(int i = 0; i<transitList.size();i++) {
-//					if(i != 0 && i % 5 == 0) {
-//						System.out.println("\t");
-//					}
-//					System.out.print("[" + transitList.get(i) + "]");
-//					if( i != transitList.size()-1) {						
-//						System.out.print(" -> ");
-//					}
-//				}
 				System.out.println();
 				System.out.print("========= [도착] =========");
 				
@@ -454,8 +448,6 @@ public class StationController {
 			System.out.println("수정되었습니다!");
 			System.out.println();
 			
-			
-			
 		} catch(Exception e) {
 			System.err.println("역 정보 수정에 실패했습니다.");
 			e.printStackTrace();
@@ -468,6 +460,12 @@ public class StationController {
 		String editStationName = Main.SC.nextLine();
 		
 		int result = stationService.stationNameEdit(vo, editStationName);
+		
+		if(result == 1) {
+			System.out.println("역 이름이 변경되었습니다.");
+		} else {
+			throw new Exception();
+		}
 	}
 	
 	// 노선 번호 수정
@@ -476,6 +474,12 @@ public class StationController {
 		String editStationNo = Main.SC.nextLine();
 		
 		int result = stationService.editStationNo(vo, editStationNo);
+
+		if(result == 1) {
+			System.out.println("노선 번호가 변경되었습니다.");
+		} else {
+			throw new Exception();
+		}
 	}
 
 	// 환승여부 수정
@@ -484,6 +488,12 @@ public class StationController {
 		String editTransferYn = Main.SC.nextLine();
 		
 		int result = stationService.editTransferYn(vo, editTransferYn);
+
+		if(result == 1) {
+			System.out.println("환승여부가 변경되었습니다.");
+		} else {
+			throw new Exception();
+		}
 	}
 
 	// 출구 개수 수정
@@ -492,6 +502,12 @@ public class StationController {
 		String editExitCount = Main.SC.nextLine();
 		
 		int result = stationService.editExitCount(vo, editExitCount);
+
+		if(result == 1) {
+			System.out.println("출구 개수가 변경되었습니다.");
+		} else {
+			throw new Exception();
+		}
 	}
 
 	// 평일 첫차시간 수정
@@ -500,6 +516,12 @@ public class StationController {
 		String editWeekStartTime = Main.SC.nextLine();
 		
 		int result = stationService.editWeekStartTime(vo, editWeekStartTime);
+
+		if(result == 1) {
+			System.out.println("평일 첫차시간이 변경되었습니다.");
+		} else {
+			throw new Exception();
+		}
 	}
 
 	// 평일 막차시간 수정
@@ -508,6 +530,12 @@ public class StationController {
 		String editWeekEndTime = Main.SC.nextLine();
 		
 		int result = stationService.editWeekEndTime(vo, editWeekEndTime);
+
+		if(result == 1) {
+			System.out.println("평일 막차시간이 변경되었습니다.");
+		} else {
+			throw new Exception();
+		}
 	}
 
 	// 주말 첫차시간 수정
@@ -516,6 +544,12 @@ public class StationController {
 		String editHolStartTime = Main.SC.nextLine();
 		
 		int result = stationService.editHolStartTime(vo, editHolStartTime);
+
+		if(result == 1) {
+			System.out.println("주말 첫차시간이 변경되었습니다.");
+		} else {
+			throw new Exception();
+		}
 	}
 
 	// 주말 막차시간 수정
@@ -524,6 +558,12 @@ public class StationController {
 		String editHolEndTime = Main.SC.nextLine();
 		
 		int result = stationService.editHolEndTime(vo, editHolEndTime);
+
+		if(result == 1) {
+			System.out.println("주말 막차시간이 변경되었습니다.");
+		} else {
+			throw new Exception();
+		}
 	}
 	
 	// 화장실 내외위치 수정
@@ -532,6 +572,12 @@ public class StationController {
 		String editTolietIo = Main.SC.nextLine();
 		
 		int result = stationService.editTolietIo(vo, editTolietIo);
+
+		if(result == 1) {
+			System.out.println("화장실 내외위치가 변경되었습니다.");
+		} else {
+			throw new Exception();
+		}
 	}
 	
 }
