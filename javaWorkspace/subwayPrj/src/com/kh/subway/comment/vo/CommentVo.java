@@ -9,10 +9,11 @@ public class CommentVo {
 	private String enrollDate;
 	private String modifyDate;
 	private String deleteYn;
+	private String comment;
 	public CommentVo() {
 	}
 	public CommentVo(String commentNo, String boardNo, String userNo, String adminNo, String content, String enrollDate,
-			String modifyDate, String deleteYn) {
+			String modifyDate, String deleteYn, String comment) {
 		super();
 		this.commentNo = commentNo;
 		this.boardNo = boardNo;
@@ -22,6 +23,7 @@ public class CommentVo {
 		this.enrollDate = enrollDate;
 		this.modifyDate = modifyDate;
 		this.deleteYn = deleteYn;
+		this.comment = comment;
 	}
 	public String getCommentNo() {
 		return commentNo;
@@ -71,15 +73,18 @@ public class CommentVo {
 	public void setDeleteYn(String deleteYn) {
 		this.deleteYn = deleteYn;
 	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 	@Override
 	public String toString() {
 		return "CommentVo [commentNo=" + commentNo + ", boardNo=" + boardNo + ", userNo=" + userNo + ", adminNo="
 				+ adminNo + ", content=" + content + ", enrollDate=" + enrollDate + ", modifyDate=" + modifyDate
-				+ ", deleteYn=" + deleteYn + "]";
+				+ ", deleteYn=" + deleteYn + ", comment=" + comment + "]";
 	}
-	
-	
-	
 	
 	
 }

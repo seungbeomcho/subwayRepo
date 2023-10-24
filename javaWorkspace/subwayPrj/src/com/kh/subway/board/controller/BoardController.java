@@ -1,5 +1,6 @@
 package com.kh.subway.board.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.kh.subway.admin.controller.AdminController;
@@ -58,14 +59,14 @@ public class BoardController {
 		public void adminMenu() {
 			System.out.println("===== 자유게시판 관리자 메뉴 =====");
 			System.out.println("1. 게시판 전체조회(최신순)");
-			System.out.println("2. 게시판 수정");
+			System.out.println("2. 상세 목록 조회 및 수정(게시판넘버)");
 			System.out.println("3. 게시판 삭제");
 			System.out.println("9. 로그아웃");
 			
 			String num = Main.SC.nextLine();
 			switch(num) {
 			case "1" : boardList(); break;
-			case "2" : adminBoardDetailByNo(); break;
+			case "2" : boardDetailByNo(); break;
 			case "3" : delete(); break;
 			case "9" : ac.adminLogout(); break;
 			default : System.out.println("잘못 입력했습니다.");
@@ -78,8 +79,6 @@ public class BoardController {
 			try {
 				if(Main.loginUser == null && Main.loginAdmin == null) {
 					System.out.println("로그인 하셔야 가능한 기능입니다.");
-					uc.login();
-					return;
 				}
 				
 				System.out.println("----- 자유게시판 작성 -----");
@@ -127,6 +126,9 @@ public class BoardController {
 				
 				for(BoardVo vo : voList) {
 					
+					if(vo.getCommentCount() == null) {
+						vo.setCommentCount("없음");
+					}
 					System.out.print("NO :" + vo.getBoardNo() + " ");
 					System.out.print("제목 : " + vo.getTitle());
 					System.out.println();
@@ -176,8 +178,7 @@ public class BoardController {
 					System.out.println();
 					System.out.print("작성자 : " + vo.getWriterNick());
 					System.out.println();
-					System.out.print("댓글 ↓ " + "\n");
-					System.out.print(vo.getCommentCount() + "\n");
+					System.out.println("→ (No:"+vo.getCommentNo()+")댓글 : " + vo.getBoardComment());
 					System.out.println("===================================");
 				}
 					System.out.println("자유게시판 수정");
@@ -216,10 +217,12 @@ public class BoardController {
 				String no = Main.SC.nextLine();
 				
 				BoardVo voList = service.boardDetailByNo(no);
+				List<BoardVo> comList = service.commentSelect(no);
 				
 				if(voList == null) {
 					throw new Exception("해당 게시글이 없습니다");
 				}
+					
 				
 				System.out.println("게시판 번호 : " + voList.getBoardNo());
 				System.out.println("게시판 제목 : " + voList.getTitle());
@@ -227,17 +230,27 @@ public class BoardController {
 				System.out.println("게시판 작성일시 : " + voList.getEnrollDate());
 				System.out.println("게시판 작성자 닉네임 : " + voList.getWriterNick());
 				System.out.println("게시판 역이름 : " + voList.getStationName());
-				System.out.println("댓글수 : " + voList.getCommentCount());
+				
+				for(BoardVo comVo : comList) {
+					System.out.println("→ (No:"+comVo.getCommentNo()+")댓글 : " + comVo.getBoardComment());
+					System.out.println("작성일시 : " + comVo.getEnrollDate());
+					System.out.println("닉네임 : " + comVo.getWriterNick());
+					System.out.println();
+					
+				}
+				
 				
 				System.out.println("댓글을 작성 하시겠습니까?(Y/N)");
+				System.out.println("수정은 (E), 삭제는(D) 를 입력해주세요");
 				String yn = Main.SC.nextLine().toLowerCase();
 		
 				switch(yn) {
-				case "Y" : cc.leaveComment(voList.getBoardNo()); break;
-				case "N" : return;
+				case "y" : cc.leaveComment(voList.getBoardNo()); break;
+				case "n" : return;
+				case "e" : cc.editComment(); break;
+				case "d" : if(Main.loginUser == null && Main.loginAdmin == null) {uc.selectMenu();}else {cc.delete();}; break;  
 				default : System.out.println("잘못 입력하셨습니다.");
 				}
-				
 				
 				
 			}catch(Exception e) {
@@ -409,6 +422,7 @@ public class BoardController {
 				
 				for(BoardVo vo : voList) {
 					System.out.print("NO :" + vo.getBoardNo() + " ");
+					System.out.println("작성자 : " + vo.getWriterNick());
 					System.out.print("제목 : " + vo.getTitle());
 					System.out.println();
 					System.out.print("내용 : " + vo.getContent());
@@ -419,7 +433,7 @@ public class BoardController {
 					System.out.println();
 					System.out.print("조회수 : " + vo.getInquiry());
 					System.out.println();
-					System.out.print("작성자 : " + vo.getWriterNick() + "\n");
+					System.out.println("댓글수 : " + vo.getCommentCount());
 					System.out.println("===================================");
 				}
 				
@@ -447,6 +461,7 @@ public class BoardController {
 				
 				for(BoardVo vo : voList) {
 					System.out.print("NO :" + vo.getBoardNo() + " ");
+					System.out.println("작성자 : " + vo.getWriterNick());
 					System.out.print("제목 : " + vo.getTitle());
 					System.out.println();
 					System.out.print("내용 : " + vo.getContent());
@@ -457,7 +472,7 @@ public class BoardController {
 					System.out.println();
 					System.out.print("조회수 : " + vo.getInquiry());
 					System.out.println();
-					System.out.print("작성자 : " + vo.getWriterNick() + "\n");
+					System.out.println("댓글수 : " + vo.getCommentCount());
 					System.out.println("===================================");
 				}
 				
@@ -485,6 +500,7 @@ public class BoardController {
 				
 				for(BoardVo vo : voList) {
 					System.out.print("NO :" + vo.getBoardNo() + " ");
+					System.out.println("작성자 : " + vo.getWriterNick());
 					System.out.print("제목 : " + vo.getTitle());
 					System.out.println();
 					System.out.print("내용 : " + vo.getContent());
@@ -495,7 +511,7 @@ public class BoardController {
 					System.out.println();
 					System.out.print("조회수 : " + vo.getInquiry());
 					System.out.println();
-					System.out.print("작성자 : " + vo.getWriterNick() + "\n");
+					System.out.println("댓글수 : " + vo.getCommentCount());
 					System.out.println("===================================");
 				}
 				
