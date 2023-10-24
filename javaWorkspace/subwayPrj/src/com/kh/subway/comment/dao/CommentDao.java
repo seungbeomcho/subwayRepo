@@ -37,4 +37,54 @@ public class CommentDao {
 		
 		return result;
 	}
+	//댓글 수정
+	public int editComment(Connection conn, CommentVo vo) throws Exception{
+		String sql = "UPDATE BOARD_COMMENT SET CONTENT = ? , MODIFY_DATE = SYSDATE WHERE DELETE_YN = 'N' AND COMMENT_NO = ? ";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, vo.getComment());
+		pstmt.setString(2, vo.getCommentNo());
+		int result = pstmt.executeUpdate();
+		
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+	}
+	//댓글 삭제(관리자)
+	public int delete(Connection conn, CommentVo vo) throws Exception {
+		String sql = "UPDATE BOARD_COMMENT SET DELETE_YN = 'Y' WHERE COMMENT_NO = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, vo.getCommentNo());
+		int result = pstmt.executeUpdate();
+		
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+		
+	}
+	public int deleteUser(Connection conn, CommentVo vo) throws Exception {
+		String sql = "UPDATE BOARD_COMMENT SET DELETE_YN = 'Y' WHERE COMMENT_NO = ? AND USER_NO = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, vo.getCommentNo());
+		pstmt.setString(2, vo.getUserNo());
+		int result = pstmt.executeUpdate();
+		
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

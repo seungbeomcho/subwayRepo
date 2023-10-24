@@ -39,4 +39,64 @@ public class CommentService {
 		return result;
 	
 	}
+	//댓글 수정
+	public int editComment(CommentVo vo) throws Exception {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = dao.editComment(conn , vo);
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+	
+	// 댓글 삭제
+	public int delete(CommentVo vo) throws Exception{
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = 0;
+		if(Main.loginUser != null) {
+			result = dao.deleteUser(conn , vo);
+		}else if(Main.loginAdmin != null) {
+			result = dao.delete(conn, vo);
+		}
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -224,6 +224,19 @@ private final BoardDao dao;
 		return voList;
 	}
 
+	//댓글 조회
+	public List<BoardVo> commentSelect(String no) throws Exception{
+		Connection conn = JDBCTemplate.getConnection();
+		
+		List<BoardVo> comList = dao.commentSelect(conn , no);
+		
+		JDBCTemplate.close(conn);
+		
+		return comList;
+		
+		
+	}
+
 
 		
 
