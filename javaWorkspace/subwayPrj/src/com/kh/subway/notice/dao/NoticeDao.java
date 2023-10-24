@@ -191,7 +191,7 @@ public class NoticeDao {
 	public List<NoticeVo> searchNoticeByTitle(Connection conn, String searchValue) throws Exception {
 
 		//sql
-		String sql = "SELECT NOTICE_NO , TITLE , INQUIRY , TO_CHAR(POST_TIME , 'YYYY-MM-DD') AS POST_TIME FROM NOTICE WHERE TITLE LIKE '%' || ? || '%' ORDER BY NOTICE_NO DESC";
+		String sql = "SELECT N.NOTICE_NO ,S.STATION_NAME , N.TITLE , N.INQUIRY , TO_CHAR(N.POST_TIME , 'YYYY-MM-DD') AS POST_TIME FROM NOTICE N JOIN STATION S ON N.STATION_NO = S.STATION_NO WHERE TITLE LIKE '%' || ? || '%' ORDER BY NOTICE_NO DESC";
 		PreparedStatement pstmt =  conn.prepareStatement(sql);
 		pstmt.setString(1, searchValue);
 		ResultSet rs = pstmt.executeQuery();
@@ -201,12 +201,14 @@ public class NoticeDao {
 		while(rs.next()) {
 			String no = rs.getString("NOTICE_NO");
 			String title = rs.getString("TITLE");
+			String stationname = rs.getString("STATION_NAME");
 			String inquiry = rs.getString("INQUIRY");
 			String posttime = rs.getString("POST_TIME");
 			
 			NoticeVo vo = new NoticeVo();
 			vo.setNoticeno(no);
 			vo.setTitle(title);
+			vo.setStationname(stationname);
 			vo.setInqiry(inquiry);
 			vo.setPosttime(posttime);
 			
@@ -227,7 +229,7 @@ public class NoticeDao {
 	public List<NoticeVo> searchNoticeByContent(Connection conn, String searchValue) throws Exception {
 		
 		//sql
-		String sql = "SELECT NOTICE_NO , TITLE , INQUIRY , TO_CHAR(POST_TIME , 'YYYY-MM-DD') AS POST_TIME , CONTENT FROM NOTICE WHERE TITLE LIKE '%' || ? || '%' ORDER BY NOTICE_NO DESC";
+		String sql = "SELECT N.NOTICE_NO ,S.STATION_NAME , N.TITLE , N.INQUIRY , TO_CHAR(N.POST_TIME , 'YYYY-MM-DD') AS POST_TIME , N.CONTENT FROM NOTICE N JOIN STATION S ON N.STATION_NO = S.STATION_NO WHERE TITLE LIKE '%' || ? || '%' ORDER BY NOTICE_NO DESC";
 		PreparedStatement pstmt =  conn.prepareStatement(sql);
 		pstmt.setString(1, searchValue);
 		ResultSet rs = pstmt.executeQuery();
@@ -236,6 +238,7 @@ public class NoticeDao {
 		List<NoticeVo> voList = new ArrayList<NoticeVo>();
 		while(rs.next()) {
 			String no = rs.getString("NOTICE_NO");
+			String stationname = rs.getString("STATION_NAME");
 			String title = rs.getString("TITLE");
 			String inquiry = rs.getString("INQUIRY");
 			String posttime = rs.getString("POST_TIME");
@@ -244,6 +247,7 @@ public class NoticeDao {
 			NoticeVo vo = new NoticeVo();
 			vo.setNoticeno(no);
 			vo.setTitle(title);
+			vo.setStationname(stationname);
 			vo.setInqiry(inquiry);
 			vo.setPosttime(posttime);
 			vo.setContent(content);

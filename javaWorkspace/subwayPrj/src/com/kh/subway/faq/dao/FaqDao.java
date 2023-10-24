@@ -125,7 +125,7 @@ public class FaqDao {
 	public List<FaqVo> searchFaqByTitle(Connection conn, String searchValue) throws Exception{
 		
 		//sql
-		String sql = "SELECT FAQ_NO , FAQ_TITLE , INQUIRY , TO_CHAR(POST_TIME , 'YYYY-MM-DD') AS POST_TIME FROM FAQ WHERE FAQ_TITLE LIKE '%' || ? || '%' ORDER BY FAQ_NO DESC";
+		String sql = "SELECT F.FAQ_NO ,S.STATION_NAME , F.FAQ_TITLE , F.INQUIRY , TO_CHAR(F.POST_TIME , 'YYYY-MM-DD') AS POST_TIME FROM FAQ F JOIN STATION S ON F.STATION_NO = S.STATION_NO WHERE FAQ_TITLE LIKE '%' || ? || '%' ORDER BY FAQ_NO DESC";
 		PreparedStatement pstmt =  conn.prepareStatement(sql);
 		pstmt.setString(1, searchValue);
 		ResultSet rs = pstmt.executeQuery();
@@ -135,12 +135,14 @@ public class FaqDao {
 		while(rs.next()) {
 			String no = rs.getString("FAQ_NO");
 			String title = rs.getString("FAQ_TITLE");
+			String stationname = rs.getString("STATION_NAME");
 			String inquiry = rs.getString("INQUIRY");
 			String posttime = rs.getString("POST_TIME");
 			
 			FaqVo vo = new FaqVo();
 			vo.setFaqno(no);
 			vo.setFaqtitle(title);
+			vo.setStationname(stationname);
 			vo.setInquiry(inquiry);
 			vo.setPosttime(posttime);
 			
@@ -157,11 +159,11 @@ public class FaqDao {
 	} 
 	
 	
-	//FAQ 검색 (내용) **SQL 확인
+	//FAQ 검색 (내용)
 	public List<FaqVo> searchFaqByContent(Connection conn, String searchValue) throws Exception {
 		
 		//sql
-		String sql = "SELECT FAQ_NO , FAQ_TITLE , INQUIRY , TO_CHAR(POST_TIME , 'YYYY-MM-DD') AS POST_TIME , CONTENT FROM FAQ WHERE CONTENT LIKE '%' || ? || '%' ORDER BY FAQ_NO DESC";
+		String sql = "SELECT F.FAQ_NO ,S.STATION_NAME , F.FAQ_TITLE , F.INQUIRY , TO_CHAR(F.POST_TIME , 'YYYY-MM-DD') AS POST_TIME , F.CONTENT FROM FAQ F JOIN STATION S ON F.STATION_NO = S.STATION_NO WHERE FAQ_TITLE LIKE '%' || ? || '%' ORDER BY FAQ_NO DESC";
 		PreparedStatement pstmt =  conn.prepareStatement(sql);
 		pstmt.setString(1, searchValue);
 		ResultSet rs = pstmt.executeQuery();
@@ -170,6 +172,7 @@ public class FaqDao {
 		List<FaqVo> voList = new ArrayList<FaqVo>();
 		while(rs.next()) {
 			String no = rs.getString("FAQ_NO");
+			String stationname = rs.getString("STATION_NAME");
 			String title = rs.getString("FAQ_TITLE");
 			String inquiry = rs.getString("INQUIRY");
 			String posttime = rs.getString("POST_TIME");
@@ -178,6 +181,7 @@ public class FaqDao {
 			FaqVo vo = new FaqVo();
 			vo.setFaqno(no);
 			vo.setFaqtitle(title);
+			vo.setStationname(stationname);
 			vo.setInquiry(inquiry);
 			vo.setPosttime(posttime);
 			vo.setContent(content);
