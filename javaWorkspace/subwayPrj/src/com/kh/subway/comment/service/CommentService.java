@@ -3,6 +3,8 @@ package com.kh.subway.comment.service;
 import java.sql.Connection;
 
 import com.kh.subway.comment.dao.CommentDao;
+import com.kh.subway.comment.vo.CommentVo;
+import com.kh.subway.main.Main;
 
 import javaJDBCTEMPLATE.JDBCTemplate;
 
@@ -15,11 +17,16 @@ public class CommentService {
 	}
 	
 	//댓글 입력
-	public int leaveComment(String comment) throws Exception {
+	public int leaveComment(CommentVo vo) throws Exception {
 		
 		Connection conn = JDBCTemplate.getConnection();
 		
-		int result = dao.leaveComment(conn , comment);
+		int result = 0;
+		if(Main.loginUser != null) {
+			result = dao.leaveCommentUser(conn , vo);
+		}else if(Main.loginAdmin !=null) {
+			result = dao.leaveCommentAdmin(conn , vo);
+		}
 		
 		if(result == 1) {
 			JDBCTemplate.commit(conn);
