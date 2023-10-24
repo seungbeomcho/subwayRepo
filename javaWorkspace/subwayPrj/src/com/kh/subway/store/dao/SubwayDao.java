@@ -3,11 +3,13 @@ package com.kh.subway.store.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import com.kh.subway.store.vo.SubwayVo;
 import javaJDBCTEMPLATE.JDBCTemplate;
+import oracle.jdbc.proxy.annotation.Pre;
 
 public class SubwayDao {
 
@@ -16,23 +18,26 @@ public class SubwayDao {
 		
 		
 		//sql
-		String sql = "SELECT STORE_NO, TEL, STORE_NAME, ADDRESS FROM SUBWAY ORDER BY STORE_NO ASC";
+		String sql = "SELECT STORE_NO, TEL, STORE_NAME, ADDRESS, DEL_YN FROM SUBWAY ORDER BY STORE_NO ASC";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 		
 		//rs
 		List<SubwayVo> voList = new ArrayList<SubwayVo>();
 		while(rs.next()) {
+			
 			String storeNo = rs.getString("STORE_NO");
 			String tel = rs.getString("TEL");
 			String storeName = rs.getString("STORE_NAME");
 			String address = rs.getString("ADDRESS");
+			String delYn = rs.getString("DEL_YN");
 			
 			SubwayVo vo = new SubwayVo();
 			vo.setStoreNo(storeNo);
 			vo.setTel(tel);
 			vo.setStoreName(storeName);
 			vo.setAddress(address);
+			vo.setDelYn(delYn);
 			
 			voList.add(vo);
 		}
@@ -46,7 +51,7 @@ public class SubwayDao {
 
 	//입력한 역 주위 매장 조회
 	public List<SubwayVo> subwayListByName(Connection conn, String name) throws Exception {
-	    String sql = "SELECT S.STORE_NO, S.STORE_NAME, S.TEL, S.ADDRESS FROM SUBWAY S JOIN STATION T ON S.STATION_NO = T.STATION_NO WHERE T.STATION_NAME LIKE '%' || ? || '%'";
+	    String sql = "SELECT DISTINCT S.STORE_NAME, S.TEL, S.ADDRESS FROM SUBWAY S JOIN STATION T ON S.STATION_NO = T.STATION_NO WHERE T.STATION_NAME = ?";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
 	    pstmt.setString(1, name); 
 	    ResultSet rs = pstmt.executeQuery();
@@ -55,13 +60,13 @@ public class SubwayDao {
 
 	    while(rs.next()) {
 	    	
-	        String storeNo = rs.getString("STORE_NO");
+	       // String storeNo = rs.getString("STORE_NO");
 	        String storeName = rs.getString("STORE_NAME");
 	        String tel = rs.getString("TEL");
 	        String address = rs.getString("ADDRESS");
 
 	        SubwayVo vo = new SubwayVo();
-	        vo.setStoreNo(storeNo);
+	       // vo.setStoreNo(storeNo);
 	        vo.setStoreName(storeName);
 	        vo.setTel(tel);
 	        vo.setAddress(address);
@@ -146,6 +151,28 @@ public class SubwayDao {
 		
 		return result;
 		
+	}
+
+	//번호로 정보조회
+	public SubwayVo printStoreInfo(Connection conn, String storeNo) throws Exception {
+		String sql = "SELECT STORE_NAME, ADDRESS, TEL FROM SUBWAY WHERE STORE_NO = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, storeNo);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		
+		SubwayVo subwayVo = new SubwayVo();
+		String storeName = rs.getString("STORE_NAME");
+		String address = rs.getString("ADDRESS");
+		String tel = rs.getString("TEL");
+		subwayVo.setStoreName(storeName); 
+		subwayVo.setAddress(address);
+		subwayVo.setTel(tel);
+		
+		JDBCTemplate.close(rs);
+		JDBCTemplate.close(pstmt);
+		return subwayVo;
 	}
 	
 
