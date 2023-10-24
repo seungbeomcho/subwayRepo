@@ -26,8 +26,7 @@ public class BoardController {
 		public void selectMenu() {
 		while(true) {
 			System.out.println("===== 자유게시판 =====");
-			System.out.println("0. 로그아웃");
-			System.out.println("1. 로그인");
+			System.out.println("1. 로그인화면");
 			System.out.println("2. 글작성");
 			System.out.println("3. 전체 목록 조회(최신순)");
 			System.out.println("4. 상세 목록 조회 (게시판넘버)");
@@ -40,8 +39,7 @@ public class BoardController {
 			
 			String num = Main.SC.nextLine();
 			switch(num) {
-//			case "0" : uc.logout(); break; 
-			case "1" : uc.login(); break; 
+			case "1" : uc.selectMenu(); break; 
 			case "2" : write(); break; 
 			case "3" : boardList(); break; 
 			case "4" : boardDetailByNo(); break; 
@@ -176,7 +174,10 @@ public class BoardController {
 					System.out.println();
 					System.out.print("조회수 : " + vo.getInquiry());
 					System.out.println();
-					System.out.print("작성자 : " + vo.getWriterNick() + "\n");
+					System.out.print("작성자 : " + vo.getWriterNick());
+					System.out.println();
+					System.out.print("댓글 ↓ " + "\n");
+					System.out.print(vo.getCommentCount() + "\n");
 					System.out.println("===================================");
 				}
 					System.out.println("자유게시판 수정");
@@ -226,10 +227,11 @@ public class BoardController {
 				System.out.println("게시판 작성일시 : " + voList.getEnrollDate());
 				System.out.println("게시판 작성자 닉네임 : " + voList.getWriterNick());
 				System.out.println("게시판 역이름 : " + voList.getStationName());
+				System.out.println("댓글수 : " + voList.getCommentCount());
 				
 				System.out.println("댓글을 작성 하시겠습니까?(Y/N)");
-				String yn = Main.SC.nextLine();
-				yn.toUpperCase();
+				String yn = Main.SC.nextLine().toLowerCase();
+		
 				switch(yn) {
 				case "Y" : cc.leaveComment(voList.getBoardNo()); break;
 				case "N" : return;
