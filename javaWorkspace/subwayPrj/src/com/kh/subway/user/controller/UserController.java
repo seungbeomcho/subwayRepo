@@ -118,7 +118,7 @@ public class UserController {
 	}
 
 	// 회원가입
-	private void join() {
+	public void join() {
 		
 		try {	
 			// 데이터
@@ -152,7 +152,7 @@ public class UserController {
 	}
 	
 	// 로그인
-	private void login() {
+	public void login() {
 		
 		try {
 
@@ -186,7 +186,7 @@ public class UserController {
 	}
 	
 	// 로그아웃
-	private void logout() {
+	public void logout() {
 		if(Main.loginUser == null) {
 			System.err.println("로그인 하고 진행해주세요.");
 			return;
