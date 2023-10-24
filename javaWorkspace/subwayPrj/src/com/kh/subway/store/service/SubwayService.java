@@ -135,5 +135,14 @@ public class SubwayService {
 		return result;
 	}
 
+	//번호로 정보 조회
+	public SubwayVo printStoreInfo(String storeNo) throws Exception {
+		Connection conn = JDBCTemplate.getConnection();
+		SubwayVo subwayVo = dao.printStoreInfo(conn, storeNo);
+		
+		JDBCTemplate.close(conn);
+		return subwayVo;
+	}
+
 
 }

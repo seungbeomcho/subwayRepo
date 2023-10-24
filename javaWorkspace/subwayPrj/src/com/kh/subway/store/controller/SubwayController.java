@@ -52,7 +52,7 @@ import com.kh.subway.store.vo.SubwayVo;
 	//서브웨이 매장 전체 조회
 	public void subwayList() {
 		try {
-			System.out.println("=====서브웨이 매장 전체 조회=====");
+			System.out.println("================서브웨이 매장 전체 조회================");
 			
 			//데이터
 			
@@ -67,6 +67,8 @@ import com.kh.subway.store.vo.SubwayVo;
 			System.out.print("매장명");
 			System.out.print(" | ");
 			System.out.print("매장주소");
+			System.out.print(" | ");
+			System.out.print("폐업여부");
 			for(SubwayVo vo : voList) {
 				System.out.println();
 				System.out.print(vo.getStoreNo());
@@ -76,14 +78,15 @@ import com.kh.subway.store.vo.SubwayVo;
 				System.out.print(vo.getStoreName());
 				System.out.print(" | " );
 				System.out.print(vo.getAddress());
-				
+				System.out.print(" | " );
+				System.out.print(vo.getDelYn());
 				System.out.println();
 			}
 			
 		}catch(Exception e) {
 			System.out.println("서브웨이 매장 전체 조회 실패 ...");
 			e.printStackTrace();
-		}
+		}  
 	}	
 	
 	//서브웨이 매장 상세 조회 (역 이름)
@@ -104,7 +107,7 @@ import com.kh.subway.store.vo.SubwayVo;
 				throw new Exception("잘못 입력하셨습니다.");
 			}	
 			for(SubwayVo vo : voList) {
-				System.out.println("일련번호 : " + vo.getStoreNo());
+				//System.out.println("일련번호 : " + vo.getStoreNo());
 				System.out.println("전화번호 : " + vo.getTel());
 				System.out.println("매장명 : " + vo.getStoreName());
 				System.out.println("주소 : " + vo.getAddress());
@@ -112,7 +115,7 @@ import com.kh.subway.store.vo.SubwayVo;
 			}
 		}catch(Exception e) {
 			System.out.println("역 주위 매장 상세조회 실패 ...");
-			e.printStackTrace();
+			e.printStackTrace(); 
 		}
 	}
 	
@@ -126,7 +129,12 @@ import com.kh.subway.store.vo.SubwayVo;
 			//데이터
 			System.out.println("정보 변동사항이 있는 매장 일련번호를 입력하세요 : ");
 			String storeNo = Main.SC.nextLine();
-			System.out.println("변경할 매장명 이름을 입력하세요 : ");
+			SubwayVo subwayVo = service.printStoreInfo(storeNo);
+			System.out.println("현재 매장이름 : " + subwayVo.getStoreName());
+			System.out.println("현재 매장주소 : " + subwayVo.getAddress());
+			System.out.println("전화번호 : " + subwayVo.getTel());
+			
+			System.out.println("변경할 매장 이름을 입력하세요 : ");
 			String storeName = Main.SC.nextLine();
 				
 			SubwayVo vo = new SubwayVo();	
@@ -157,6 +165,11 @@ import com.kh.subway.store.vo.SubwayVo;
 			//데이터
 			System.out.println("주소를 변경할 매장 일련번호를 입력하세요 : ");
 			String storeNo = Main.SC.nextLine();
+			SubwayVo subwayVo = service.printStoreInfo(storeNo);
+			System.out.println("현재 매장이름 : " + subwayVo.getStoreName());
+			System.out.println("현재 매장주소 : " + subwayVo.getAddress());
+			System.out.println("전화번호 : " + subwayVo.getTel());
+			
 			System.out.println("변경할 주소지를 입력하세요 : ");
 			String address = Main.SC.nextLine();
 			
