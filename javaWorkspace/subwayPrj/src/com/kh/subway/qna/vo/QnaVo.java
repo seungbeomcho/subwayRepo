@@ -14,7 +14,7 @@ public class QnaVo {
 	private String inquiry; 
 	private String deleteYn;
 	private String writerNick;
-	
+	private String StationName;
 	public String getQnaNo() {
 		return qnaNo;
 	}
@@ -87,10 +87,15 @@ public class QnaVo {
 	public void setWriterNick(String writerNick) {
 		this.writerNick = writerNick;
 	}
-	public QnaVo() {
+	public String getStationName() {
+		return StationName;
+	}
+	public void setStationName(String stationName) {
+		StationName = stationName;
 	}
 	public QnaVo(String qnaNo, String stationNo, String adminNo, String userNo, String postTime, String title,
-			String content, String reTitle, String reContent, String inquiry, String deleteYn, String writerNick) {
+			String content, String reTitle, String reContent, String inquiry, String deleteYn, String writerNick,
+			String stationName) {
 		super();
 		this.qnaNo = qnaNo;
 		this.stationNo = stationNo;
@@ -104,13 +109,18 @@ public class QnaVo {
 		this.inquiry = inquiry;
 		this.deleteYn = deleteYn;
 		this.writerNick = writerNick;
+		StationName = stationName;
+	}
+	public QnaVo() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public String toString() {
 		return "QnaVo [qnaNo=" + qnaNo + ", stationNo=" + stationNo + ", adminNo=" + adminNo + ", userNo=" + userNo
 				+ ", postTime=" + postTime + ", title=" + title + ", content=" + content + ", reTitle=" + reTitle
 				+ ", reContent=" + reContent + ", inquiry=" + inquiry + ", deleteYn=" + deleteYn + ", writerNick="
-				+ writerNick + "]";
+				+ writerNick + ", StationName=" + StationName + "]";
 	}
 	
 }
