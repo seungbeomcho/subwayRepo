@@ -39,7 +39,6 @@ public class NoticeService {
 		
 		//close
 		JDBCTemplate.close(conn);
-		
 		return result;
 	}
 

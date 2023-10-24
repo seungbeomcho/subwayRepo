@@ -11,14 +11,14 @@ public class FaqVo {
 	private String posttime;
 	private String deleteyn;
 	private String modifydate;
-	
+	private String stationname;
 	public FaqVo() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	public FaqVo(String faqno, String stationno, String adminno, String faqtitle, String content, String inquiry,
-			String posttime, String deleteyn, String modifydate) {
+			String posttime, String deleteyn, String modifydate, String stationname) {
 		super();
 		this.faqno = faqno;
 		this.stationno = stationno;
@@ -29,6 +29,14 @@ public class FaqVo {
 		this.posttime = posttime;
 		this.deleteyn = deleteyn;
 		this.modifydate = modifydate;
+		this.stationname = stationname;
+	}
+
+	@Override
+	public String toString() {
+		return "FaqVo [faqno=" + faqno + ", stationno=" + stationno + ", adminno=" + adminno + ", faqtitle=" + faqtitle
+				+ ", content=" + content + ", inquiry=" + inquiry + ", posttime=" + posttime + ", deleteyn=" + deleteyn
+				+ ", modifydate=" + modifydate + ", stationname=" + stationname + "]";
 	}
 
 	public String getFaqno() {
@@ -103,14 +111,13 @@ public class FaqVo {
 		this.modifydate = modifydate;
 	}
 
-	@Override
-	public String toString() {
-		return "FaqVo [faqno=" + faqno + ", stationno=" + stationno + ", adminno=" + adminno + ", faqtitle=" + faqtitle
-				+ ", content=" + content + ", inquiry=" + inquiry + ", posttime=" + posttime + ", deleteyn=" + deleteyn
-				+ ", modifydate=" + modifydate + "]";
+	public String getStationname() {
+		return stationname;
 	}
-	
-	
+
+	public void setStationname(String stationname) {
+		this.stationname = stationname;
+	}
 	
 	
 	

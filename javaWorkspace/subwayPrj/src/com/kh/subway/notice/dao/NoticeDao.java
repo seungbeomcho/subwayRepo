@@ -22,7 +22,7 @@ public class NoticeDao {
 		//SQL
 		String sql = "INSERT INTO NOTICE (NOTICE_NO, STATION_NO, TITLE, CONTENT) VALUES (SEQ_NOTICE_NO.NEXTVAL, (SELECT STATION_NO FROM STATION WHERE STATION_NAME = ?), ?, ?)";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, vo.getStationno());
+		pstmt.setString(1, vo.getStationname());
 		pstmt.setString(2, vo.getTitle());
 		pstmt.setString(3, vo.getContent());
 		int result = pstmt.executeUpdate();

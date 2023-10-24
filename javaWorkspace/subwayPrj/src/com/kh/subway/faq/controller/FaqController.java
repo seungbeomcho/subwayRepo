@@ -89,6 +89,8 @@ public class FaqController {
 					throw new Exception("관리자 로그인이 필요합니다.");
 				}
 				
+				System.out.println("역이름 : ");
+				String stationname = Main.SC.nextLine();
 				System.out.println("제목 : ");
 				String title = Main.SC.nextLine();
 				System.out.println("내용 : ");
@@ -97,6 +99,7 @@ public class FaqController {
 				FaqVo vo = new FaqVo();
 				vo.setFaqtitle(title);
 				vo.setContent(content);
+				vo.setStationname(stationname);
 				
 				int result = service.writer(vo);
 				
@@ -200,7 +203,16 @@ public class FaqController {
 				}
 				
 				for(FaqVo vo : voList) {
-					System.out.println(vo);
+					System.out.print("NO :" + vo.getFaqno() + " ");
+					System.out.print("제목 : " + vo.getFaqtitle());
+					System.out.println();
+					System.out.print("역이름 : " + vo.getStationname());
+					System.out.println();
+					System.out.print("작성일시 : " + vo.getPosttime());
+					System.out.println();
+					System.out.print("조회수 : " + vo.getInquiry());
+					System.out.println();
+					System.out.println("===================================");
 				}
 				
 			}catch(Exception e) {
@@ -231,7 +243,19 @@ public class FaqController {
 				}
 				
 				for(FaqVo vo : voList) {
-					System.out.println(vo);
+					System.out.print("NO :" + vo.getFaqno() + " ");
+					System.out.print("제목 : " + vo.getFaqtitle());
+					System.out.println();
+					System.out.print("내용 : " + vo.getContent());
+					System.out.println();
+					System.out.print("역이름 : " + vo.getStationname());
+					System.out.println();
+					System.out.print("작성일시 : " + vo.getPosttime());
+					System.out.println();
+					System.out.print("조회수 : " + vo.getInquiry());
+					System.out.println();
+					System.out.println("===================================");
+				
 				}
 				
 			}catch(Exception e) {
