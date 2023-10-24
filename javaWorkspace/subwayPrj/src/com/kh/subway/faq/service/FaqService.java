@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.kh.subway.faq.dao.FaqDao;
 import com.kh.subway.faq.vo.FaqVo;
+import com.kh.subway.main.Main;
 
 import javaJDBCTEMPLATE.JDBCTemplate;
 
@@ -155,26 +156,22 @@ public class FaqService {
 		
 
 	//FAQ 삭제
-	public int delete(HashMap<String, String> map) throws Exception {
-
-		//CONN
+	public int delete(String no) throws Exception {
+		
 		Connection conn = JDBCTemplate.getConnection();
 		
-		//DAO
-		int result = dao.delete(conn, map);
+		int result = dao.delete(conn , no);
 		
-		//TX
 		if(result == 1) {
 			JDBCTemplate.commit(conn);
 		}else {
 			JDBCTemplate.rollback(conn);
 		}
 		
-		//CLOSE
 		JDBCTemplate.close(conn);
+			
 		return result;
-		
-	} //delete
+	}
 
 	
  } //class

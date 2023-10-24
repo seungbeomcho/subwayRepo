@@ -43,15 +43,13 @@ public class NoticeDao {
 		String sql = "UPDATE NOTICE SET TITLE = ? , MODIFY_DATE = SYSDATE WHERE NOTICE_NO = ? AND DELETE_YN = 'N'";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, vo.getTitle());
-//		pstmt.setString(2, vo.getContent());
-		pstmt.setString(3, vo.getNoticeno());
-//		pstmt.setString(4, vo.getAdminno());
+		pstmt.setString(2, vo.getNoticeno());
 		int result = pstmt.executeUpdate();
 		
 		// close
-			JDBCTemplate.close(pstmt);
-			
-			return result;
+		JDBCTemplate.close(pstmt);
+		
+		return result;
 		}
 	
 	
@@ -61,10 +59,8 @@ public class NoticeDao {
 		// SQL
 		String sql = "UPDATE NOTICE SET CONTENT = ? , MODIFY_DATE = SYSDATE WHERE NOTICE_NO = ? AND DELETE_YN = 'N'";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-//		pstmt.setString(1, vo.getTitle());
-		pstmt.setString(2, vo.getContent());
-		pstmt.setString(3, vo.getNoticeno());
-//		pstmt.setString(4, vo.getAdminno());
+		pstmt.setString(1, vo.getContent());
+		pstmt.setString(2, vo.getNoticeno());
 		int result = pstmt.executeUpdate();
 		
 		// close
@@ -74,25 +70,43 @@ public class NoticeDao {
 		}
 
 
-	//공지사항 삭제
-	public int delete(Connection conn, HashMap<String, String> map) throws Exception {
+	// 공지사항 삭제
+	public int delete(Connection conn, String no) throws Exception {
 		
-		String sql = "UPDATE NOTICE SET DELETE_YN = 'Y' , MODIFY_DATE = SYSDATE WHERE NOTICE_NO = ?";
+		String sql = "UPDATE NOTICE SET DELETE_YN = 'Y' , MODIFY_DATE = SYSDATE WHERE NOTICE_NO = ? AND DELETE_YN = 'N'";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, map.get("noticeno"));
+		pstmt.setString(1, no);
 		int result = pstmt.executeUpdate();
 		
 		JDBCTemplate.close(pstmt);
 		
 		return result;
+		
 	}
+	
+	
+//	//공지사항 삭제 2
+//	public int delete(Connection conn, HashMap<String, String> map) throws Exception {
+//		
+//		//sql
+//		String sql = "UPDATE NOTICE SET DELETE_YN = 'Y' , MODIFY_DATE = SYSDATE WHERE NOTICE_NO = ? AND DELETE_YN = 'N'";
+//		PreparedStatement pstmt = conn.prepareStatement(sql);
+//		pstmt.setString(1, map.get("noticeNum"));
+//		int result = pstmt.executeUpdate();
+//		
+//		//close
+//		JDBCTemplate.close(pstmt);
+//		
+//		return result;
+//	
+//	}
 
 
 	//공지사항 목록조회 (최신순)
 	public List<NoticeVo> noticeList(Connection conn) throws Exception {
 		
 		//SQL
-		String sql = "SELECT NOTICE_NO AS NO , TITLE , INQUIRY ,  TO_CHAR(POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS POST_TIME FROM NOTICE ORDER BY NOTICE_NO DESC";
+		String sql = "SELECT NOTICE_NO AS NO , TITLE , INQUIRY ,  TO_CHAR(POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS POST_TIME FROM NOTICE WHERE DELETE_YN = 'N' ORDER BY NOTICE_NO DESC";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 		
@@ -121,11 +135,11 @@ public class NoticeDao {
 	}
 
 	
-	//FAQ 상세 조회 (번호)
+	//공지사항 상세 조회 (번호)
 	public NoticeVo noticeDetailByNo(Connection conn, String num) throws Exception {
 			
 		//sql
-		String sql = "SELECT NOTICE_NO , TITLE , ADMIN_NO , INQUIRY , TO_CHAR(POST_TIME , 'MM/DD') AS POST_TIME , MODIFY_DATE , CONTENT FROM NOTICE WHERE NOTICE_NO = ? AND DELETE_YN = 'N'";
+		String sql = "SELECT NOTICE_NO , STATION_NO , TITLE , INQUIRY , TO_CHAR(POST_TIME , 'YYYY/MM/DD') AS POST_TIME , CONTENT FROM NOTICE WHERE NOTICE_NO = ? AND DELETE_YN = 'N'";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, num);
 		ResultSet rs = pstmt.executeQuery();
@@ -133,20 +147,20 @@ public class NoticeDao {
 		//rs
 		NoticeVo vo = null;
 		if(rs.next()) {
-			String no = rs.getString("NOTICE_NO");
+			String noticeno = rs.getString("NOTICE_NO");
+			String stationno = rs.getString("STATION_NO");
 			String title = rs.getString("TITLE");
 			String inqiry = rs.getString("INQUIRY");
-			String enrollDate = rs.getString("POST_TIME");
-			String modifyDate = rs.getString("MODIFY_DATE");
+			String posttime = rs.getString("POST_TIME");
 			String content = rs.getString("CONTENT");
 		
 			vo = new NoticeVo();
-			vo.setNoticeno(no);
+			vo.setNoticeno(noticeno);
+			vo.setStationno(stationno);
 			vo.setTitle(title);
-			vo.setContent(content);
 			vo.setInqiry(inqiry);
-			vo.setPosttime(enrollDate);
-			vo.setModifydate(modifyDate);
+			vo.setPosttime(posttime);
+			vo.setContent(content);
 		
 		}
 		

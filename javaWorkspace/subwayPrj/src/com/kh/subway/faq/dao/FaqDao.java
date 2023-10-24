@@ -40,7 +40,7 @@ public class FaqDao {
 	public List<FaqVo> faqList (Connection conn)throws Exception{
 		
 		//SQL
-		String sql = "SELECT F.FAQ_NO AS NO, F.FAQ_TITLE AS TITLE, F.INQUIRY,  TO_CHAR(F.POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS POST_TIME FROM FAQ F ORDER BY FAQ_NO DESC";
+		String sql = "SELECT F.FAQ_NO AS NO, F.FAQ_TITLE AS TITLE, F.INQUIRY,  TO_CHAR(F.POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS POST_TIME FROM FAQ F WHERE DELETE_YN = 'N' ORDER BY FAQ_NO DESC";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 		
@@ -202,9 +202,7 @@ public class FaqDao {
 		String sql = "UPDATE FAQ SET FAQ_TITLE = ? , MODIFY_DATE = SYSDATE WHERE FAQ_NO = ? AND DELETE_YN = 'N'";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, vo.getFaqtitle());
-//		pstmt.setString(2, vo.getContent());
-		pstmt.setString(3, vo.getFaqno());
-//		pstmt.setString(4, vo.getAdminno());
+		pstmt.setString(2, vo.getFaqno());
 		int result = pstmt.executeUpdate();
 		
 		// close
@@ -216,11 +214,12 @@ public class FaqDao {
 	
 	//FAQ 내용 수정
 	public int contentModify(Connection conn, FaqVo vo) throws Exception {
+		
 		// SQL
 		String sql = "UPDATE FAQ SET CONTENT = ? , MODIFY_DATE = SYSDATE WHERE FAQ_NO = ? AND DELETE_YN = 'N'";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(2, vo.getContent());
-		pstmt.setString(3, vo.getFaqno());
+		pstmt.setString(1, vo.getContent());
+		pstmt.setString(2, vo.getFaqno());
 		int result = pstmt.executeUpdate();
 		
 		// close
@@ -229,22 +228,19 @@ public class FaqDao {
 		return result;
 	}
 	
+	
 	//FAQ 삭제
-	public int delete(Connection conn, HashMap<String, String> map)throws Exception {
-
-		//sql
+	public int delete(Connection conn, String no) throws Exception {
+		
 		String sql = "UPDATE FAQ SET DELETE_YN = 'Y' , MODIFY_DATE = SYSDATE WHERE FAQ_NO = ? AND DELETE_YN = 'N'";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, map.get("faqno"));
+		pstmt.setString(1, no);
 		int result = pstmt.executeUpdate();
 		
-		
-		//close
 		JDBCTemplate.close(pstmt);
 		
 		return result;
 		
-	
 	}
 
 
