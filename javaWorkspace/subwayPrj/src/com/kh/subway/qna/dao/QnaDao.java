@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.kh.subway.board.vo.BoardVo;
 import com.kh.subway.main.Main;
 import com.kh.subway.qna.vo.QnaVo;
 
@@ -112,11 +113,11 @@ public class QnaDao {
 
 	public int reWrite(Connection conn, QnaVo vo) throws Exception {
 		//sql
-				String sql = "INSERT INTO QNA(QNA_NO, RE_TITLE, RE_CONTENT, ADMIN_NO) VALUES(SEQ_QNA_NO.NEXTVAL, ?, ?, ?)";
+				String sql = "INSERT INTO QNA_ADMIN(QNA_NO, ADMIN_NO, RE_TITLE, RE_CONTENT) VALUES(SEQ_QNA_NO.NEXTVAL, ?, ?, ?)";
 				PreparedStatement pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, vo.getReTitle());
-				pstmt.setString(2, vo.getReContent());
-				pstmt.setString(3, Main.loginAdmin.getAdminNo());
+				pstmt.setString(1, Main.loginAdmin.getAdminNo());
+				pstmt.setString(2, vo.getReTitle());
+				pstmt.setString(3, vo.getReContent());
 				int result = pstmt.executeUpdate();
 				//rs
 				
@@ -130,7 +131,7 @@ public class QnaDao {
 	public List<QnaVo> reWriteList(Connection conn) throws Exception {
 		
 		//sql
-				String sql = "SELECT Q.ADMIN_NO , Q.RE_TITLE , Q.RE_CONTENT , Q.INQUIRY , TO_CHAR(Q.POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS POST_TIME, Q.USER_NO FROM QNA Q JOIN SUBWAY_USER U ON Q.USER_NO = U.USER_NO WHERE Q.DELETE_YN = 'N' ORDER BY Q.QNA_NO DESC";
+				String sql = "SELECT Q.ADMIN_NO , Q.RE_TITLE , Q.RE_CONTENT , Q.INQUIRY , TO_CHAR(Q.POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS POST_TIME, Q.USER_NO FROM QNA_ADMIN Q JOIN SUBWAY_USER U ON Q.USER_NO = U.USER_NO WHERE Q.DELETE_YN = 'N' ORDER BY Q.QNA_NO DESC";
 				PreparedStatement pstmt = conn.prepareStatement(sql);
 				ResultSet rs = pstmt.executeQuery();
 				
@@ -200,7 +201,7 @@ public class QnaDao {
 		
 		//sql
 		
-			String sql = "SELECT Q.QNA_NO , Q.RE_TITLE , Q.RE_CONTENT, Q.INQUIRY , TO_CHAR(Q.POST_TIME, 'MM/DD') AS POST_TIME FROM QNA Q JOIN SUBWAY_USER U ON Q.USER_NO = U.USER_NO WHERE Q.DELETE_YN = 'N' AND QNA_NO = ?";
+			String sql = "SELECT Q.QNA_NO , Q.RE_TITLE , Q.RE_CONTENT, Q.INQUIRY , TO_CHAR(Q.POST_TIME, 'MM/DD') AS POST_TIME FROM QNA_ADMIN Q JOIN SUBWAY_USER U ON Q.USER_NO = U.USER_NO WHERE Q.DELETE_YN = 'N' AND QNA_NO = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, num);
 			ResultSet rs = pstmt.executeQuery();
@@ -234,7 +235,7 @@ public class QnaDao {
 	public List<QnaVo> searchReWriteByTitle(Connection conn, String searchValue) throws Exception {
 		
 		//sql
-		String sql = "SELECT Q.QNA_NO , Q.ADMIN_NO,  Q.USER_NO , Q.RE_TITLE , Q.RE_CONTENT , Q.INQUIRY , TO_CHAR(Q.POST_TIME, 'YYYY-MM-DD') AS POST_TIME FROM QNA Q JOIN SUBWAY_USER U ON Q.USER_NO = U.USER_NO WHERE Q.ADMIN_NO = ? ORDER BY QNA_NO DESC";
+		String sql = "SELECT Q.QNA_NO , Q.ADMIN_NO,  Q.USER_NO , Q.RE_TITLE , Q.RE_CONTENT , Q.INQUIRY , TO_CHAR(Q.POST_TIME, 'YYYY-MM-DD') AS POST_TIME FROM QNA_ADMIN Q JOIN SUBWAY_USER U ON Q.USER_NO = U.USER_NO WHERE Q.ADMIN_NO = ? ORDER BY QNA_NO DESC";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, searchValue);
 		ResultSet rs = pstmt.executeQuery();
@@ -288,10 +289,9 @@ public class QnaDao {
 	public int reWriteDelete(Connection conn, HashMap<String, String> map) throws Exception {
 
 		//sql 
-		String sql = "UPDATE QNA SET DELETE_YN = 'Y' , POST_TIME = SYSDATE WHERE QNA_NO = ? AND ADMIN_NO = ?";
+		String sql = "UPDATE QNA_ADMIN SET DELETE_YN = 'Y' , POST_TIME = SYSDATE WHERE ADMIN_NO = ?";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, map.get("qnaNum"));
-		pstmt.setString(2, map.get("loginAdmin"));
+		pstmt.setString(1, map.get("loginAdmin"));
 		int result = pstmt.executeUpdate();
 		//rs
 		
@@ -300,6 +300,65 @@ public class QnaDao {
 		
 		return result;
 		
+	}
+
+
+	public int titleCorrect(Connection conn, QnaVo vo) throws Exception {
+		
+			String sql = "UPDATE QNA SET TITLE = ? , POST_TIME = SYSDATE WHERE QNA_NO = ?  AND DELETE_YN = 'N'";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setString(2, vo.getQnaNo());
+			int result = pstmt.executeUpdate();
+			
+			JDBCTemplate.close(pstmt);
+			
+			return result;
+		
+	}
+
+
+	public int contentCorrect(Connection conn, QnaVo vo)	 throws Exception {
+		
+		String sql = "UPDATE QNA SET CONTENT = ? , POST_TIME = SYSDATE WHERE QNA_NO = ?  AND DELETE_YN = 'N'";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, vo.getContent());
+		pstmt.setString(2, vo.getQnaNo());
+		int result = pstmt.executeUpdate();
+		
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+		
+	}
+
+
+	public int reTitleCorrect(Connection conn, QnaVo vo)  throws Exception {
+		
+		String sql = "UPDATE QNA_ADMIN SET RE_TITLE = ? , POST_TIME = SYSDATE WHERE QNA_NO = ?  AND DELETE_YN = 'N'";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, vo.getReTitle());
+		pstmt.setString(2, vo.getQnaNo());
+		int result = pstmt.executeUpdate();
+		
+		JDBCTemplate.close(pstmt);
+		
+		return result;
+	
+	}
+
+
+	public int reContentCorrect(Connection conn, QnaVo vo) throws Exception {
+		
+		String sql = "UPDATE QNA_ADMIN SET RE_CONTENT = ? , POST_TIME = SYSDATE WHERE QNA_NO = ?  AND DELETE_YN = 'N'";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, vo.getReContent());
+		pstmt.setString(2, vo.getQnaNo());
+		int result = pstmt.executeUpdate();
+		
+		JDBCTemplate.close(pstmt);
+		
+		return result;
 	}
 	
 }

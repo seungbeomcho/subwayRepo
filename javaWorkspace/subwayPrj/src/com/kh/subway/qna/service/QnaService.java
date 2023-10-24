@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 
+import com.kh.subway.main.Main;
 import com.kh.subway.qna.dao.QnaDao;
 import com.kh.subway.qna.vo.QnaVo;
 
@@ -185,6 +186,101 @@ public class QnaService {
 		}
 		//close
 		JDBCTemplate.close(conn);
+		return result;
+		
+	}
+
+
+
+	public int titleCorrect(QnaVo vo) throws Exception {
+
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = 0;
+		if(Main.loginUser != null) {
+			result = dao.titleCorrect(conn , vo);
+		}
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		
+		return result;
+	}
+
+
+
+	public int contentCorrect(QnaVo vo) throws Exception {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = 0;
+		if(Main.loginUser != null) {
+			result = dao.contentCorrect(conn , vo);
+		}
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		
+		return result;
+		
+		
+	}
+
+
+
+	public int reTitleCorrect(QnaVo vo) throws Exception {
+
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = 0;
+		if(Main.loginAdmin != null) {
+			result = dao.reTitleCorrect(conn , vo);
+		}
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		
+		return result;
+	}
+
+
+
+	public int reContentCorrect(QnaVo vo) throws Exception {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = 0;
+		if(Main.loginAdmin != null) {
+			result = dao.reContentCorrect(conn , vo);
+		}
+		
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		
 		return result;
 		
 	}
