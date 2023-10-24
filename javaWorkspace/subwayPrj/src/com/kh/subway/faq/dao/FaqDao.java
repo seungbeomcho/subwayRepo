@@ -22,7 +22,7 @@ public class FaqDao {
 		//SQL
 		String sql = "INSERT INTO FAQ (FAQ_NO, STATION_NO, FAQ_TITLE, CONTENT) VALUES (SEQ_FAQ_NO.NEXTVAL, (SELECT STATION_NO FROM STATION WHERE STATION_NAME = ?), ?, ?)";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, vo.getStationno());
+		pstmt.setString(1, vo.getStationname());
 		pstmt.setString(2, vo.getFaqtitle());
 		pstmt.setString(3, vo.getContent());
 		int result = pstmt.executeUpdate();

@@ -18,28 +18,30 @@ public class NoticeController {
 	}
 	
 	//관리자 메뉴
-	public void adminMenu() {
-		System.out.println("---공지사항 관리자 메뉴---");
-		
-		System.out.println("1. 공지사항 작성");
-		System.out.println("2. 공지사항 제목 수정");
-		System.out.println("3. 공지사항 내용 수정");
-		System.out.println("4. 공지사항 삭제");
-		System.out.println("5. 로그아웃");
-		System.out.println("9. 돌아가기");
-		
-		String num = Main.SC.nextLine();
-		switch(num) {
-		case "1" : write(); break;
-		case "2" : titleModify(); break;
-		case "3" : contentModify(); break;
-		case "4" : delete(); break;
-		case "5" : Logout(); break;
-		case "9" : return;
-		
-		default : System.out.println("잘못입력하셨습니다");
+		public void adminMenu() {
+		boolean isMenu = true;
+			while (isMenu) {
+				System.out.println("---공지사항 관리자 메뉴---");
+				
+				System.out.println("1. 공지사항 작성");
+				System.out.println("2. 공지사항 제목 수정");
+				System.out.println("3. 공지사항 내용 수정");
+				System.out.println("4. 공지사항 삭제");
+				System.out.println("5. 로그아웃");
+				System.out.println("9. 돌아가기");
+				
+				String num = Main.SC.nextLine();
+				switch(num) {
+				case "1" : write(); break;
+				case "2" : titleModify(); break;
+				case "3" : contentModify(); break;
+				case "4" : delete(); break;
+				case "5" : Logout(); break;
+				case "9" : isMenu = false;break;
+				
+				default : System.out.println("잘못입력하셨습니다");
+			}
 		}
-		
 	}
 	
 	//관리자 로그아웃
@@ -51,23 +53,26 @@ public class NoticeController {
 	
 	//공지사항 메뉴선택
 	public void selectMenu() {
-		System.out.println("----공지사항----");
-		
-		System.out.println("1. 공지사항 목록조회");
-		System.out.println("2. 공지사항 상세조회 (번호)");
-		System.out.println("3. 공지사항 검색 (제목)");
-		System.out.println("4. 공지사항 검색 (내용)");
-		System.out.println("9. 돌아가기");
-		
-		String num = Main.SC.nextLine();
-		switch(num) {
-		case "1" : noticeList(); break;
-		case "2" : noticeDetailByNo(); break;
-		case "3" : searchNoticeByTitle(); break;
-		case "4" : searchNoticeByContent(); break;
-		case "9" : return;
-		
-		default : System.out.println("잘못입력하셨습니다");
+		boolean isMenu = true;
+			while(isMenu) {
+				System.out.println("----공지사항----");
+				
+				System.out.println("1. 공지사항 목록조회");
+				System.out.println("2. 공지사항 상세조회 (번호)");
+				System.out.println("3. 공지사항 검색 (제목)");
+				System.out.println("4. 공지사항 검색 (내용)");
+				System.out.println("9. 돌아가기");
+				
+				String num = Main.SC.nextLine();
+				switch(num) {
+				case "1" : noticeList(); break;
+				case "2" : noticeDetailByNo(); break;
+				case "3" : searchNoticeByTitle(); break;
+				case "4" : searchNoticeByContent(); break;
+				case "9" : isMenu = false;break;
+				
+				default : System.out.println("잘못입력하셨습니다");
+			}
 		}
 	}
 
@@ -84,6 +89,8 @@ public class NoticeController {
 			}
 			
 			//데이터
+			System.out.println("역이름 : ");
+			String stationname = Main.SC.nextLine();
 			System.out.println("제목 : ");
 			String title = Main.SC.nextLine();
 			System.out.println("내용 : ");
@@ -92,6 +99,7 @@ public class NoticeController {
 			NoticeVo vo = new NoticeVo();
 			vo.setTitle(title);
 			vo.setContent(content);
+			vo.setStationname(stationname);
 			
 			//서비스
 			int result = service.writer(vo);
@@ -339,7 +347,16 @@ public class NoticeController {
 				}
 				
 				for(NoticeVo vo : voList) {
-					System.out.println(vo);
+					System.out.print("NO :" + vo.getNoticeno() + " ");
+					System.out.print("제목 : " + vo.getTitle());
+					System.out.println();
+					System.out.print("역이름 : " + vo.getStationname());
+					System.out.println();
+					System.out.print("작성일시 : " + vo.getPosttime());
+					System.out.println();
+					System.out.print("조회수 : " + vo.getInqiry());
+					System.out.println();
+					System.out.println("===================================");
 				}
 				
 			}catch(Exception e) {
@@ -370,7 +387,18 @@ public class NoticeController {
 				}
 				
 				for(NoticeVo vo : voList) {
-					System.out.println(vo);
+					System.out.print("NO :" + vo.getNoticeno() + " ");
+					System.out.print("제목 : " + vo.getTitle());
+					System.out.println();
+					System.out.print("내용 : " + vo.getContent());
+					System.out.println();
+					System.out.print("역이름 : " + vo.getStationname());
+					System.out.println();
+					System.out.print("작성일시 : " + vo.getPosttime());
+					System.out.println();
+					System.out.print("조회수 : " + vo.getInqiry());
+					System.out.println();
+					System.out.println("===================================");
 				}
 				
 			}catch(Exception e) {
