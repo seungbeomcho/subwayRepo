@@ -221,40 +221,6 @@ public class NoticeController {
 	}
 	
 	
-//	//공지사항 삭제 2
-//	public void delete() {
-//			
-//			try {
-//				System.out.println("---공지사항 삭제---");
-//				
-//				//로그인 여부 체크
-//				if(Main.loginAdmin == null) {
-//					throw new Exception("관리자 로그인이 필요합니다.");
-//				}
-//				
-//				//데이터
-//				System.out.println("공지사항 번호 : ");
-//				String num = Main.SC.nextLine();
-//				String adminNo = Main.loginAdmin.getAdminNo();
-//				
-//				//서비스
-//				HashMap<String, String> map = new HashMap<String, String>();
-//				map.put("NoticeNum", num);
-//				map.put("loginAdminNo", adminNo);
-//				int result = service.delete(map);
-//				
-//				//결과
-//				if(result != 1) {
-//					throw new Exception();
-//				}
-//				System.out.println("공지사항 삭제 완료");
-//				
-//			}catch(Exception e) {
-//				System.out.println("공지사항 삭제 실패");
-//				e.printStackTrace();
-//			}
-//		}
-
 	
 	//공지사항 목록조회 (최신순)
 		public void noticeList() {
@@ -349,6 +315,8 @@ public class NoticeController {
 				for(NoticeVo vo : voList) {
 					System.out.print("NO :" + vo.getNoticeno() + " ");
 					System.out.print("제목 : " + vo.getTitle());
+					System.out.println();
+					System.out.print("내용 : " + vo.getContent());
 					System.out.println();
 					System.out.print("역이름 : " + vo.getStationname());
 					System.out.println();
