@@ -83,10 +83,17 @@ public class QnaService {
 		//conn
 		Connection conn = JDBCTemplate.getConnection();
 		//DAO
+		int result = dao.increaseInquiry(conn, num);
 		QnaVo vo = dao.writeDetailByNo(conn, num);
 		//tx
 		
 		//close
+		if(result == 1) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
 		JDBCTemplate.close(conn);
 		
 		return vo;
@@ -111,12 +118,20 @@ public class QnaService {
 
 	public List<QnaVo> searchWriteByTitle(String searchValue) throws Exception {
 		
-		//conn
+				//conn
 				Connection conn = JDBCTemplate.getConnection();
 				
+				int result = dao.increaseInquiry(conn, searchValue);
 				List<QnaVo> voList = dao.searchWriteByTitle(conn, searchValue);
 				
+				if(result == 1) {
+					JDBCTemplate.commit(conn);
+				}else {
+					JDBCTemplate.rollback(conn);
+				}
+				
 				JDBCTemplate.close(conn);
+				
 				return voList;
 		
 	}
