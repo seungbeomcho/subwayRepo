@@ -57,7 +57,7 @@ public class QnaController {
 		switch(num3) {
 		    case "1": write(); break;
 		    case "2": writeList(); break;
-			case "3": writeDetailByNo(); break;
+			case "3": reWriteDetailByNo(); break;
 			case "4": searchWriteByTitle(); break;
 			case "5": writeDelete(); break;
 			case "6": correct(); break;
@@ -144,12 +144,12 @@ public class QnaController {
 	private void AdminQna() {
 			System.out.println("===== 관리자 전용 게시판 =====");
 		
-			System.out.println("1. 질의답변 작성"); 
-			System.out.println("2. 질의답변 목록 조회 <최신순>");
-			System.out.println("3. 질의답변 상세 조회 <번호>");
-			System.out.println("4. 질의답변 검색<제목>");
-			System.out.println("5. 질의답변 삭제<관리자 번호조회>");
-			System.out.println("6. 질의답변 제목 및 내용 수정");
+			System.out.println("1. 답변 작성"); 
+			System.out.println("2. 답변 목록 조회 <최신순>");
+			System.out.println("3. 질의답변 상세 조회 <번호, 유저 사용 불가>");
+			System.out.println("4. 답변 검색<제목>");
+			System.out.println("5. 답변 삭제<관리자 번호조회>");
+			System.out.println("6. 답변 제목 및 내용 수정");
 			System.out.println("9. 나가기");
 			
 			String num = Main.SC.nextLine();
@@ -246,7 +246,7 @@ public class QnaController {
 				throw new Exception("로그인 하고 오세요! 회원만 가능합니다.");
 			}
 			// 데이터
-			System.out.println("역번호 : ");
+			System.out.println("역이름 : ");
 			String stationNo = Main.SC.nextLine();
 			System.out.println("질의제목 : ");
 			String title = Main.SC.nextLine();
@@ -286,16 +286,17 @@ public class QnaController {
 				throw new Exception("로그인 하고 오세요! 관리자만 가능합니다.");
 			}else {
 				System.out.println("답변할 QNA_NO : ");
-				String qnaAdminNo = Main.SC.nextLine();
+				String qnaNo = Main.SC.nextLine();
 				// 데이터
 				System.out.println("답변제목 : ");
 				String reTitle = Main.SC.nextLine();
 				System.out.println("답변내용 : ");
 				String reContent = Main.SC.nextLine();
 				
-				vo.setQnaAdminNo(qnaAdminNo);
+				vo.setQnaNo(qnaNo);
 				vo.setReTitle(reTitle);
 				vo.setReContent(reContent);
+				vo.setAdminNo(Main.loginAdmin.getAdminNo());
 			}
 			// 서비스
 			int result = service.reWrite(vo);
@@ -398,7 +399,6 @@ public class QnaController {
 			
 			System.out.println("------------------------------");
 			System.out.println("QNA번호 : " + vo.getQnaNo());
-			System.out.println("유저번호 : " + vo.getUserNo());
 			System.out.println("역 이름 : " + vo.getStationName());
 			System.out.println("닉네임 : " + vo.getWriterNick());
 			System.out.println("질의제목 : " + vo.getTitle());
@@ -437,8 +437,6 @@ public class QnaController {
 			System.out.print("/");
 			System.out.print("관리자 작성일자");
 			System.out.print("/");
-			System.out.print("유저번호");
-			System.out.print("/");
 			System.out.println();
 
 			for (QnaVo vo : voList) {
@@ -452,7 +450,6 @@ public class QnaController {
 				System.out.print("/");
 				System.out.print(vo.getRePostTime());
 				System.out.print("/");
-				System.out.print(vo.getUserNo());
 
 				System.out.println();
 			}
@@ -527,12 +524,8 @@ public class QnaController {
 	public void reWriteDetailByNo() {
 
 		try {
-			System.out.println("----------질의답변 상세 조회(관리자)------------");
+			System.out.println("----------질의답변 상세조회(관리자 전용, 유저 사용 불가)------------");
 
-			// 로그인 여부 확인
-			if (Main.loginAdmin == null ) {
-				throw new Exception("로그인 하고 오세요! 관리자만 가능합니다.");
-			}
 			
 			// 데이터
 			System.out.print("조회할 QNA 번호 : ");
@@ -660,4 +653,5 @@ public class QnaController {
 			e.printStackTrace();
 		}
 	}
-	}
+
+}
