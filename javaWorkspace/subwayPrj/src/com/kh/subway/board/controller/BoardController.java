@@ -245,9 +245,9 @@ public class BoardController {
 				String yn = Main.SC.nextLine().toLowerCase();
 		
 				switch(yn) {
-				case "y" : cc.leaveComment(voList.getBoardNo()); break;
+				case "y" : if(Main.loginUser == null && Main.loginAdmin == null) {uc.selectMenu();}else {cc.leaveComment(voList.getBoardNo());}; break;
 				case "n" : return;
-				case "e" : cc.editComment(); break;
+				case "e" : if(Main.loginUser == null && Main.loginAdmin == null) {uc.selectMenu();}else {cc.editComment();}; break;
 				case "d" : if(Main.loginUser == null && Main.loginAdmin == null) {uc.selectMenu();}else {cc.delete();}; break;  
 				default : System.out.println("잘못 입력하셨습니다.");
 				}
