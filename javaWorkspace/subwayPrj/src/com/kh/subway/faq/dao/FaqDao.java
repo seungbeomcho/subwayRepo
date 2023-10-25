@@ -125,7 +125,7 @@ public class FaqDao {
 	public List<FaqVo> searchFaqByTitle(Connection conn, String searchValue) throws Exception{
 		
 		//sql
-		String sql = "SELECT F.FAQ_NO ,S.STATION_NAME , F.FAQ_TITLE , F.INQUIRY , TO_CHAR(F.POST_TIME , 'YYYY-MM-DD') AS POST_TIME FROM FAQ F JOIN STATION S ON F.STATION_NO = S.STATION_NO WHERE FAQ_TITLE LIKE '%' || ? || '%' ORDER BY FAQ_NO DESC";
+		String sql = "SELECT F.FAQ_NO ,S.STATION_NAME , F.FAQ_TITLE , F.INQUIRY , TO_CHAR(F.POST_TIME , 'YYYY-MM-DD') AS POST_TIME , F.CONTENT FROM FAQ F JOIN STATION S ON F.STATION_NO = S.STATION_NO WHERE FAQ_TITLE LIKE '%' || ? || '%' ORDER BY FAQ_NO DESC";
 		PreparedStatement pstmt =  conn.prepareStatement(sql);
 		pstmt.setString(1, searchValue);
 		ResultSet rs = pstmt.executeQuery();
@@ -138,6 +138,7 @@ public class FaqDao {
 			String stationname = rs.getString("STATION_NAME");
 			String inquiry = rs.getString("INQUIRY");
 			String posttime = rs.getString("POST_TIME");
+			String content = rs.getString("CONTENT");
 			
 			FaqVo vo = new FaqVo();
 			vo.setFaqno(no);
@@ -145,6 +146,7 @@ public class FaqDao {
 			vo.setStationname(stationname);
 			vo.setInquiry(inquiry);
 			vo.setPosttime(posttime);
+			vo.setContent(content);
 			
 			voList.add(vo);
 			

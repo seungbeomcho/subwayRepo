@@ -316,6 +316,8 @@ public class NoticeController {
 					System.out.print("NO :" + vo.getNoticeno() + " ");
 					System.out.print("제목 : " + vo.getTitle());
 					System.out.println();
+					System.out.print("내용 : " + vo.getContent());
+					System.out.println();
 					System.out.print("역이름 : " + vo.getStationname());
 					System.out.println();
 					System.out.print("작성일시 : " + vo.getPosttime());

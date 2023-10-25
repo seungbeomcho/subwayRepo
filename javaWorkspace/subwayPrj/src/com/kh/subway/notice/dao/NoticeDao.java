@@ -85,22 +85,6 @@ public class NoticeDao {
 	}
 	
 	
-//	//공지사항 삭제 2
-//	public int delete(Connection conn, HashMap<String, String> map) throws Exception {
-//		
-//		//sql
-//		String sql = "UPDATE NOTICE SET DELETE_YN = 'Y' , MODIFY_DATE = SYSDATE WHERE NOTICE_NO = ? AND DELETE_YN = 'N'";
-//		PreparedStatement pstmt = conn.prepareStatement(sql);
-//		pstmt.setString(1, map.get("noticeNum"));
-//		int result = pstmt.executeUpdate();
-//		
-//		//close
-//		JDBCTemplate.close(pstmt);
-//		
-//		return result;
-//	
-//	}
-
 
 	//공지사항 목록조회 (최신순)
 	public List<NoticeVo> noticeList(Connection conn) throws Exception {
@@ -191,7 +175,7 @@ public class NoticeDao {
 	public List<NoticeVo> searchNoticeByTitle(Connection conn, String searchValue) throws Exception {
 
 		//sql
-		String sql = "SELECT N.NOTICE_NO ,S.STATION_NAME , N.TITLE , N.INQUIRY , TO_CHAR(N.POST_TIME , 'YYYY-MM-DD') AS POST_TIME FROM NOTICE N JOIN STATION S ON N.STATION_NO = S.STATION_NO WHERE TITLE LIKE '%' || ? || '%' ORDER BY NOTICE_NO DESC";
+		String sql = "SELECT N.NOTICE_NO ,S.STATION_NAME , N.TITLE , N.INQUIRY , TO_CHAR(N.POST_TIME , 'YYYY-MM-DD') AS POST_TIME , N.CONTENT FROM NOTICE N JOIN STATION S ON N.STATION_NO = S.STATION_NO WHERE TITLE LIKE '%' || ? || '%' ORDER BY NOTICE_NO DESC";
 		PreparedStatement pstmt =  conn.prepareStatement(sql);
 		pstmt.setString(1, searchValue);
 		ResultSet rs = pstmt.executeQuery();
@@ -204,6 +188,7 @@ public class NoticeDao {
 			String stationname = rs.getString("STATION_NAME");
 			String inquiry = rs.getString("INQUIRY");
 			String posttime = rs.getString("POST_TIME");
+			String content = rs.getString("CONTENT");
 			
 			NoticeVo vo = new NoticeVo();
 			vo.setNoticeno(no);
@@ -211,6 +196,7 @@ public class NoticeDao {
 			vo.setStationname(stationname);
 			vo.setInqiry(inquiry);
 			vo.setPosttime(posttime);
+			vo.setContent(content);
 			
 			voList.add(vo);
 			
