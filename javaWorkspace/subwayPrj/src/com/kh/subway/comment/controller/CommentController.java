@@ -29,7 +29,6 @@ public class CommentController {
 				vo = new CommentVo();
 				vo.setBoardNo(boardNo);
 				vo.setContent(comment);
-				vo.setAdminNo(Main.loginAdmin.getAdminNo());
 			}
 			
 			int result = service.leaveComment(vo);

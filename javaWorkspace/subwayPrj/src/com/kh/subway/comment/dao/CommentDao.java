@@ -26,11 +26,10 @@ public class CommentDao {
 	}
 	//댓글 입력(관리자)
 	public int leaveCommentAdmin(Connection conn, CommentVo vo) throws Exception{
-		String sql = "INSERT INTO BOARD_COMMENT(COMMENT_NO, BOARD_NO, ADMIN_NO ,CONTENT) VALUES (SEQ_COMMENT_NO.NEXTVAL , ?, ? , ?)";
+		String sql = "INSERT INTO BOARD_COMMENT(COMMENT_NO, BOARD_NO,CONTENT) VALUES (SEQ_COMMENT_NO.NEXTVAL , ? , ?)";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, vo.getBoardNo());
-		pstmt.setString(2, vo.getAdminNo());
-		pstmt.setString(3, vo.getContent());
+		pstmt.setString(2, vo.getContent());
 		int result = pstmt.executeUpdate();
 		
 		JDBCTemplate.close(pstmt);

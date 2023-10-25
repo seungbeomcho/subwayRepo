@@ -73,10 +73,9 @@ public class BoardDao {
 	//게시판 상세 조회(BOARD_NO)
 	public BoardVo boardDetailByNo(Connection conn, String no) throws Exception{
 		
-		String sql = "SELECT B.BOARD_NO ,S.STATION_NAME ,B.TITLE ,B.CONTENT ,TO_CHAR(B.ENROLL_DATE , 'YY/MM/DD') AS ENROLL_DATE ,B.INQUIRY ,U.NICK AS WRITER_NICK ,(SELECT COUNT(BOARD_NO) FROM BOARD_COMMENT WHERE BOARD_NO = ? AND DELETE_YN = 'N' GROUP BY BOARD_NO) AS COMMENT_COUNT FROM BOARD B JOIN SUBWAY_USER U ON B.USER_NO = U.USER_NO JOIN STATION S ON B.STATION_NO = S.STATION_NO JOIN BOARD_COMMENT C ON B.BOARD_NO = C.BOARD_NO WHERE B.DELETE_YN = 'N' AND B.BOARD_NO = ?";
+		String sql = "SELECT B.BOARD_NO ,S.STATION_NAME ,B.TITLE ,B.CONTENT ,TO_CHAR(B.ENROLL_DATE, 'YY/MM/DD') AS ENROLL_DATE ,B.INQUIRY ,U.NICK AS WRITER_NICK ,(SELECT COUNT(*) FROM BOARD_COMMENT WHERE BOARD_NO = B.BOARD_NO AND DELETE_YN = 'N') AS COMMENT_COUNT FROM BOARD B JOIN SUBWAY_USER U ON B.USER_NO = U.USER_NO JOIN STATION S ON B.STATION_NO = S.STATION_NO WHERE B.DELETE_YN = 'N' AND B.BOARD_NO = ?";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, no);
-		pstmt.setString(2, no);
 		ResultSet rs = pstmt.executeQuery();
 		
 		BoardVo voList = null;
@@ -184,7 +183,7 @@ public class BoardDao {
 		//게시판 수정 (역이름)
 		public int stationNameModify(Connection conn, BoardVo vo) throws Exception {
 			
-			String sql = "UPDATE BOARD SET (SELECT STATION_NO FROM STATION WHERE STATION_NAME = ?) , MODIFY_DATE = SYSDATE WHERE  = ? AND DELETE_YN = 'N'";
+			String sql = "UPDATE BOARD SET STATION_NO = (SELECT STATION_NO FROM STATION WHERE STATION_NAME = ?) , MODIFY_DATE = SYSDATE WHERE USER_NO = ? AND DELETE_YN = 'N'";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, vo.getStationName());
 			pstmt.setString(2, vo.getUserNo());
@@ -212,7 +211,7 @@ public class BoardDao {
 		
 		// 게시글 조회(USER_NO가 쓴글)
 		public List<BoardVo> userBoardSelect(Connection conn, String userNo) throws Exception {
-			String sql = "SELECT B.BOARD_NO ,S.STATION_NAME ,B.TITLE ,B.CONTENT ,TO_CHAR(B.ENROLL_DATE , 'YY/MM/DD') AS ENROLLDATE ,B.INQUIRY ,U.NICK AS WRITER_NICK , C.CONTENT AS COM , C.COMMENT_NO FROM BOARD B JOIN SUBWAY_USER U ON B.USER_NO = U.USER_NO JOIN STATION S ON B.STATION_NO = S.STATION_NO JOIN BOARD_COMMENT C ON B.BOARD_NO = C.BOARD_NO WHERE B.USER_NO = ? AND B.DELETE_YN = 'N' AND C.DELETE_YN = 'N' ORDER BY B.ENROLL_DATE DESC";
+			String sql = "SELECT B.BOARD_NO ,S.STATION_NAME ,B.TITLE ,B.CONTENT ,TO_CHAR(B.ENROLL_DATE, 'YY/MM/DD') AS ENROLLDATE ,B.INQUIRY ,U.NICK AS WRITER_NICK ,(SELECT COUNT(*) FROM BOARD_COMMENT WHERE BOARD_NO = B.BOARD_NO AND DELETE_YN = 'N') AS COMMENT_COUNT FROM BOARD B JOIN SUBWAY_USER U ON B.USER_NO = U.USER_NO JOIN STATION S ON B.STATION_NO = S.STATION_NO LEFT JOIN BOARD_COMMENT C ON B.BOARD_NO = C.BOARD_NO WHERE B.USER_NO = ? AND B.DELETE_YN = 'N' ORDER BY B.ENROLL_DATE DESC";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, userNo);
@@ -227,8 +226,7 @@ public class BoardDao {
 				String enrollDate = rs.getString("ENROLLDATE");
 				String inquiry = rs.getString("INQUIRY");
 				String writerNick = rs.getString("WRITER_NICK");
-				String comment = rs.getString("COM");
-				String commentNo = rs.getString("COMMENT_NO");
+				String commentCount = rs.getString("COMMENT_COUNT");
 				
 				BoardVo vo = new BoardVo();
 				vo.setBoardNo(doardNo);
@@ -238,8 +236,7 @@ public class BoardDao {
 				vo.setEnrollDate(enrollDate);
 				vo.setInquiry(inquiry);
 				vo.setWriterNick(writerNick);
-				vo.setBoardComment(comment);
-				vo.setCommentNo(commentNo);
+				vo.setCommentCount(commentCount);
 				
 				voList.add(vo);
 				
@@ -386,7 +383,7 @@ public class BoardDao {
 
 		//댓글 조회
 		public List<BoardVo> commentSelect(Connection conn, String no) throws Exception{
-			String sql = "SELECT B.COMMENT_NO , B.CONTENT , B.ENROLL_DATE , S.NICK AS WRITER_NICK FROM BOARD_COMMENT B JOIN SUBWAY_USER S ON B.USER_NO = S.USER_NO WHERE BOARD_NO = ? AND DELETE_YN = 'N' ";
+			String sql = "SELECT B.COMMENT_NO , B.CONTENT , B.ENROLL_DATE , S.NICK AS WRITER_NICK FROM BOARD_COMMENT B LEFT JOIN SUBWAY_USER S ON B.USER_NO = S.USER_NO WHERE BOARD_NO = ? AND DELETE_YN = 'N'";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, no);
 			ResultSet rs = pstmt.executeQuery();
