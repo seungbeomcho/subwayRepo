@@ -170,7 +170,8 @@ public class BoardController {
 				if(voList.size() == 0) {
 					throw new Exception();
 				}
-				
+				while(true) {
+					
 				for(BoardVo vo : voList) {
 					System.out.println("NO :" + vo.getBoardNo() + " ");
 					System.out.print("제목 : " + vo.getTitle());
@@ -204,6 +205,7 @@ public class BoardController {
 					default : System.out.println("잘못 입력하셨습니다.");
 					}
 					
+				}
 
 				
 			}catch(Exception e) {
@@ -283,6 +285,7 @@ public class BoardController {
 				System.out.print("변경할 내용 : ");
 				String title = Main.SC.nextLine();
 				BoardVo vo = new BoardVo();
+				vo.setUserNo(Main.loginUser.getUserNo());
 				vo.setTitle(title);
 				vo.setBoardNo(no);
 			
@@ -310,6 +313,7 @@ public class BoardController {
 				System.out.print("변경할 내용 : ");
 				String content = Main.SC.nextLine();
 				BoardVo vo = new BoardVo();
+				vo.setUserNo(Main.loginUser.getUserNo());
 				vo.setContent(content);
 				vo.setBoardNo(no);
 				
@@ -336,6 +340,7 @@ public class BoardController {
 				System.out.print("변경할 내용 : ");
 				String stationName = Main.SC.nextLine();
 				BoardVo vo = new BoardVo();
+				vo.setUserNo(Main.loginUser.getUserNo());
 				vo.setStationName(stationName);
 				vo.setBoardNo(no);
 			

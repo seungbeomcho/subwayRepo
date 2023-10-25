@@ -125,10 +125,11 @@ public class BoardDao {
 		// 게시글 제목 수정
 		public int titleModify(Connection conn, BoardVo vo) throws Exception {
 			
-			String sql = "UPDATE BOARD SET TITLE = ? , MODIFY_DATE = SYSDATE WHERE USER_NO = ? AND DELETE_YN = 'N'";
+			String sql = "UPDATE BOARD SET TITLE = ? , MODIFY_DATE = SYSDATE WHERE USER_NO = ? AND DELETE_YN = 'N' AND BOARD_NO = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getUserNo());
+			pstmt.setString(3, vo.getBoardNo());
 			int result = pstmt.executeUpdate();
 			
 			JDBCTemplate.close(pstmt);
@@ -154,10 +155,11 @@ public class BoardDao {
 		// 게시글 내용 수정
 		public int contentModify(Connection conn, BoardVo vo) throws Exception {
 			
-			String sql = "UPDATE BOARD SET CONTENT = ? , MODIFY_DATE = SYSDATE WHERE USER_NO = ? AND DELETE_YN = 'N'";
+			String sql = "UPDATE BOARD SET CONTENT = ? , MODIFY_DATE = SYSDATE WHERE USER_NO = ? AND DELETE_YN = 'N' AND BOARD_NO = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, vo.getContent());
 			pstmt.setString(2, vo.getUserNo());
+			pstmt.setString(3, vo.getBoardNo());
 			int result = pstmt.executeUpdate();
 			
 			JDBCTemplate.close(pstmt);
@@ -183,10 +185,11 @@ public class BoardDao {
 		//게시판 수정 (역이름)
 		public int stationNameModify(Connection conn, BoardVo vo) throws Exception {
 			
-			String sql = "UPDATE BOARD SET STATION_NO = (SELECT STATION_NO FROM STATION WHERE STATION_NAME = ?) , MODIFY_DATE = SYSDATE WHERE USER_NO = ? AND DELETE_YN = 'N'";
+			String sql = "UPDATE BOARD SET STATION_NO = (SELECT STATION_NO FROM STATION WHERE STATION_NAME = ?) , MODIFY_DATE = SYSDATE WHERE USER_NO = ? AND DELETE_YN = 'N' AND BOARD_NO = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, vo.getStationName());
 			pstmt.setString(2, vo.getUserNo());
+			pstmt.setString(3, vo.getBoardNo());
 			int result = pstmt.executeUpdate();
 			
 			JDBCTemplate.close(pstmt);
