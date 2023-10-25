@@ -13,13 +13,12 @@ public class SubwayVo {
     private String openDate;            
     private String modifydate;     
     private String newYn;
+	private String stationName;
 	
-    public SubwayVo() {
-
-    }
+    
 
 	public SubwayVo(String storeNo, String stationNo, String adminNo, String tel, String storeName, String address,
-			String delYn, String closeDate, String openDate, String modifydate, String newYn) {
+			String delYn, String closeDate, String openDate, String modifydate, String newYn, String stationName) {
 		super();
 		this.storeNo = storeNo;
 		this.stationNo = stationNo;
@@ -32,6 +31,20 @@ public class SubwayVo {
 		this.openDate = openDate;
 		this.modifydate = modifydate;
 		this.newYn = newYn;
+		this.stationName = stationName;
+	}
+
+	public SubwayVo() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "SubwayVo [storeNo=" + storeNo + ", stationNo=" + stationNo + ", adminNo=" + adminNo + ", tel=" + tel
+				+ ", storeName=" + storeName + ", address=" + address + ", delYn=" + delYn + ", closeDate=" + closeDate
+				+ ", openDate=" + openDate + ", modifydate=" + modifydate + ", newYn=" + newYn + ", stationName="
+				+ stationName + "]";
 	}
 
 	public String getStoreNo() {
@@ -122,9 +135,12 @@ public class SubwayVo {
 		this.newYn = newYn;
 	}
 
-	public String toString() {
-		return "SubwayVo [storeNo=" + storeNo + ", stationNo=" + stationNo + ", adminNo=" + adminNo + ", tel=" + tel
-				+ ", storeName=" + storeName + ", address=" + address + ", delYn=" + delYn + ", closeDate=" + closeDate
-				+ ", openDate=" + openDate + ", modifydate=" + modifydate + ", newYn=" + newYn + "]";
+	public String getStationName() {
+		return stationName;
 	}
+
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
+	}
+
 }

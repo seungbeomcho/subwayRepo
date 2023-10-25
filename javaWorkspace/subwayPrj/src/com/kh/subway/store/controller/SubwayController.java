@@ -37,12 +37,14 @@ import com.kh.subway.store.vo.SubwayVo;
 		System.out.println("=====SUBWAY STORE=====");
 		System.out.println("1. 역 주위 서브웨이 매장 전체 조회");
 		System.out.println("2. 역 주위 서브웨이 매장 조회 (역 이름)");
+		System.out.println("3. 매장 변경사항 상세 조회");
 		
 		
 		String num = Main.SC.nextLine();
 		switch(num) {
 		case "1" : subwayList(); break;
-		case "2" : subwayListByName(); break; 
+		case "2" : subwayListByName(); break;
+		case "3" : subwayDetailList(); break;
 		case "9" : return;
 		default : System.out.println("잘못 입력하셨습니다."); 
 		
@@ -67,8 +69,6 @@ import com.kh.subway.store.vo.SubwayVo;
 			System.out.print("매장명");
 			System.out.print(" | ");
 			System.out.print("매장주소");
-			System.out.print(" | ");
-			System.out.print("폐업여부");
 			for(SubwayVo vo : voList) {
 				System.out.println();
 				System.out.print(vo.getStoreNo());
@@ -78,8 +78,6 @@ import com.kh.subway.store.vo.SubwayVo;
 				System.out.print(vo.getStoreName());
 				System.out.print(" | " );
 				System.out.print(vo.getAddress());
-				System.out.print(" | " );
-				System.out.print(vo.getDelYn());
 				System.out.println();
 			}
 			
@@ -89,6 +87,48 @@ import com.kh.subway.store.vo.SubwayVo;
 		}  
 	}	
 	
+	//서브웨이 매장 상세 조회(매장명, 개업여부, 폐업여부, 개업일시, 폐업일시, 수정일시)
+	public void subwayDetailList() {
+		try {
+			System.out.println("===== 매장 변경사항 상세 조회 =====");
+			
+			//서비스 호출
+			List<SubwayVo> voList = service.subwayDetailList();
+			
+			//결과처리
+			System.out.print("매장명");
+			System.out.print(" | ");
+			System.out.print("신규여부");
+			System.out.print(" | ");
+			System.out.print("폐업여부");
+			System.out.print(" | ");
+			System.out.print("개업일시");
+			System.out.print(" | ");
+			System.out.print("폐업일시");
+			System.out.print(" | ");
+			System.out.print("수정일시");
+			for(SubwayVo vo : voList) {
+				System.out.println();
+				System.out.print(vo.getStoreName());
+				System.out.print(" | " );
+				System.out.print(vo.getNewYn());
+				System.out.print(" | " );
+				System.out.print(vo.getDelYn());
+				System.out.print(" | " );
+				System.out.print(vo.getOpenDate());
+				System.out.print(" | " );
+				System.out.print(vo.getCloseDate());
+				System.out.print(" | " );
+				System.out.print(vo.getModifydate());
+				System.out.println();
+			}
+			
+		}catch(Exception e) {
+			System.out.println("매장 변경사항 상세조회 실패 ...");
+			e.printStackTrace();
+		}
+		
+	}
 	//서브웨이 매장 상세 조회 (역 이름)
 	public void subwayListByName() {
 		
@@ -239,6 +279,8 @@ import com.kh.subway.store.vo.SubwayVo;
 			System.out.println("===== 신규 매장 추가 =====");
 
 			//데이터
+			System.out.println("신규 매장 근처 역 이름를 입력하세요 : ");
+			String stationName = Main.SC.nextLine();
 			System.out.println("신규 매장 일련 번호를 입력하세요 : ");
 			String storeNo = Main.SC.nextLine();
 			System.out.println("신규 매장 이름을 입력하세요 : ");
@@ -249,6 +291,7 @@ import com.kh.subway.store.vo.SubwayVo;
 			String address = Main.SC.nextLine();
 			
 			SubwayVo vo = new SubwayVo();
+			vo.setStationName(stationName);
 			vo.setStoreNo(storeNo);
 			vo.setStoreName(storeName);
 			vo.setTel(tel);
