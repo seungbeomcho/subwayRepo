@@ -51,7 +51,7 @@ public class SubwayDao {
 	public List<SubwayVo> subwayDeatilList(Connection conn) throws Exception {
 		
 		//sql
-		String sql = "SELECT STORE_NAME, NEW_YN, DEL_YN, TO_CHAR(OPEN_DATE, 'YYYY-MM-DD') OPEN_DATE, TO_CHAR(CLOSE_DATE, 'YYYY-MM-DD') CLOSE_DATE, TO_CHAR(MODIFY_DATE, 'YYYY-MM-DD') MODIFY_DATE FROM SUBWAY ORDER BY STORE_NAME";
+		String sql = "SELECT STORE_NAME, ADDRESS, NEW_YN, DEL_YN, TO_CHAR(OPEN_DATE, 'YYYY-MM-DD') OPEN_DATE, TO_CHAR(CLOSE_DATE, 'YYYY-MM-DD') CLOSE_DATE, TO_CHAR(MODIFY_DATE, 'YYYY-MM-DD') MODIFY_DATE FROM SUBWAY ORDER BY STORE_NAME";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 		
@@ -59,6 +59,7 @@ public class SubwayDao {
 		List<SubwayVo> voList = new ArrayList<SubwayVo>();
 		while(rs.next()) {
 			String storeName = rs.getString("STORE_NAME");
+			String address = rs.getString("ADDRESS");
 			String newYn = rs.getString("NEW_YN");
 			String delYn = rs.getString("DEL_YN");
 			String openDate = rs.getString("OPEN_DATE");
@@ -67,6 +68,7 @@ public class SubwayDao {
 			
 			SubwayVo vo = new SubwayVo();
 			vo.setStoreName(storeName);
+			vo.setAddress(address);
 			vo.setNewYn(newYn);
 			vo.setDelYn(delYn);
 			vo.setOpenDate(openDate);

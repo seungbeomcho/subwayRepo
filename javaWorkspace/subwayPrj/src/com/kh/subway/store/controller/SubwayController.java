@@ -18,37 +18,47 @@ import com.kh.subway.store.vo.SubwayVo;
 	
 	//관리자 메뉴
 	public void adminMenu() {
-		System.out.println("1. 매장 이름 수정 (관리자만)");
-		System.out.println("2. 매장 주소 수정 (관리자만)");
-		System.out.println("3. 폐업 매장 삭제 (관리자만)");
-		System.out.println("4. 신규 매장 추가 (관리자만)");
-		
-		String num = Main.SC.nextLine();
-		switch(num) {
-		case "1" : changeStoreName(); break;
-		case "2" : changeStoreAddress(); break;
-		case "3" : closeStore(); break;
-		case "4" : newStore(); break;
-	    default : System.out.println("잘못 입력하셨습니다.");
+		while(true) {
+			System.out.println("1. 매장 이름 수정 (관리자만)");
+			System.out.println("2. 매장 주소 수정 (관리자만)");
+			System.out.println("3. 폐업 매장 삭제 (관리자만)");
+			System.out.println("4. 신규 매장 추가 (관리자만)");
+			System.out.println("5. 매장 변동사항 상세 조회(관리자만)");
+			System.out.println("6. 메인으로 돌아가기");
+			
+			
+			String num = Main.SC.nextLine();
+			switch(num) {
+			case "1" : changeStoreName(); break;
+			case "2" : changeStoreAddress(); break;
+			case "3" : closeStore(); break;
+			case "4" : newStore(); break;
+			case "5" : subwayDetailList(); break;
+			case "6" : return;
+		    default : System.out.println("잘못 입력하셨습니다.");
+			}
 		}
+		
 	}
 	//메뉴선택
 	public void selectMenu() {
-		System.out.println("=====SUBWAY STORE=====");
-		System.out.println("1. 역 주위 서브웨이 매장 전체 조회");
-		System.out.println("2. 역 주위 서브웨이 매장 조회 (역 이름)");
-		System.out.println("3. 매장 변경사항 상세 조회");
+		while(true) {
+			System.out.println("=====SUBWAY STORE=====");
+			System.out.println("1. 역 주위 서브웨이 매장 전체 조회");
+			System.out.println("2. 역 주위 서브웨이 매장 조회 (역 이름)");
+			System.out.println("3. 뒤로가기");
+			
+			
+			String num = Main.SC.nextLine();
+			switch(num) {
+			case "1" : subwayList(); break;
+			case "2" : subwayListByName(); break;
+			case "3" : return;
 		
-		
-		String num = Main.SC.nextLine();
-		switch(num) {
-		case "1" : subwayList(); break;
-		case "2" : subwayListByName(); break;
-		case "3" : subwayDetailList(); break;
-		case "9" : return;
-		default : System.out.println("잘못 입력하셨습니다."); 
-		
+			default : System.out.println("잘못 입력하셨습니다."); 
+			}
 		}
+		
 	}
 	
 	//서브웨이 매장 전체 조회
@@ -98,6 +108,8 @@ import com.kh.subway.store.vo.SubwayVo;
 			//결과처리
 			System.out.print("매장명");
 			System.out.print(" | ");
+			System.out.print("주소");
+			System.out.print(" | ");
 			System.out.print("신규여부");
 			System.out.print(" | ");
 			System.out.print("폐업여부");
@@ -110,6 +122,8 @@ import com.kh.subway.store.vo.SubwayVo;
 			for(SubwayVo vo : voList) {
 				System.out.println();
 				System.out.print(vo.getStoreName());
+				System.out.print(" | " );
+				System.out.print(vo.getAddress());
 				System.out.print(" | " );
 				System.out.print(vo.getNewYn());
 				System.out.print(" | " );
@@ -136,7 +150,8 @@ import com.kh.subway.store.vo.SubwayVo;
 			System.out.println("===== 역 주위 매장 조회 (역 이름) =====");
 			
 			//데이터
-			System.out.println("조회할 매장 주위 역 이름 : ");
+			System.out.println("조회할 매장 주위 역 이름(ex : 강남역 X -> 강남O) : ");
+			
 			String name = Main.SC.nextLine();
 			
 			//서비스 호출
