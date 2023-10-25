@@ -17,18 +17,18 @@ public class StationController {
 		stationService = new StationService();
 	}
 
-	boolean menu = true;
+	
 	//메뉴 선택
 	public void selectMenu() {
-		
+		boolean menu = true;
 		while(menu) {
 			//메뉴판
 			System.out.println("원하시는 메뉴를 입력해주세요.");
 			System.out.println("┌─────────────────────────────────────────────────────────┐");
 			System.out.println("| ※ 1 ~ 9 호선에 존재하는 역만 조회가 가능합니다 ※");
-			System.out.println("| 1. 역 정보 검색");
+			System.out.println("| 1. ◆ 역 정보 검색 ◆");
 			System.out.println("|  - 노선명, 환승 여부, 환승 가능 노선, 출구 개수, 화장실 개찰구 내외 안내");
-			System.out.println("| 2. 시간표 조회");
+			System.out.println("| 2. ◆ 시간표 조회 ◆");
 			System.out.println("|  - 평일 첫차 - 막차시간, 주말 첫차 - 막차 시간");
 			System.out.println("| 9. 뒤로가기");
 			System.out.println("└─────────────────────────────────────────────────────────┘");
@@ -131,7 +131,7 @@ public class StationController {
 			for(StationVo vo : voList) {
 				System.out.print(vo.getLineNo() + "호선 | ");
 			}
-			System.out.println("\n! 숫자만 입력해주세요 !");
+			System.out.println("\n※ 숫자만 입력해주세요 ※");
 			System.out.println();
 			System.out.print("호선 : ");
 			
