@@ -82,7 +82,7 @@ public class QnaDao {
 		
 		//sql
 	
-		String sql = "SELECT Q.QNA_NO , S.STATION_NAME , Q.USER_NO , Q.TITLE , Q.CONTENT , A.RE_TITLE, A.RE_CONTENT, U.NICK AS WRITER_NICK , Q.INQUIRY , TO_CHAR(Q.POST_TIME, 'MM/DD') AS POST_TIME , TO_CHAR(A.POST_TIME, 'MM/DD') AS RE_POST_TIME FROM QNA Q JOIN QNA_ADMIN A ON Q.USER_NO = A.USER_NO JOIN SUBWAY_USER U ON Q.USER_NO = U.USER_NO JOIN STATION S ON Q.STATION_NO = S.STATION_NO WHERE Q.DELETE_YN = 'N' AND QNA_NO = ?";
+		String sql = "SELECT Q.QNA_NO, S.STATION_NAME, Q.TITLE, Q.CONTENT, A.RE_TITLE, A.RE_CONTENT, U.NICK AS WRITER_NICK, Q.INQUIRY, TO_CHAR(Q.POST_TIME, 'MM/DD') AS POST_TIME, TO_CHAR(A.POST_TIME, 'MM/DD') AS RE_POST_TIME FROM QNA Q LEFT JOIN QNA_ADMIN A ON Q.QNA_NO = A.QNA_NO JOIN SUBWAY_USER U ON Q.USER_NO = U.USER_NO JOIN STATION S ON Q.STATION_NO = S.STATION_NO WHERE Q.DELETE_YN = 'N' AND Q.QNA_NO = ?";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, num);
 		ResultSet rs = pstmt.executeQuery();
@@ -112,7 +112,6 @@ public class QnaDao {
 			vo.setWriterNick(writerNick);
 			vo.setInquiry(inquiry);
 			vo.setPostTime(postTime);
-			vo.setUserNo(userNo);
 			vo.setRePostTime(rePostTime);
 		}
 		//close
@@ -126,10 +125,12 @@ public class QnaDao {
 
 	public int reWrite(Connection conn, QnaVo vo) throws Exception {
 		//sql
-				String sql = "INSERT INTO QNA_ADMIN(QNA_ADMIN_NO, RE_TITLE, RE_CONTENT)VALUES(SEQ_QNA_NO.NEXTVAL, ?, ?)";
+				String sql = "INSERT INTO QNA_ADMIN(QNA_ADMIN_NO, QNA_NO, ADMIN_NO, RE_TITLE, RE_CONTENT) VALUES(SEQ_QNA_ADMIN_NO.NEXTVAL, ?, ?, ?, ?)";
 				PreparedStatement pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, vo.getReTitle());
-				pstmt.setString(2, vo.getReContent());
+				pstmt.setString(1, vo.getQnaNo());
+				pstmt.setString(2, Main.loginAdmin.getAdminNo());
+				pstmt.setString(3, vo.getReTitle());
+				pstmt.setString(4, vo.getReContent());
 				int result = pstmt.executeUpdate();
 				//rs
 				
@@ -143,7 +144,7 @@ public class QnaDao {
 	public List<QnaVo> reWriteList(Connection conn) throws Exception {
 		
 		//sql
-				String sql = "SELECT A.QNA_ADMIN_NO, A.RE_TITLE , A.RE_CONTENT , A.INQUIRY , TO_CHAR(A.POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS RE_POST_TIME, A.USER_NO FROM QNA_ADMIN A JOIN SUBWAY_USER U ON A.USER_NO = U.USER_NO WHERE A.DELETE_YN = 'N' ORDER BY A.QNA_ADMIN_NO DESC";
+				String sql = "SELECT A.QNA_ADMIN_NO, A.RE_TITLE , A.RE_CONTENT , A.INQUIRY , TO_CHAR(A.POST_TIME, 'YYYY\"년\"MM\"월\"DD\"일\"') AS RE_POST_TIME FROM QNA_ADMIN A WHERE A.DELETE_YN = 'N' ORDER BY A.QNA_ADMIN_NO DESC";
 				PreparedStatement pstmt = conn.prepareStatement(sql);
 				ResultSet rs = pstmt.executeQuery();
 				
@@ -155,7 +156,6 @@ public class QnaDao {
 					String reContent = rs.getString("RE_CONTENT");
 					String inquiry = rs.getString("INQUIRY");
 					String rePostTime = rs.getString("RE_POST_TIME");
-					String userNo = rs.getString("USER_NO");
 					
 					QnaVo vo = new QnaVo();
 					vo.setQnaAdminNo(qnaAdminNo);
@@ -163,7 +163,6 @@ public class QnaDao {
 					vo.setReContent(reContent);
 					vo.setInquiry(inquiry);
 					vo.setRePostTime(rePostTime);
-					vo.setUserNo(userNo);
 					
 					voList.add(vo);
 				}
@@ -220,7 +219,7 @@ public class QnaDao {
 		
 		//sql
 		
-			String sql = "SELECT Q.QNA_NO , S.STATION_NAME , Q.TITLE , Q.CONTENT , A.RE_TITLE , A.RE_CONTENT , U.NICK AS WRITER_NICK , Q.INQUIRY , TO_CHAR(Q.POST_TIME, 'MM/DD') AS POST_TIME , TO_CHAR(A.POST_TIME, 'MM/DD') AS RE_POST_TIME FROM QNA Q JOIN QNA_ADMIN A ON Q.USER_NO = A.USER_NO JOIN SUBWAY_USER U ON Q.USER_NO = U.USER_NO JOIN STATION S ON Q.STATION_NO = S.STATION_NO WHERE Q.DELETE_YN = 'N' AND Q.QNA_NO = ?";
+			String sql = "SELECT Q.QNA_NO, S.STATION_NAME, Q.TITLE, Q.CONTENT, A.RE_TITLE, A.RE_CONTENT, U.NICK AS WRITER_NICK, Q.INQUIRY, TO_CHAR(Q.POST_TIME, 'MM/DD') AS POST_TIME, TO_CHAR(A.POST_TIME, 'MM/DD') AS RE_POST_TIME FROM QNA Q LEFT JOIN QNA_ADMIN A ON Q.QNA_NO = A.QNA_NO JOIN SUBWAY_USER U ON Q.USER_NO = U.USER_NO JOIN STATION S ON Q.STATION_NO = S.STATION_NO WHERE Q.DELETE_YN = 'N' AND Q.QNA_NO = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, num);
 			ResultSet rs = pstmt.executeQuery();
@@ -401,4 +400,5 @@ public class QnaDao {
 		
 		return result;
 	}
+	
 }
