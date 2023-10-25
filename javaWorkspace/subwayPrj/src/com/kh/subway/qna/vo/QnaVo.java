@@ -3,6 +3,7 @@ package com.kh.subway.qna.vo;
 public class QnaVo {
 
 	private String qnaNo;
+	private String qnaAdminNo;
 	private String stationNo;
 	private String adminNo;
 	private String userNo;
@@ -15,11 +16,18 @@ public class QnaVo {
 	private String deleteYn;
 	private String writerNick;
 	private String StationName;
+	private String rePostTime;
 	public String getQnaNo() {
 		return qnaNo;
 	}
 	public void setQnaNo(String qnaNo) {
 		this.qnaNo = qnaNo;
+	}
+	public String getQnaAdminNo() {
+		return qnaAdminNo;
+	}
+	public void setQnaAdminNo(String qnaAdminNo) {
+		this.qnaAdminNo = qnaAdminNo;
 	}
 	public String getStationNo() {
 		return stationNo;
@@ -93,11 +101,22 @@ public class QnaVo {
 	public void setStationName(String stationName) {
 		StationName = stationName;
 	}
-	public QnaVo(String qnaNo, String stationNo, String adminNo, String userNo, String postTime, String title,
-			String content, String reTitle, String reContent, String inquiry, String deleteYn, String writerNick,
-			String stationName) {
+	public String getRePostTime() {
+		return rePostTime;
+	}
+	public void setRePostTime(String rePostTime) {
+		this.rePostTime = rePostTime;
+	}
+	public QnaVo() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public QnaVo(String qnaNo, String qnaAdminNo, String stationNo, String adminNo, String userNo, String postTime,
+			String title, String content, String reTitle, String reContent, String inquiry, String deleteYn,
+			String writerNick, String stationName, String rePostTime) {
 		super();
 		this.qnaNo = qnaNo;
+		this.qnaAdminNo = qnaAdminNo;
 		this.stationNo = stationNo;
 		this.adminNo = adminNo;
 		this.userNo = userNo;
@@ -110,17 +129,15 @@ public class QnaVo {
 		this.deleteYn = deleteYn;
 		this.writerNick = writerNick;
 		StationName = stationName;
-	}
-	public QnaVo() {
-		super();
-		// TODO Auto-generated constructor stub
+		this.rePostTime = rePostTime;
 	}
 	@Override
 	public String toString() {
-		return "QnaVo [qnaNo=" + qnaNo + ", stationNo=" + stationNo + ", adminNo=" + adminNo + ", userNo=" + userNo
-				+ ", postTime=" + postTime + ", title=" + title + ", content=" + content + ", reTitle=" + reTitle
-				+ ", reContent=" + reContent + ", inquiry=" + inquiry + ", deleteYn=" + deleteYn + ", writerNick="
-				+ writerNick + ", StationName=" + StationName + "]";
+		return "QnaVo [qnaNo=" + qnaNo + ", qnaAdminNo=" + qnaAdminNo + ", stationNo=" + stationNo + ", adminNo="
+				+ adminNo + ", userNo=" + userNo + ", postTime=" + postTime + ", title=" + title + ", content="
+				+ content + ", reTitle=" + reTitle + ", reContent=" + reContent + ", inquiry=" + inquiry + ", deleteYn="
+				+ deleteYn + ", writerNick=" + writerNick + ", StationName=" + StationName + ", rePostTime="
+				+ rePostTime + "]";
 	}
 	
 }
