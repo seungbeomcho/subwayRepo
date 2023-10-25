@@ -31,6 +31,21 @@ public class SubwayService {
 		
 		return voList;
 	}
+	
+	//매장 변경사항 상세조회
+	public List<SubwayVo> subwayDetailList() throws Exception {
+		
+		//conn
+		Connection conn = JDBCTemplate.getConnection();
+		
+		//dao
+		List<SubwayVo> voList = dao.subwayDeatilList(conn);
+		
+		//close
+		JDBCTemplate.close(conn);
+		
+		return voList;
+	}
 
 	//역 이름으로 근처 매장 조회
 	public List<SubwayVo> subwayListByName(String name) throws Exception {
