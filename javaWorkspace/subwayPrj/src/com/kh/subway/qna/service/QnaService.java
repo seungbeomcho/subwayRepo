@@ -121,14 +121,7 @@ public class QnaService {
 				//conn
 				Connection conn = JDBCTemplate.getConnection();
 				
-				int result = dao.increaseInquiry(conn, searchValue);
 				List<QnaVo> voList = dao.searchWriteByTitle(conn, searchValue);
-				
-				if(result == 1) {
-					JDBCTemplate.commit(conn);
-				}else {
-					JDBCTemplate.rollback(conn);
-				}
 				
 				JDBCTemplate.close(conn);
 				
